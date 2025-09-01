@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing React + WordPress: Building Bulletproof Applications</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="icon" href="/favicon.png">
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        .test-pass {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        .test-fail {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        .test-code {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .test-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #007bff;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+        .coverage-bar {
+            width: 100%;
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+        .coverage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .test-pyramid {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🧪 Testing React + WordPress: Building Bulletproof Applications</h1>
+        <p>Learn to write tests that catch bugs before your users do!</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>The Testing Pyramid: Your Quality Assurance Fortress</h2>
+            <p>Testing is like building a fortress with multiple layers of defense. Each layer catches different types of problems, and together they create an impenetrable defense against bugs!</p>
+
+            <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+                <!-- Testing Pyramid -->
+                <defs>
+                    <linearGradient id="pyramidGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#e74c3c;stop-opacity:1" />
+                        <stop offset="33%" style="stop-color:#f39c12;stop-opacity:1" />
+                        <stop offset="66%" style="stop-color:#3498db;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#2ecc71;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- Pyramid shape -->
+                <path d="M 300 80 L 500 320 L 100 320 Z" fill="url(#pyramidGradient)" stroke="#333" stroke-width="2"/>
+                
+                <!-- Horizontal lines dividing sections -->
+                <line x1="200" y1="160" x2="400" y2="160" stroke="#333" stroke-width="2"/>
+                <line x1="250" y1="240" x2="350" y2="240" stroke="#333" stroke-width="2"/>
+                
+                <!-- Labels -->
+                <text x="300" y="120" text-anchor="middle" fill="white" font-size="14" font-weight="bold">E2E Tests</text>
+                <text x="300" y="140" text-anchor="middle" fill="white" font-size="10">(Few)</text>
+                
+                <text x="300" y="200" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Integration</text>
+                <text x="300" y="220" text-anchor="middle" fill="white" font-size="10">(Some)</text>
+                
+                <text x="300" y="280" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Unit Tests</text>
+                <text x="300" y="300" text-anchor="middle" fill="white" font-size="10">(Many)</text>
+                
+                <!-- Title -->
+                <text x="300" y="30" text-anchor="middle" fill="#333" font-size="20" font-weight="bold">The Testing Pyramid</text>
+                
+                <!-- Descriptions -->
+                <text x="300" y="360" text-anchor="middle" fill="#666" font-size="12">Fast & Isolated ← → Slow & Realistic</text>
+                <text x="300" y="380" text-anchor="middle" fill="#666" font-size="12">Cheap to Run ← → Expensive to Maintain</text>
+            </svg>
+
+            <div class="mermaid">
+            graph LR
+                A[Unit Tests] -->|70%| B[Test individual functions/components]
+                C[Integration Tests] -->|20%| D[Test component interactions]
+                E[E2E Tests] -->|10%| F[Test complete user flows]
+                
+                style A fill:#2ecc71
+                style C fill:#3498db
+                style E fill:#e74c3c
+            </div>
+        </section>
+
+        <section>
+            <h2>Setting Up Your Testing Environment</h2>
+            <p>Setting up testing is like preparing a laboratory - you need the right tools, a clean environment, and proper safety equipment (error handling)!</p>
+
+            <div class="test-code">
+<pre>// package.json - Testing Dependencies
+{
+  "devDependencies": {
+    // Testing Framework
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/jest-dom": "^6.1.0",
+    "@testing-library/user-event": "^14.5.0",
+    
+    // Test Runner
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    
+    // Mocking & Utilities
+    "msw": "^2.0.0",  // Mock Service Worker for API mocking
+    "axios-mock-adapter": "^1.22.0",
+    
+    // E2E Testing
+    "cypress": "^13.6.0",
+    "@cypress/react": "^8.0.0",
+    
+    // Coverage & Reporting
+    "jest-coverage-badges": "^1.0.0"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "cypress open",
+    "test:e2e:headless": "cypress run"
+  }
+}</pre>
+            </div>
+
+            <h3>Jest Configuration</h3>
+            <div class="test-code">
+<pre>// jest.config.js
+module.exports = {
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
+  moduleNameMapper: {
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '^@/(.*)$': '<rootDir>/src/$1'
+  },
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx}',
+    '!src/index.js',
+    '!src/serviceWorker.js'
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 70,
+      functions: 70,
+      lines: 70,
+      statements: 70
+    }
+  },
+  testMatch: [
+    '**/__tests__/**/*.[jt]s?(x)',
+    '**/?(*.)+(spec|test).[jt]s?(x)'
+  ]
+};</pre>
+            </div>
+
+            <h3>Setup Test Utilities</h3>
+            <div class="test-code">
+<pre>// src/setupTests.js
+import '@testing-library/jest-dom';
+import { server } from './mocks/server';
+
+// Establish API mocking before all tests
+beforeAll(() => server.listen());
+
+// Reset handlers after each test
+afterEach(() => server.resetHandlers());
+
+// Clean up after tests
+afterAll(() => server.close());
+
+// Custom matchers
+expect.extend({
+  toBeWithinRange(received, floor, ceiling) {
+    const pass = received >= floor && received <= ceiling;
+    return {
+      pass,
+      message: () =>
+        `expected ${received} to be within range ${floor} - ${ceiling}`
+    };
+  }
+});</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Unit Testing: Testing the LEGO Blocks</h2>
+            <p>Unit tests are like testing individual LEGO blocks - making sure each piece works perfectly before building the castle!</p>
+
+            <canvas id="unitTestCanvas" width="600" height="400"></canvas>
+            <script>
+                const unitCanvas = document.getElementById('unitTestCanvas');
+                const unitCtx = unitCanvas.getContext('2d');
+                
+                // Title
+                unitCtx.font = 'bold 18px Arial';
+                unitCtx.fillStyle = '#333';
+                unitCtx.textAlign = 'center';
+                unitCtx.fillText('Unit Test Lifecycle', 300, 30);
+                
+                // Test stages
+                const stages = [
+                    {x: 100, y: 100, label: 'Arrange', color: '#3498db', desc: 'Set up test data'},
+                    {x: 300, y: 100, label: 'Act', color: '#f39c12', desc: 'Execute function'},
+                    {x: 500, y: 100, label: 'Assert', color: '#2ecc71', desc: 'Check results'}
+                ];
+                
+                stages.forEach((stage, index) => {
+                    // Draw circle
+                    unitCtx.fillStyle = stage.color;
+                    unitCtx.beginPath();
+                    unitCtx.arc(stage.x, stage.y, 40, 0, Math.PI * 2);
+                    unitCtx.fill();
+                    
+                    // Label
+                    unitCtx.fillStyle = 'white';
+                    unitCtx.font = 'bold 14px Arial';
+                    unitCtx.fillText(stage.label, stage.x, stage.y + 5);
+                    
+                    // Description
+                    unitCtx.fillStyle = '#666';
+                    unitCtx.font = '12px Arial';
+                    unitCtx.fillText(stage.desc, stage.x, stage.y + 70);
+                    
+                    // Arrow to next
+                    if (index < stages.length - 1) {
+                        unitCtx.strokeStyle = '#666';
+                        unitCtx.lineWidth = 2;
+                        unitCtx.beginPath();
+                        unitCtx.moveTo(stage.x + 40, stage.y);
+                        unitCtx.lineTo(stages[index + 1].x - 40, stages[index + 1].y);
+                        unitCtx.stroke();
+                    }
+                });
+                
+                // Example test
+                unitCtx.fillStyle = '#f8f9fa';
+                unitCtx.fillRect(50, 200, 500, 180);
+                unitCtx.strokeStyle = '#dee2e6';
+                unitCtx.strokeRect(50, 200, 500, 180);
+                
+                unitCtx.fillStyle = '#333';
+                unitCtx.font = '13px Courier';
+                unitCtx.textAlign = 'left';
+                unitCtx.fillText('test("should calculate total price", () => {', 60, 225);
+                unitCtx.fillStyle = '#2ecc71';
+                unitCtx.fillText('  // Arrange', 60, 245);
+                unitCtx.fillStyle = '#333';
+                unitCtx.fillText('  const items = [{price: 10}, {price: 20}];', 60, 265);
+                unitCtx.fillStyle = '#f39c12';
+                unitCtx.fillText('  // Act', 60, 285);
+                unitCtx.fillStyle = '#333';
+                unitCtx.fillText('  const total = calculateTotal(items);', 60, 305);
+                unitCtx.fillStyle = '#3498db';
+                unitCtx.fillText('  // Assert', 60, 325);
+                unitCtx.fillStyle = '#333';
+                unitCtx.fillText('  expect(total).toBe(30);', 60, 345);
+                unitCtx.fillText('});', 60, 365);
+            </script>
+
+            <h3>Testing React Components</h3>
+            <div class="test-code">
+<pre>// Button.test.jsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import Button from './Button';
+
+describe('Button Component', () => {
+  test('renders with text', () => {
+    render(&lt;Button&gt;Click me&lt;/Button&gt;);
+    
+    const button = screen.getByRole('button', { name: /click me/i });
+    expect(button).toBeInTheDocument();
+  });
+
+  test('handles click events', () => {
+    const handleClick = jest.fn();
+    render(&lt;Button onClick={handleClick}&gt;Click me&lt;/Button&gt;);
+    
+    const button = screen.getByRole('button');
+    fireEvent.click(button);
+    
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  test('applies disabled state', () => {
+    render(&lt;Button disabled&gt;Disabled&lt;/Button&gt;);
+    
+    const button = screen.getByRole('button');
+    expect(button).toBeDisabled();
+    expect(button).toHaveClass('opacity-50');
+  });
+
+  test('shows loading spinner', () => {
+    render(&lt;Button loading&gt;Loading&lt;/Button&gt;);
+    
+    const spinner = screen.getByTestId('spinner');
+    expect(spinner).toBeInTheDocument();
+    expect(screen.getByRole('button')).toHaveAttribute('aria-busy', 'true');
+  });
+});</pre>
+            </div>
+
+            <h3>Testing Custom Hooks</h3>
+            <div class="test-code">
+<pre>// useCounter.test.js
+import { renderHook, act } from '@testing-library/react';
+import useCounter from './useCounter';
+
+describe('useCounter Hook', () => {
+  test('initializes with default value', () => {
+    const { result } = renderHook(() => useCounter());
+    
+    expect(result.current.count).toBe(0);
+  });
+
+  test('initializes with custom value', () => {
+    const { result } = renderHook(() => useCounter(10));
+    
+    expect(result.current.count).toBe(10);
+  });
+
+  test('increments counter', () => {
+    const { result } = renderHook(() => useCounter());
+    
+    act(() => {
+      result.current.increment();
+    });
+    
+    expect(result.current.count).toBe(1);
+  });
+
+  test('decrements counter', () => {
+    const { result } = renderHook(() => useCounter(5));
+    
+    act(() => {
+      result.current.decrement();
+    });
+    
+    expect(result.current.count).toBe(4);
+  });
+
+  test('resets to initial value', () => {
+    const { result } = renderHook(() => useCounter(10));
+    
+    act(() => {
+      result.current.increment();
+      result.current.increment();
+      result.current.reset();
+    });
+    
+    expect(result.current.count).toBe(10);
+  });
+});</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Integration Testing: Testing the Assembly</h2>
+            <p>Integration tests are like testing a LEGO sub-assembly - making sure multiple pieces work together correctly!</p>
+
+            <div class="mermaid">
+            graph TB
+                A[Integration Test] --> B[Component A]
+                A --> C[Component B]
+                A --> D[API Mock]
+                B --> E[State Management]
+                C --> E
+                E --> F[Rendered Output]
+                D --> E
+                
+                style A fill:#3498db
+                style D fill:#f39c12
+                style F fill:#2ecc71
+            </div>
+
+            <h3>Testing Component Integration</h3>
+            <div class="test-code">
+<pre>// BlogPost.integration.test.jsx
+import { render, screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+import BlogPost from './BlogPost';
+import { WordPressProvider } from './contexts/WordPressContext';
+
+// Mock WordPress API
+const server = setupServer(
+  rest.get('/wp-json/wp/v2/posts/:id', (req, res, ctx) => {
+    return res(
+      ctx.json({
+        id: req.params.id,
+        title: { rendered: 'Test Post Title' },
+        content: { rendered: '&lt;p&gt;Test content&lt;/p&gt;' },
+        author: 1,
+        date: '2024-01-01T00:00:00'
+      })
+    );
+  }),
+  
+  rest.get('/wp-json/wp/v2/comments', (req, res, ctx) => {
+    return res(
+      ctx.json([
+        {
+          id: 1,
+          content: { rendered: 'Great post!' },
+          author_name: 'John Doe',
+          date: '2024-01-02T00:00:00'
+        }
+      ])
+    );
+  }),
+  
+  rest.post('/wp-json/wp/v2/comments', (req, res, ctx) => {
+    return res(
+      ctx.status(201),
+      ctx.json({
+        id: 2,
+        content: { rendered: req.body.content },
+        author_name: req.body.author_name
+      })
+    );
+  })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+describe('BlogPost Integration', () => {
+  test('loads and displays post with comments', async () => {
+    render(
+      &lt;WordPressProvider&gt;
+        &lt;BlogPost postId="1" /&gt;
+      &lt;/WordPressProvider&gt;
+    );
+    
+    // Wait for post to load
+    await waitFor(() => {
+      expect(screen.getByText('Test Post Title')).toBeInTheDocument();
+    });
+    
+    // Check content
+    expect(screen.getByText('Test content')).toBeInTheDocument();
+    
+    // Check comments loaded
+    await waitFor(() => {
+      expect(screen.getByText('Great post!')).toBeInTheDocument();
+    });
+    
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+  });
+
+  test('submits new comment', async () => {
+    const user = userEvent.setup();
+    
+    render(
+      &lt;WordPressProvider&gt;
+        &lt;BlogPost postId="1" /&gt;
+      &lt;/WordPressProvider&gt;
+    );
+    
+    // Wait for post to load
+    await waitFor(() => {
+      expect(screen.getByText('Test Post Title')).toBeInTheDocument();
+    });
+    
+    // Fill comment form
+    const nameInput = screen.getByLabelText(/your name/i);
+    const commentInput = screen.getByLabelText(/your comment/i);
+    const submitButton = screen.getByRole('button', { name: /submit/i });
+    
+    await user.type(nameInput, 'Jane Smith');
+    await user.type(commentInput, 'Excellent article!');
+    await user.click(submitButton);
+    
+    // Check comment was added
+    await waitFor(() => {
+      expect(screen.getByText('Excellent article!')).toBeInTheDocument();
+    });
+  });
+
+  test('handles API errors gracefully', async () => {
+    server.use(
+      rest.get('/wp-json/wp/v2/posts/:id', (req, res, ctx) => {
+        return res(ctx.status(500));
+      })
+    );
+    
+    render(
+      &lt;WordPressProvider&gt;
+        &lt;BlogPost postId="1" /&gt;
+      &lt;/WordPressProvider&gt;
+    );
+    
+    await waitFor(() => {
+      expect(screen.getByText(/error loading post/i)).toBeInTheDocument();
+    });
+    
+    // Check retry button exists
+    const retryButton = screen.getByRole('button', { name: /retry/i });
+    expect(retryButton).toBeInTheDocument();
+  });
+});</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Testing WordPress API Integration</h2>
+            <p>Testing API integration is like testing a phone line - you want to make sure messages get through correctly, even when the line is busy or disconnected!</p>
+
+            <canvas id="apiTestCanvas" width="600" height="350"></canvas>
+            <script>
+                const apiCanvas = document.getElementById('apiTestCanvas');
+                const apiCtx = apiCanvas.getContext('2d');
+                
+                // Title
+                apiCtx.font = 'bold 18px Arial';
+                apiCtx.fillStyle = '#333';
+                apiCtx.textAlign = 'center';
+                apiCtx.fillText('API Testing Strategy', 300, 30);
+                
+                // Mock Server
+                apiCtx.fillStyle = '#3498db';
+                apiCtx.fillRect(50, 60, 150, 80);
+                apiCtx.fillStyle = 'white';
+                apiCtx.font = 'bold 14px Arial';
+                apiCtx.fillText('Mock Server', 125, 95);
+                apiCtx.font = '12px Arial';
+                apiCtx.fillText('(MSW)', 125, 115);
+                
+                // Your App
+                apiCtx.fillStyle = '#2ecc71';
+                apiCtx.fillRect(400, 60, 150, 80);
+                apiCtx.fillStyle = 'white';
+                apiCtx.font = 'bold 14px Arial';
+                apiCtx.fillText('Your App', 475, 95);
+                apiCtx.font = '12px Arial';
+                apiCtx.fillText('(React)', 475, 115);
+                
+                // Bidirectional arrows
+                apiCtx.strokeStyle = '#666';
+                apiCtx.lineWidth = 2;
+                
+                // Request arrow
+                apiCtx.beginPath();
+                apiCtx.moveTo(400, 80);
+                apiCtx.lineTo(200, 80);
+                apiCtx.stroke();
+                apiCtx.beginPath();
+                apiCtx.moveTo(205, 75);
+                apiCtx.lineTo(200, 80);
+                apiCtx.lineTo(205, 85);
+                apiCtx.stroke();
+                
+                // Response arrow
+                apiCtx.beginPath();
+                apiCtx.moveTo(200, 120);
+                apiCtx.lineTo(400, 120);
+                apiCtx.stroke();
+                apiCtx.beginPath();
+                apiCtx.moveTo(395, 115);
+                apiCtx.lineTo(400, 120);
+                apiCtx.lineTo(395, 125);
+                apiCtx.stroke();
+                
+                // Labels
+                apiCtx.fillStyle = '#666';
+                apiCtx.font = '11px Arial';
+                apiCtx.fillText('Request', 300, 75);
+                apiCtx.fillText('Response', 300, 135);
+                
+                // Test scenarios
+                const scenarios = [
+                    {y: 180, label: '✓ Success (200)', color: '#2ecc71'},
+                    {y: 220, label: '✗ Not Found (404)', color: '#f39c12'},
+                    {y: 260, label: '✗ Server Error (500)', color: '#e74c3c'},
+                    {y: 300, label: '⏱ Timeout', color: '#95a5a6'}
+                ];
+                
+                scenarios.forEach(scenario => {
+                    apiCtx.fillStyle = scenario.color;
+                    apiCtx.fillRect(200, scenario.y, 200, 30);
+                    apiCtx.fillStyle = 'white';
+                    apiCtx.font = '12px Arial';
+                    apiCtx.textAlign = 'center';
+                    apiCtx.fillText(scenario.label, 300, scenario.y + 20);
+                });
+            </script>
+
+            <h3>API Service Testing</h3>
+            <div class="test-code">
+<pre>// WordPressAPI.test.js
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+import WordPressAPI from './WordPressAPI';
+
+describe('WordPress API Service', () => {
+  let mock;
+  
+  beforeEach(() => {
+    mock = new MockAdapter(axios);
+  });
+  
+  afterEach(() => {
+    mock.restore();
+  });
+  
+  describe('getPosts', () => {
+    test('fetches posts successfully', async () => {
+      const mockPosts = [
+        { id: 1, title: { rendered: 'Post 1' } },
+        { id: 2, title: { rendered: 'Post 2' } }
+      ];
+      
+      mock.onGet('/wp-json/wp/v2/posts').reply(200, mockPosts);
+      
+      const posts = await WordPressAPI.getPosts();
+      
+      expect(posts).toEqual(mockPosts);
+      expect(mock.history.get[0].params).toEqual({ per_page: 10 });
+    });
+    
+    test('handles pagination', async () => {
+      mock.onGet('/wp-json/wp/v2/posts').reply(200, [], {
+        'x-wp-total': '50',
+        'x-wp-totalpages': '5'
+      });
+      
+      const response = await WordPressAPI.getPosts({ page: 2 });
+      
+      expect(mock.history.get[0].params).toEqual({
+        per_page: 10,
+        page: 2
+      });
+    });
+    
+    test('handles network errors', async () => {
+      mock.onGet('/wp-json/wp/v2/posts').networkError();
+      
+      await expect(WordPressAPI.getPosts()).rejects.toThrow('Network Error');
+    });
+    
+    test('retries failed requests', async () => {
+      let attempts = 0;
+      mock.onGet('/wp-json/wp/v2/posts').reply(() => {
+        attempts++;
+        if (attempts < 3) {
+          return [500, null];
+        }
+        return [200, [{ id: 1 }]];
+      });
+      
+      const posts = await WordPressAPI.getPosts();
+      
+      expect(posts).toEqual([{ id: 1 }]);
+      expect(attempts).toBe(3);
+    });
+  });
+  
+  describe('caching', () => {
+    test('caches responses', async () => {
+      const mockPosts = [{ id: 1 }];
+      mock.onGet('/wp-json/wp/v2/posts').reply(200, mockPosts);
+      
+      // First call - hits API
+      await WordPressAPI.getPosts();
+      expect(mock.history.get).toHaveLength(1);
+      
+      // Second call - uses cache
+      await WordPressAPI.getPosts();
+      expect(mock.history.get).toHaveLength(1);
+    });
+    
+    test('invalidates cache after TTL', async () => {
+      jest.useFakeTimers();
+      
+      mock.onGet('/wp-json/wp/v2/posts').reply(200, []);
+      
+      await WordPressAPI.getPosts();
+      expect(mock.history.get).toHaveLength(1);
+      
+      // Advance time past cache TTL
+      jest.advanceTimersByTime(5 * 60 * 1000);
+      
+      await WordPressAPI.getPosts();
+      expect(mock.history.get).toHaveLength(2);
+      
+      jest.useRealTimers();
+    });
+  });
+});</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>End-to-End Testing: The Full Journey</h2>
+            <p>E2E tests are like a test drive of your entire car - checking that everything works together from starting the engine to parking!</p>
+
+            <div class="mermaid">
+            sequenceDiagram
+                participant User
+                participant Browser
+                participant React App
+                participant WordPress API
+                
+                User->>Browser: Navigate to site
+                Browser->>React App: Load application
+                React App->>WordPress API: Fetch initial data
+                WordPress API-->>React App: Return posts
+                React App-->>Browser: Render UI
+                Browser-->>User: Display content
+                
+                User->>Browser: Click on post
+                Browser->>React App: Route change
+                React App->>WordPress API: Fetch post details
+                WordPress API-->>React App: Return post data
+                React App-->>Browser: Update view
+                Browser-->>User: Show post
+                
+                Note over User,WordPress API: Complete user journey tested
+            </div>
+
+            <h3>Cypress E2E Tests</h3>
+            <div class="test-code">
+<pre>// cypress/e2e/blog-flow.cy.js
+describe('Blog User Flow', () => {
+  beforeEach(() => {
+    // Seed test data
+    cy.task('seedDatabase');
+    cy.visit('/');
+  });
+  
+  it('allows users to browse and comment on posts', () => {
+    // Check homepage loads
+    cy.contains('h1', 'My WordPress Blog').should('be.visible');
+    
+    // Verify posts are displayed
+    cy.get('[data-testid="post-card"]').should('have.length.at.least', 3);
+    
+    // Search for a specific post
+    cy.get('[data-testid="search-input"]').type('React Tutorial');
+    cy.get('[data-testid="search-button"]').click();
+    
+    // Verify search results
+    cy.get('[data-testid="post-card"]').should('have.length', 1);
+    cy.contains('React Tutorial').should('be.visible');
+    
+    // Click on the post
+    cy.get('[data-testid="post-card"]').first().click();
+    
+    // Verify post details page
+    cy.url().should('include', '/posts/');
+    cy.contains('h1', 'React Tutorial').should('be.visible');
+    cy.get('[data-testid="post-content"]').should('be.visible');
+    
+    // Add a comment
+    cy.get('[data-testid="comment-form"]').within(() => {
+      cy.get('input[name="name"]').type('Test User');
+      cy.get('input[name="email"]').type('test@example.com');
+      cy.get('textarea[name="comment"]').type('Great tutorial!');
+      cy.get('button[type="submit"]').click();
+    });
+    
+    // Verify comment was added
+    cy.get('[data-testid="comment"]').should('contain', 'Great tutorial!');
+    cy.get('[data-testid="comment"]').should('contain', 'Test User');
+    
+    // Test pagination
+    cy.visit('/');
+    cy.get('[data-testid="pagination-next"]').click();
+    cy.url().should('include', 'page=2');
+    cy.get('[data-testid="post-card"]').should('exist');
+  });
+  
+  it('handles errors gracefully', () => {
+    // Simulate API failure
+    cy.intercept('GET', '/wp-json/wp/v2/posts', {
+      statusCode: 500,
+      body: { message: 'Server error' }
+    });
+    
+    cy.visit('/');
+    
+    // Check error message is displayed
+    cy.contains('Unable to load posts').should('be.visible');
+    cy.get('[data-testid="retry-button"]').should('be.visible');
+    
+    // Fix the API and retry
+    cy.intercept('GET', '/wp-json/wp/v2/posts', {
+      fixture: 'posts.json'
+    });
+    
+    cy.get('[data-testid="retry-button"]').click();
+    cy.get('[data-testid="post-card"]').should('exist');
+  });
+  
+  it('is accessible', () => {
+    cy.visit('/');
+    cy.injectAxe();
+    
+    // Check for accessibility violations
+    cy.checkA11y();
+    
+    // Navigate with keyboard
+    cy.get('body').tab();
+    cy.focused().should('have.attr', 'data-testid', 'skip-to-content');
+    
+    // Check ARIA labels
+    cy.get('[role="navigation"]').should('have.attr', 'aria-label');
+    cy.get('[role="main"]').should('exist');
+    cy.get('[role="search"]').should('have.attr', 'aria-label');
+  });
+});</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Test Coverage: Your Quality Report Card</h2>
+            <p>Test coverage is like a report card for your code - it shows which parts are well-tested (A+) and which need more attention!</p>
+
+            <div style="background: #f8f9fa; padding: 2rem; border-radius: 10px; margin: 2rem 0;">
+                <h3 style="color: #333; margin-bottom: 1rem;">Coverage Report</h3>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #666; margin-bottom: 0.5rem;">Statements: 85%</h4>
+                    <div class="coverage-bar">
+                        <div class="coverage-fill" style="width: 85%;">85%</div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #666; margin-bottom: 0.5rem;">Branches: 78%</h4>
+                    <div class="coverage-bar">
+                        <div class="coverage-fill" style="width: 78%; background: linear-gradient(90deg, #ffc107 0%, #fd7e14 100%);">78%</div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #666; margin-bottom: 0.5rem;">Functions: 92%</h4>
+                    <div class="coverage-bar">
+                        <div class="coverage-fill" style="width: 92%;">92%</div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #666; margin-bottom: 0.5rem;">Lines: 88%</h4>
+                    <div class="coverage-bar">
+                        <div class="coverage-fill" style="width: 88%;">88%</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Running Coverage Reports</h3>
+            <div class="test-code">
+<pre>// Generate coverage report
+npm run test:coverage
+
+// Coverage configuration in package.json
+{
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!src/index.js",
+      "!src/serviceWorker.js",
+      "!src/**/*.stories.js"
+    ],
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    }
+  }
+}</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Testing Best Practices</h2>
+            <p>Testing best practices are like the rules of the road - they keep everyone safe and moving in the right direction!</p>
+
+            <div class="test-pyramid">
+                <h3>The Golden Rules of Testing</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 4px solid #28a745;">
+                        <h4 style="color: #28a745; margin-bottom: 0.5rem;">✅ DO</h4>
+                        <ul style="margin: 0; padding-left: 1.5rem;">
+                            <li>Write tests first (TDD)</li>
+                            <li>Test behavior, not implementation</li>
+                            <li>Keep tests simple and focused</li>
+                            <li>Use descriptive test names</li>
+                            <li>Mock external dependencies</li>
+                            <li>Test edge cases</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 4px solid #dc3545;">
+                        <h4 style="color: #dc3545; margin-bottom: 0.5rem;">❌ DON'T</h4>
+                        <ul style="margin: 0; padding-left: 1.5rem;">
+                            <li>Test implementation details</li>
+                            <li>Write brittle tests</li>
+                            <li>Ignore failing tests</li>
+                            <li>Test third-party code</li>
+                            <li>Over-mock everything</li>
+                            <li>Write tests after bugs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Testing Checklist</h3>
+            <div class="test-code">
+<pre>// Testing Checklist for React + WordPress Apps
+
+□ Unit Tests
+  ✓ All utility functions tested
+  ✓ Component rendering tests
+  ✓ Event handler tests
+  ✓ Custom hooks tested
+  ✓ Edge cases covered
+
+□ Integration Tests
+  ✓ Component interactions tested
+  ✓ API integration tested
+  ✓ State management tested
+  ✓ Router integration tested
+  ✓ Error boundaries tested
+
+□ E2E Tests
+  ✓ Critical user paths tested
+  ✓ Form submissions work
+  ✓ Navigation works
+  ✓ Authentication flow tested
+  ✓ Error scenarios handled
+
+□ Performance Tests
+  ✓ Load time benchmarks
+  ✓ Bundle size checks
+  ✓ Memory leak detection
+  ✓ API response time tests
+
+□ Accessibility Tests
+  ✓ Keyboard navigation
+  ✓ Screen reader compatibility
+  ✓ Color contrast checks
+  ✓ ARIA labels present
+
+□ Security Tests
+  ✓ XSS prevention tested
+  ✓ Input validation tested
+  ✓ Authentication tested
+  ✓ Authorization tested</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Continuous Integration: Automated Testing Pipeline</h2>
+            <p>CI/CD is like having a robot assistant that runs all your tests every time you make changes - catching bugs before they reach production!</p>
+
+            <div class="mermaid">
+            graph LR
+                A[Push Code] --> B[GitHub Actions]
+                B --> C[Install Dependencies]
+                C --> D[Run Linting]
+                D --> E[Run Unit Tests]
+                E --> F[Run Integration Tests]
+                F --> G[Build Application]
+                G --> H[Run E2E Tests]
+                H --> I{All Tests Pass?}
+                I -->|Yes| J[Deploy to Staging]
+                I -->|No| K[Notify Developer]
+                
+                style I fill:#f39c12
+                style J fill:#2ecc71
+                style K fill:#e74c3c
+            </div>
+
+            <h3>GitHub Actions Configuration</h3>
+            <div class="test-code">
+<pre># .github/workflows/test.yml
+name: Test Suite
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run linting
+        run: npm run lint
+      
+      - name: Run unit tests
+        run: npm test -- --coverage
+      
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Run E2E tests
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm start
+          wait-on: 'http://localhost:3000'
+      
+      - name: Upload test artifacts
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: |
+            coverage/
+            cypress/screenshots/
+            cypress/videos/</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Real-World Testing Scenario</h2>
+            <p>Let's see how all these testing strategies come together in a real feature: a WordPress comment system with React!</p>
+
+            <div class="test-pass">
+                <h4>✅ Complete Test Suite Example</h4>
+                <div class="test-code">
+<pre>// Complete test suite for Comment System
+
+// 1. Unit Test - Comment validation
+describe('Comment Validation', () => {
+  test('validates required fields', () => {
+    const result = validateComment({
+      author: '',
+      content: 'Great post!'
+    });
+    
+    expect(result.isValid).toBe(false);
+    expect(result.errors).toContain('Author is required');
+  });
+});
+
+// 2. Component Test - Comment Form
+describe('CommentForm', () => {
+  test('submits valid comment', async () => {
+    const onSubmit = jest.fn();
+    const { user } = render(&lt;CommentForm onSubmit={onSubmit} /&gt;);
+    
+    await user.type(screen.getByLabelText(/name/i), 'John');
+    await user.type(screen.getByLabelText(/comment/i), 'Nice!');
+    await user.click(screen.getByRole('button', { name: /submit/i }));
+    
+    expect(onSubmit).toHaveBeenCalledWith({
+      author: 'John',
+      content: 'Nice!'
+    });
+  });
+});
+
+// 3. Integration Test - Comments with API
+describe('Comments Integration', () => {
+  test('loads and displays comments', async () => {
+    render(&lt;Comments postId="1" /&gt;);
+    
+    await waitFor(() => {
+      expect(screen.getByText('First comment')).toBeInTheDocument();
+    });
+  });
+});
+
+// 4. E2E Test - Complete flow
+describe('Comment User Flow', () => {
+  it('user can add and view comment', () => {
+    cy.visit('/posts/1');
+    cy.get('[data-testid="comment-input"]').type('Awesome!');
+    cy.get('[data-testid="submit-comment"]').click();
+    cy.contains('Awesome!').should('be.visible');
+  });
+});</pre>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 0.5rem; margin-top: 2rem;">
+                <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">🎯 Testing Mastery Achieved!</h2>
+                <p style="margin-bottom: 1rem;">You now have the complete testing toolkit for React + WordPress applications:</p>
+                <ul style="margin-bottom: 1.5rem;">
+                    <li style="margin: 0.5rem 0;">🧪 Unit testing for components and functions</li>
+                    <li style="margin: 0.5rem 0;">🔗 Integration testing for feature flows</li>
+                    <li style="margin: 0.5rem 0;">🚀 E2E testing for user journeys</li>
+                    <li style="margin: 0.5rem 0;">📊 Coverage reporting and metrics</li>
+                    <li style="margin: 0.5rem 0;">🤖 CI/CD automation setup</li>
+                </ul>
+                <p style="font-weight: bold;">Remember: Good tests give you confidence to ship fast and sleep well!</p>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>
