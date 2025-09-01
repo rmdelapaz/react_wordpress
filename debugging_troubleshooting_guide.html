@@ -40,6 +40,8 @@
             font-family: 'Courier New', monospace;
             overflow-x: auto;
             margin: 1rem 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
         .code-fix {
             background: #1e1e1e;
@@ -49,6 +51,18 @@
             font-family: 'Courier New', monospace;
             overflow-x: auto;
             margin: 1rem 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        code {
+            background: transparent;
+            padding: 0;
+            font-family: inherit;
         }
         .debug-tool {
             display: inline-block;
@@ -188,17 +202,14 @@
 
             <div class="error-box">
                 <h4>🔴 The Error:</h4>
-                <div class="code-error">
-Access to fetch at 'http://localhost:8000/wp-json/wp/v2/posts' from origin 
+                <pre class="code-error">Access to fetch at 'http://localhost:8000/wp-json/wp/v2/posts' from origin 
 'http://localhost:3000' has been blocked by CORS policy: 
-No 'Access-Control-Allow-Origin' header is present on the requested resource.
-                </div>
+No 'Access-Control-Allow-Origin' header is present on the requested resource.</pre>
             </div>
 
             <div class="solution-box">
                 <h4>✅ The Solutions:</h4>
-                <div class="code-fix">
-// Solution 1: WordPress functions.php
+                <pre class="code-fix">// Solution 1: WordPress functions.php
 function add_cors_headers() {
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
@@ -217,8 +228,7 @@ add_action('init', 'add_cors_headers');
 }
 
 // Solution 3: Use a CORS plugin for WordPress
-// Install: "WP CORS" or "WP REST API Controller"
-                </div>
+// Install: "WP CORS" or "WP REST API Controller"</pre>
             </div>
 
             <div class="mermaid">
@@ -249,11 +259,9 @@ add_action('init', 'add_cors_headers');
 
             <div class="error-box">
                 <h4>🔴 The Error:</h4>
-                <div class="code-error">
-TypeError: Cannot read property 'title' of undefined
+                <pre class="code-error">TypeError: Cannot read property 'title' of undefined
     at PostCard (PostCard.js:15)
-    at renderWithHooks (react-dom.development.js:14985)
-                </div>
+    at renderWithHooks (react-dom.development.js:14985)</pre>
             </div>
 
             <canvas id="undefinedCanvas" width="600" height="300"></canvas>
@@ -311,33 +319,31 @@ TypeError: Cannot read property 'title' of undefined
 
             <div class="solution-box">
                 <h4>✅ The Solutions:</h4>
-                <div class="code-fix">
-// Solution 1: Optional Chaining (ES2020)
+                <pre class="code-fix">// Solution 1: Optional Chaining (ES2020)
 const title = post?.title?.rendered;
 
 // Solution 2: Conditional Rendering
 {post && post.title && (
-    <h2>{post.title.rendered}</h2>
+    &lt;h2&gt;{post.title.rendered}&lt;/h2&gt;
 )}
 
 // Solution 3: Default Props
 const PostCard = ({ post = {} }) => {
     const { title = { rendered: 'Loading...' } } = post;
-    return <h2>{title.rendered}</h2>;
+    return &lt;h2&gt;{title.rendered}&lt;/h2&gt;;
 };
 
 // Solution 4: Loading State
-if (loading) return <Spinner />;
-if (!post) return <div>No post found</div>;
-return <h2>{post.title.rendered}</h2>;
+if (loading) return &lt;Spinner /&gt;;
+if (!post) return &lt;div&gt;No post found&lt;/div&gt;;
+return &lt;h2&gt;{post.title.rendered}&lt;/h2&gt;;
 
 // Solution 5: Guard Clauses
 const getTitle = (post) => {
     if (!post) return 'No post';
     if (!post.title) return 'Untitled';
     return post.title.rendered || 'Untitled';
-};
-                </div>
+};</pre>
             </div>
         </section>
 
@@ -347,10 +353,8 @@ const getTitle = (post) => {
 
             <div class="error-box">
                 <h4>🔴 The Error:</h4>
-                <div class="code-error">
-Warning: Maximum update depth exceeded. This can happen when a component 
-repeatedly calls setState inside componentWillUpdate or componentDidUpdate.
-                </div>
+                <pre class="code-error">Warning: Maximum update depth exceeded. This can happen when a component 
+repeatedly calls setState inside componentWillUpdate or componentDidUpdate.</pre>
             </div>
 
             <div class="mermaid">
@@ -368,8 +372,7 @@ repeatedly calls setState inside componentWillUpdate or componentDidUpdate.
 
             <div class="solution-box">
                 <h4>✅ The Fix:</h4>
-                <div class="code-fix">
-// ❌ BAD - Infinite Loop
+                <pre class="code-fix">// ❌ BAD - Infinite Loop
 useEffect(() => {
     setCount(count + 1); // This causes re-render, which triggers useEffect again!
 });
@@ -390,8 +393,7 @@ useEffect(() => {
 // ✅ GOOD - Using Callback
 useEffect(() => {
     setCount(prevCount => prevCount + 1);
-}, [someDependency]); // Not dependent on count
-                </div>
+}, [someDependency]); // Not dependent on count</pre>
             </div>
         </section>
 
@@ -401,9 +403,7 @@ useEffect(() => {
 
             <div class="error-box">
                 <h4>🔴 The Error:</h4>
-                <div class="code-error">
-GET http://localhost:8000/wp-json/wp/v2/posts 404 (Not Found)
-                </div>
+                <pre class="code-error">GET http://localhost:8000/wp-json/wp/v2/posts 404 (Not Found)</pre>
             </div>
 
             <div class="warning-box">
@@ -419,8 +419,7 @@ GET http://localhost:8000/wp-json/wp/v2/posts 404 (Not Found)
 
             <div class="solution-box">
                 <h4>✅ The Solutions:</h4>
-                <div class="code-fix">
-// Solution 1: Fix Permalinks
+                <pre class="code-fix">// Solution 1: Fix Permalinks
 // Go to: WordPress Admin → Settings → Permalinks
 // Select "Post name" and Save (this regenerates .htaccess)
 
@@ -447,8 +446,7 @@ RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]
-# END WordPress
-                </div>
+# END WordPress</pre>
             </div>
         </section>
 
@@ -458,13 +456,11 @@ RewriteRule . /index.php [L]
 
             <div class="error-box">
                 <h4>🔴 The Problem:</h4>
-                <div class="code-error">
-// You update state but UI doesn't change
+                <pre class="code-error">// You update state but UI doesn't change
 handleClick = () => {
     user.name = 'John'; // ❌ Mutating state directly
     setUser(user); // React doesn't see this as a change!
-}
-                </div>
+}</pre>
             </div>
 
             <canvas id="stateCanvas" width="600" height="350"></canvas>
@@ -534,8 +530,7 @@ handleClick = () => {
 
             <div class="solution-box">
                 <h4>✅ The Solutions:</h4>
-                <div class="code-fix">
-// For Objects - Create New Reference
+                <pre class="code-fix">// For Objects - Create New Reference
 // ❌ Wrong
 const updateUser = () => {
     user.name = 'John';
@@ -582,8 +577,7 @@ const updateNested = () => {
             city: 'New York'
         }
     });
-};
-                </div>
+};</pre>
             </div>
         </section>
 
@@ -593,17 +587,14 @@ const updateNested = () => {
 
             <div class="error-box">
                 <h4>🔴 The Error:</h4>
-                <div class="code-error">
-Mixed Content: The page at 'https://mysite.com' was loaded over HTTPS, 
+                <pre class="code-error">Mixed Content: The page at 'https://mysite.com' was loaded over HTTPS, 
 but requested an insecure resource 'http://mysite.com/wp-json/wp/v2/posts'. 
-This request has been blocked; the content must be served over HTTPS.
-                </div>
+This request has been blocked; the content must be served over HTTPS.</pre>
             </div>
 
             <div class="solution-box">
                 <h4>✅ The Solutions:</h4>
-                <div class="code-fix">
-// Solution 1: Use Protocol-Relative URLs
+                <pre class="code-fix">// Solution 1: Use Protocol-Relative URLs
 const API_URL = '//mysite.com/wp-json/wp/v2';
 
 // Solution 2: Force HTTPS in WordPress
@@ -625,8 +616,7 @@ const API_URL = process.env.NODE_ENV === 'production'
 // Solution 5: .htaccess Redirect
 RewriteEngine On
 RewriteCond %{HTTPS} !=on
-RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
-                </div>
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]</pre>
             </div>
         </section>
 
@@ -763,8 +753,7 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 
             <div class="solution-box">
                 <h4>🔍 React DevTools Techniques:</h4>
-                <div class="code-fix">
-// 1. Finding Performance Issues
+                <pre class="code-fix">// 1. Finding Performance Issues
 // Look for components highlighted in yellow/red during renders
 
 // 2. Debugging Props
@@ -786,8 +775,7 @@ console.log($r.state); // Selected component's state
 // Watch for unexpected flashing
 
 // 7. Performance Profiling
-// Start profiling → Interact with app → Stop → Analyze flamegraph
-                </div>
+// Start profiling → Interact with app → Stop → Analyze flamegraph</pre>
             </div>
         </section>
 
@@ -797,8 +785,7 @@ console.log($r.state); // Selected component's state
 
             <div class="solution-box">
                 <h4>⚙️ Enable WordPress Debugging:</h4>
-                <div class="code-fix">
-// wp-config.php - Development Settings
+                <pre class="code-fix">// wp-config.php - Development Settings
 define('WP_DEBUG', true);
 define('WP_DEBUG_LOG', true);
 define('WP_DEBUG_DISPLAY', true);
@@ -833,8 +820,7 @@ function debug_log($message) {
 
 // Usage
 debug_log('User ID: ' . get_current_user_id());
-debug_log($_POST); // Log entire POST array
-                </div>
+debug_log($_POST); // Log entire POST array</pre>
             </div>
         </section>
 
@@ -844,8 +830,7 @@ debug_log($_POST); // Log entire POST array
 
             <div class="solution-box">
                 <h4>🎯 Advanced Console Techniques:</h4>
-                <div class="code-fix">
-// 1. Styled Console Logs
+                <pre class="code-fix">// 1. Styled Console Logs
 console.log('%c Important Message! ', 
     'background: #222; color: #bada55; font-size: 16px; padding: 5px;');
 
@@ -889,8 +874,7 @@ console.memory; // Check memory usage
 // 10. Clear with Style
 console.clear();
 console.log('%c Console Cleared! ', 
-    'background: red; color: white; font-size: 20px;');
-                </div>
+    'background: red; color: white; font-size: 20px;');</pre>
             </div>
         </section>
 
@@ -900,8 +884,7 @@ console.log('%c Console Cleared! ',
 
             <div class="solution-box">
                 <h4>🔧 VS Code Configuration:</h4>
-                <div class="code-fix">
-// .vscode/launch.json
+                <pre class="code-fix">// .vscode/launch.json
 {
     "version": "0.2.0",
     "configurations": [
@@ -947,8 +930,7 @@ console.log('%c Console Cleared! ',
 // Debug Console Commands
 // Watch expressions in real-time
 // Evaluate expressions while paused
-// Modify variables during execution
-                </div>
+// Modify variables during execution</pre>
             </div>
         </section>
 
@@ -958,8 +940,7 @@ console.log('%c Console Cleared! ',
 
             <div class="solution-box">
                 <h4>🛡️ Error Boundary Component:</h4>
-                <div class="code-fix">
-// ErrorBoundary.js
+                <pre class="code-fix">// ErrorBoundary.js
 import React from 'react';
 
 class ErrorBoundary extends React.Component {
@@ -1009,20 +990,20 @@ class ErrorBoundary extends React.Component {
         if (this.state.hasError) {
             // Fallback UI
             return (
-                <div style={{
+                &lt;div style={{
                     padding: '20px',
                     background: '#fee',
                     border: '1px solid #fcc',
                     borderRadius: '5px',
                     margin: '20px'
-                }}>
-                    <h2>Oops! Something went wrong 😢</h2>
-                    <details style={{ whiteSpace: 'pre-wrap', marginTop: '10px' }}>
-                        <summary>Click for error details</summary>
-                        <p>{this.state.error && this.state.error.toString()}</p>
-                        <p>{this.state.errorInfo && this.state.errorInfo.componentStack}</p>
-                    </details>
-                    <button onClick={this.handleReset} style={{
+                }}&gt;
+                    &lt;h2&gt;Oops! Something went wrong 😢&lt;/h2&gt;
+                    &lt;details style={{ whiteSpace: 'pre-wrap', marginTop: '10px' }}&gt;
+                        &lt;summary&gt;Click for error details&lt;/summary&gt;
+                        &lt;p&gt;{this.state.error && this.state.error.toString()}&lt;/p&gt;
+                        &lt;p&gt;{this.state.errorInfo && this.state.errorInfo.componentStack}&lt;/p&gt;
+                    &lt;/details&gt;
+                    &lt;button onClick={this.handleReset} style={{
                         marginTop: '10px',
                         padding: '10px 20px',
                         background: '#007bff',
@@ -1030,10 +1011,10 @@ class ErrorBoundary extends React.Component {
                         border: 'none',
                         borderRadius: '5px',
                         cursor: 'pointer'
-                    }}>
+                    }}&gt;
                         Try Again
-                    </button>
-                </div>
+                    &lt;/button&gt;
+                &lt;/div&gt;
             );
         }
 
@@ -1044,13 +1025,13 @@ class ErrorBoundary extends React.Component {
 // Usage
 function App() {
     return (
-        <ErrorBoundary>
-            <Header />
-            <ErrorBoundary>
-                <MainContent />
-            </ErrorBoundary>
-            <Footer />
-        </ErrorBoundary>
+        &lt;ErrorBoundary&gt;
+            &lt;Header /&gt;
+            &lt;ErrorBoundary&gt;
+                &lt;MainContent /&gt;
+            &lt;/ErrorBoundary&gt;
+            &lt;Footer /&gt;
+        &lt;/ErrorBoundary&gt;
     );
 }
 
@@ -1070,8 +1051,7 @@ function useErrorHandler() {
     }, [error]);
     
     return { captureError, resetError };
-}
-                </div>
+}</pre>
             </div>
         </section>
 
@@ -1155,17 +1135,16 @@ function useErrorHandler() {
 
             <div class="solution-box">
                 <h4>⚡ Performance Debugging Tools:</h4>
-                <div class="code-fix">
-// 1. React Profiler API
+                <pre class="code-fix">// 1. React Profiler API
 import { Profiler } from 'react';
 
 function onRenderCallback(id, phase, actualDuration) {
     console.log(`${id} (${phase}) took ${actualDuration}ms`);
 }
 
-<Profiler id="PostList" onRender={onRenderCallback}>
-    <PostList posts={posts} />
-</Profiler>
+&lt;Profiler id="PostList" onRender={onRenderCallback}&gt;
+    &lt;PostList posts={posts} /&gt;
+&lt;/Profiler&gt;
 
 // 2. Performance Observer
 const observer = new PerformanceObserver((list) => {
@@ -1202,8 +1181,7 @@ function usePerformanceTimer(label) {
             console.log(`${label}: ${measure.duration}ms`);
         };
     }, [label]);
-}
-                </div>
+}</pre>
             </div>
         </section>
 
