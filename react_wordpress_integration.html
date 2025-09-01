@@ -371,21 +371,22 @@
             <p>React Router is like the GPS in your car. It knows all the roads (routes) in your application, helps users navigate between destinations (pages), and remembers where they've been (history).</p>
 
             <div class="mermaid">
-            graph LR
-                subgraph "URL Routes"
-                    Home[/<br/>Home Page] --> PostList[/blog<br/>All Posts]
-                    PostList --> PostDetail[/blog/:slug<br/>Single Post]
-                    Home --> Category[/category/:name<br/>Category Posts]
-                    Home --> Search[/search<br/>Search Results]
-                    Home --> About[/about<br/>About Page]
-                    PostDetail --> NotFound[/404<br/>Not Found]
-                end
-                
-                style Home fill:#3498db
-                style PostList fill:#2ecc71
-                style PostDetail fill:#e74c3c
-                style NotFound fill:#95a5a6
-            </div>
+graph LR
+  subgraph "URL Routes"
+    Home["/\nHome Page"] --> PostList["/blog\nAll Posts"]
+    PostList --> PostDetail["/blog/:slug\nSingle Post"]
+    Home --> Category["/category/:name\nCategory Posts"]
+    Home --> Search["/search\nSearch Results"]
+    Home --> About["/about\nAbout Page"]
+    PostDetail --> NotFound["/404\nNot Found"]
+  end
+
+  style Home fill:#3498db,color:#fff
+  style PostList fill:#2ecc71,color:#000
+  style PostDetail fill:#e74c3c,color:#fff
+  style NotFound fill:#95a5a6,color:#000
+</div>
+
 
             <h3>Real-World Example: Medium's URL Structure</h3>
             <p>Medium uses clean URLs that map directly to their content structure. When you visit medium.com/@author/article-title, React Router instantly knows to load the article component with that specific content. No page reload needed!</p>
@@ -874,4 +875,3 @@
     </main>
 </body>
 </html>
-

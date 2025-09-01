@@ -79,34 +79,35 @@
             <p>REST (Representational State Transfer) is like a well-organized restaurant. You have a menu (endpoints), you place orders (requests), and you get exactly what you ordered (responses). The kitchen doesn't care if you're dining in, taking out, or getting delivery - the process is the same!</p>
 
             <div class="mermaid">
-            graph LR
-                subgraph "HTTP Verbs = Restaurant Actions"
-                    GET[GET<br/>Read the Menu]
-                    POST[POST<br/>Place New Order]
-                    PUT[PUT<br/>Replace Entire Order]
-                    PATCH[PATCH<br/>Modify Order]
-                    DELETE[DELETE<br/>Cancel Order]
-                end
-                
-                subgraph "Resources = Menu Items"
-                    Posts[/wp/v2/posts<br/>Blog Posts]
-                    Pages[/wp/v2/pages<br/>Static Pages]
-                    Media[/wp/v2/media<br/>Images/Videos]
-                    Users[/wp/v2/users<br/>Authors]
-                    Comments[/wp/v2/comments<br/>Discussions]
-                end
-                
-                GET --> Posts
-                POST --> Comments
-                PUT --> Pages
-                DELETE --> Media
-                
-                style GET fill:#2ecc71
-                style POST fill:#3498db
-                style PUT fill:#f39c12
-                style PATCH fill:#9b59b6
-                style DELETE fill:#e74c3c
-            </div>
+graph LR
+  subgraph "HTTP Verbs = Restaurant Actions"
+    GET["GET\nRead the Menu"]
+    POST["POST\nPlace New Order"]
+    PUT["PUT\nReplace Entire Order"]
+    PATCH["PATCH\nModify Order"]
+    DELETE["DELETE\nCancel Order"]
+  end
+
+  subgraph "Resources = Menu Items"
+    Posts[/wp/v2/posts\nBlog Posts/]
+    Pages[/wp/v2/pages\nStatic Pages/]
+    Media[/wp/v2/media\nImages/Videos/]
+    Users[/wp/v2/users\nAuthors/]
+    Comments[/wp/v2/comments\nDiscussions/]
+  end
+
+  GET --> Posts
+  POST --> Comments
+  PUT --> Pages
+  DELETE --> Media
+
+  style GET fill:#2ecc71,color:#000
+  style POST fill:#3498db,color:#fff
+  style PUT fill:#f39c12,color:#000
+  style PATCH fill:#9b59b6,color:#fff
+  style DELETE fill:#e74c3c,color:#fff
+</div>
+
         </section>
 
         <section>

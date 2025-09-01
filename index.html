@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React + WordPress Mastery Course - Learn Modern Web Development</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="icon" href="/favicon.png">
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>🚀 React + WordPress Mastery Course</h1>
+        <p>Your Complete Journey from Beginner to Expert in Modern Web Development</p>
+    </header>
+
+    <main>
+        <section class="hero">
+            <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300">
+                <!-- Background gradient -->
+                <defs>
+                    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.1" />
+                        <stop offset="100%" style="stop-color:#764ba2;stop-opacity:0.1" />
+                    </linearGradient>
+                    <linearGradient id="reactGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#61dafb;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#4fa8c5;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <rect width="600" height="300" fill="url(#bgGradient)"/>
+                
+                <!-- React Logo -->
+                <g transform="translate(150, 150)">
+                    <circle cx="0" cy="0" r="8" fill="#61dafb"/>
+                    <ellipse cx="0" cy="0" rx="45" ry="17" fill="none" stroke="#61dafb" stroke-width="3"/>
+                    <ellipse cx="0" cy="0" rx="45" ry="17" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60)"/>
+                    <ellipse cx="0" cy="0" rx="45" ry="17" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(-60)"/>
+                </g>
+                
+                <!-- Plus Sign -->
+                <text x="300" y="160" font-size="48" fill="#666" text-anchor="middle" font-weight="bold">+</text>
+                
+                <!-- WordPress Logo -->
+                <g transform="translate(450, 150)">
+                    <circle cx="0" cy="0" r="40" fill="#21759b" stroke="#1a5c7a" stroke-width="2"/>
+                    <text x="0" y="8" font-size="36" fill="white" text-anchor="middle" font-weight="bold" font-family="Arial">W</text>
+                </g>
+                
+                <!-- Title -->
+                <text x="300" y="50" font-size="24" fill="#333" text-anchor="middle" font-weight="bold">Master Modern Web Development</text>
+                <text x="300" y="250" font-size="16" fill="#666" text-anchor="middle">Build Lightning-Fast, SEO-Optimized Applications</text>
+            </svg>
+        </section>
+
+        <section class="course-overview">
+            <h2>📚 Course Overview</h2>
+            <p>This comprehensive course takes you from React basics to building production-ready WordPress-powered applications. Each lesson includes interactive visualizations, real-world examples, and hands-on code samples.</p>
+            
+            <div class="mermaid">
+            graph LR
+                Start[Start Here] --> Lesson1[Foundation]
+                Lesson1 --> Lesson2[React Mastery]
+                Lesson2 --> Lesson3[API Integration]
+                Lesson3 --> Lesson4[Build Apps]
+                Lesson4 --> Lesson5[SEO Excellence]
+                Lesson5 --> Expert[Expert Level 🏆]
+                
+                style Start fill:#f9f,stroke:#333,stroke-width:4px
+                style Expert fill:#9f9,stroke:#333,stroke-width:4px
+                style Lesson1 fill:#e1f5fe
+                style Lesson2 fill:#c8e6c9
+                style Lesson3 fill:#fff3e0
+                style Lesson4 fill:#f3e5f5
+                style Lesson5 fill:#ffebee
+            </div>
+        </section>
+
+        <section class="lessons">
+            <h2>🎯 Course Modules</h2>
+            
+            <div class="lesson-grid">
+                <!-- Lesson 1 -->
+                <article class="lesson-card">
+                    <canvas id="lesson1Canvas" width="500" height="200"></canvas>
+                    <script>
+                        const l1Canvas = document.getElementById('lesson1Canvas');
+                        const l1Ctx = l1Canvas.getContext('2d');
+                        
+                        // Background
+                        l1Ctx.fillStyle = '#e3f2fd';
+                        l1Ctx.fillRect(0, 0, 500, 200);
+                        
+                        // Module number
+                        l1Ctx.fillStyle = '#1976d2';
+                        l1Ctx.font = 'bold 48px Arial';
+                        l1Ctx.fillText('01', 20, 60);
+                        
+                        // Title
+                        l1Ctx.fillStyle = '#333';
+                        l1Ctx.font = 'bold 20px Arial';
+                        l1Ctx.fillText('Introduction to React & Headless WordPress', 100, 40);
+                        
+                        // Description
+                        l1Ctx.fillStyle = '#666';
+                        l1Ctx.font = '14px Arial';
+                        l1Ctx.fillText('• Understand the architecture of modern web apps', 100, 70);
+                        l1Ctx.fillText('• Learn why React + WordPress is powerful', 100, 90);
+                        l1Ctx.fillText('• Explore real-world success stories', 100, 110);
+                        l1Ctx.fillText('• Set up your development environment', 100, 130);
+                        
+                        // Icons
+                        l1Ctx.font = '24px Arial';
+                        l1Ctx.fillText('🏗️ 🚀 💡', 100, 165);
+                        
+                        // CTA Button
+                        l1Ctx.fillStyle = '#1976d2';
+                        l1Ctx.fillRect(350, 150, 130, 35);
+                        l1Ctx.fillStyle = 'white';
+                        l1Ctx.font = 'bold 14px Arial';
+                        l1Ctx.textAlign = 'center';
+                        l1Ctx.fillText('Start Learning', 415, 172);
+                        l1Ctx.textAlign = 'left';
+                    </script>
+                    <h3>Foundation: React Meets WordPress</h3>
+                    <p>Begin your journey by understanding how React and WordPress work together to create powerful, modern web applications.</p>
+                    <ul>
+                        <li>🎯 The Restaurant Analogy</li>
+                        <li>🧩 LEGO Blocks of Web Development</li>
+                        <li>🏢 Architecture Patterns</li>
+                        <li>⚡ Performance Benefits</li>
+                    </ul>
+                    <a href="react_wordpress_intro.html" class="lesson-link">
+                        <strong>Open Lesson 1 →</strong>
+                    </a>
+                </article>
+
+                <!-- Lesson 2 -->
+                <article class="lesson-card">
+                    <canvas id="lesson2Canvas" width="500" height="200"></canvas>
+                    <script>
+                        const l2Canvas = document.getElementById('lesson2Canvas');
+                        const l2Ctx = l2Canvas.getContext('2d');
+                        
+                        // Background
+                        l2Ctx.fillStyle = '#e8f5e9';
+                        l2Ctx.fillRect(0, 0, 500, 200);
+                        
+                        // Module number
+                        l2Ctx.fillStyle = '#388e3c';
+                        l2Ctx.font = 'bold 48px Arial';
+                        l2Ctx.fillText('02', 20, 60);
+                        
+                        // Title
+                        l2Ctx.fillStyle = '#333';
+                        l2Ctx.font = 'bold 20px Arial';
+                        l2Ctx.fillText('React Components & Hooks Deep Dive', 100, 40);
+                        
+                        // Animated component boxes
+                        const colors = ['#4caf50', '#8bc34a', '#cddc39'];
+                        for(let i = 0; i < 3; i++) {
+                            l2Ctx.fillStyle = colors[i];
+                            l2Ctx.globalAlpha = 0.6;
+                            l2Ctx.fillRect(100 + i*30, 60 + i*10, 60, 40);
+                            l2Ctx.globalAlpha = 1;
+                        }
+                        
+                        // Description
+                        l2Ctx.fillStyle = '#666';
+                        l2Ctx.font = '14px Arial';
+                        l2Ctx.fillText('• Master function components and hooks', 220, 80);
+                        l2Ctx.fillText('• Build reusable UI components', 220, 100);
+                        l2Ctx.fillText('• Manage state like a pro', 220, 120);
+                        
+                        // CTA Button
+                        l2Ctx.fillStyle = '#388e3c';
+                        l2Ctx.fillRect(350, 150, 130, 35);
+                        l2Ctx.fillStyle = 'white';
+                        l2Ctx.font = 'bold 14px Arial';
+                        l2Ctx.textAlign = 'center';
+                        l2Ctx.fillText('Explore React', 415, 172);
+                        l2Ctx.textAlign = 'left';
+                    </script>
+                    <h3>React Mastery: Components & Hooks</h3>
+                    <p>Deep dive into React's core concepts with interactive examples and real-world patterns.</p>
+                    <ul>
+                        <li>🔧 useState, useEffect, useContext</li>
+                        <li>🎨 Component Composition</li>
+                        <li>🎯 Event Handling</li>
+                        <li>⚡ Performance Optimization</li>
+                    </ul>
+                    <a href="react_components_deep_dive.html" class="lesson-link">
+                        <strong>Open Lesson 2 →</strong>
+                    </a>
+                </article>
+
+                <!-- Lesson 3 -->
+                <article class="lesson-card">
+                    <canvas id="lesson3Canvas" width="500" height="200"></canvas>
+                    <script>
+                        const l3Canvas = document.getElementById('lesson3Canvas');
+                        const l3Ctx = l3Canvas.getContext('2d');
+                        
+                        // Background
+                        l3Ctx.fillStyle = '#fff3e0';
+                        l3Ctx.fillRect(0, 0, 500, 200);
+                        
+                        // Module number
+                        l3Ctx.fillStyle = '#f57c00';
+                        l3Ctx.font = 'bold 48px Arial';
+                        l3Ctx.fillText('03', 20, 60);
+                        
+                        // API Flow visualization
+                        l3Ctx.strokeStyle = '#ff9800';
+                        l3Ctx.lineWidth = 3;
+                        l3Ctx.beginPath();
+                        l3Ctx.moveTo(100, 100);
+                        l3Ctx.lineTo(200, 100);
+                        l3Ctx.moveTo(200, 85);
+                        l3Ctx.lineTo(200, 115);
+                        l3Ctx.moveTo(200, 100);
+                        l3Ctx.lineTo(300, 100);
+                        l3Ctx.stroke();
+                        
+                        // Boxes
+                        l3Ctx.fillStyle = '#ff9800';
+                        l3Ctx.fillRect(80, 85, 40, 30);
+                        l3Ctx.fillRect(280, 85, 40, 30);
+                        l3Ctx.fillStyle = 'white';
+                        l3Ctx.font = '12px Arial';
+                        l3Ctx.textAlign = 'center';
+                        l3Ctx.fillText('WP', 100, 103);
+                        l3Ctx.fillText('React', 300, 103);
+                        
+                        // Title
+                        l3Ctx.fillStyle = '#333';
+                        l3Ctx.font = 'bold 20px Arial';
+                        l3Ctx.textAlign = 'left';
+                        l3Ctx.fillText('WordPress REST API Mastery', 100, 40);
+                        
+                        // Description
+                        l3Ctx.fillStyle = '#666';
+                        l3Ctx.font = '14px Arial';
+                        l3Ctx.fillText('• Connect React to WordPress', 100, 140);
+                        l3Ctx.fillText('• Master API authentication', 100, 160);
+                        l3Ctx.fillText('• Handle data like a pro', 100, 180);
+                        
+                        // CTA Button
+                        l3Ctx.fillStyle = '#f57c00';
+                        l3Ctx.fillRect(350, 150, 130, 35);
+                        l3Ctx.fillStyle = 'white';
+                        l3Ctx.font = 'bold 14px Arial';
+                        l3Ctx.textAlign = 'center';
+                        l3Ctx.fillText('Learn API', 415, 172);
+                    </script>
+                    <h3>API Integration: Connect Everything</h3>
+                    <p>Master the WordPress REST API and learn to fetch, display, and manage content dynamically.</p>
+                    <ul>
+                        <li>🔌 REST API Fundamentals</li>
+                        <li>🔐 Authentication Methods</li>
+                        <li>📊 Query Parameters</li>
+                        <li>💾 Caching Strategies</li>
+                    </ul>
+                    <a href="wordpress_rest_api_mastery.html" class="lesson-link">
+                        <strong>Open Lesson 3 →</strong>
+                    </a>
+                </article>
+
+                <!-- Lesson 4 -->
+                <article class="lesson-card">
+                    <canvas id="lesson4Canvas" width="500" height="200"></canvas>
+                    <script>
+                        const l4Canvas = document.getElementById('lesson4Canvas');
+                        const l4Ctx = l4Canvas.getContext('2d');
+                        
+                        // Background
+                        l4Ctx.fillStyle = '#f3e5f5';
+                        l4Ctx.fillRect(0, 0, 500, 200);
+                        
+                        // Module number
+                        l4Ctx.fillStyle = '#7b1fa2';
+                        l4Ctx.font = 'bold 48px Arial';
+                        l4Ctx.fillText('04', 20, 60);
+                        
+                        // App mockup
+                        l4Ctx.strokeStyle = '#9c27b0';
+                        l4Ctx.lineWidth = 2;
+                        l4Ctx.strokeRect(100, 70, 120, 80);
+                        
+                        // App elements
+                        l4Ctx.fillStyle = '#e1bee7';
+                        l4Ctx.fillRect(105, 75, 110, 20);
+                        l4Ctx.fillRect(105, 100, 50, 20);
+                        l4Ctx.fillRect(160, 100, 55, 20);
+                        l4Ctx.fillRect(105, 125, 110, 20);
+                        
+                        // Title
+                        l4Ctx.fillStyle = '#333';
+                        l4Ctx.font = 'bold 20px Arial';
+                        l4Ctx.fillText('Build Complete Applications', 100, 40);
+                        
+                        // Features
+                        l4Ctx.fillStyle = '#666';
+                        l4Ctx.font = '14px Arial';
+                        l4Ctx.fillText('✓ Blog with comments', 240, 90);
+                        l4Ctx.fillText('✓ Search functionality', 240, 110);
+                        l4Ctx.fillText('✓ User authentication', 240, 130);
+                        l4Ctx.fillText('✓ Deployment ready', 240, 150);
+                        
+                        // CTA Button
+                        l4Ctx.fillStyle = '#7b1fa2';
+                        l4Ctx.fillRect(350, 150, 130, 35);
+                        l4Ctx.fillStyle = 'white';
+                        l4Ctx.font = 'bold 14px Arial';
+                        l4Ctx.textAlign = 'center';
+                        l4Ctx.fillText('Build Now', 415, 172);
+                    </script>
+                    <h3>Full Integration: Build Real Apps</h3>
+                    <p>Put it all together and build a production-ready blog application from scratch.</p>
+                    <ul>
+                        <li>🏗️ Project Architecture</li>
+                        <li>📱 Responsive Design</li>
+                        <li>🔄 State Management</li>
+                        <li>🚀 Deployment Strategies</li>
+                    </ul>
+                    <a href="react_wordpress_integration.html" class="lesson-link">
+                        <strong>Open Lesson 4 →</strong>
+                    </a>
+                </article>
+
+                <!-- Lesson 5 -->
+                <article class="lesson-card">
+                    <canvas id="lesson5Canvas" width="500" height="200"></canvas>
+                    <script>
+                        const l5Canvas = document.getElementById('lesson5Canvas');
+                        const l5Ctx = l5Canvas.getContext('2d');
+                        
+                        // Background
+                        l5Ctx.fillStyle = '#ffebee';
+                        l5Ctx.fillRect(0, 0, 500, 200);
+                        
+                        // Module number
+                        l5Ctx.fillStyle = '#c62828';
+                        l5Ctx.font = 'bold 48px Arial';
+                        l5Ctx.fillText('05', 20, 60);
+                        
+                        // SEO Graph
+                        l5Ctx.strokeStyle = '#f44336';
+                        l5Ctx.lineWidth = 3;
+                        l5Ctx.beginPath();
+                        l5Ctx.moveTo(100, 120);
+                        l5Ctx.lineTo(130, 110);
+                        l5Ctx.lineTo(160, 95);
+                        l5Ctx.lineTo(190, 85);
+                        l5Ctx.lineTo(220, 70);
+                        l5Ctx.stroke();
+                        
+                        // Arrow up
+                        l5Ctx.beginPath();
+                        l5Ctx.moveTo(215, 75);
+                        l5Ctx.lineTo(220, 70);
+                        l5Ctx.lineTo(225, 75);
+                        l5Ctx.stroke();
+                        
+                        // Title
+                        l5Ctx.fillStyle = '#333';
+                        l5Ctx.font = 'bold 20px Arial';
+                        l5Ctx.fillText('SEO Mastery & Optimization', 100, 40);
+                        
+                        // Metrics
+                        l5Ctx.fillStyle = '#666';
+                        l5Ctx.font = '14px Arial';
+                        l5Ctx.fillText('🎯 100/100 PageSpeed', 250, 85);
+                        l5Ctx.fillText('📈 Top Google Rankings', 250, 105);
+                        l5Ctx.fillText('🚀 Server-Side Rendering', 250, 125);
+                        l5Ctx.fillText('📱 Mobile-First Indexing', 250, 145);
+                        
+                        // CTA Button
+                        l5Ctx.fillStyle = '#c62828';
+                        l5Ctx.fillRect(350, 150, 130, 35);
+                        l5Ctx.fillStyle = 'white';
+                        l5Ctx.font = 'bold 14px Arial';
+                        l5Ctx.textAlign = 'center';
+                        l5Ctx.fillText('Optimize SEO', 415, 172);
+                    </script>
+                    <h3>SEO Excellence: Dominate Search</h3>
+                    <p>Make your React + WordPress app discoverable with advanced SEO techniques.</p>
+                    <ul>
+                        <li>🎯 Server-Side Rendering</li>
+                        <li>📊 Core Web Vitals</li>
+                        <li>🔍 Structured Data</li>
+                        <li>📈 Performance Monitoring</li>
+                    </ul>
+                    <a href="react_wordpress_seo_mastery.html" class="lesson-link">
+                        <strong>Open Lesson 5 →</strong>
+                    </a>
+                </article>
+            </div>
+        </section>
+
+        <section class="learning-path">
+            <h2>🗺️ Your Learning Journey</h2>
+            <div class="mermaid">
+            journey
+                title Your Path to Mastery
+                section Foundation
+                  Learn Concepts: 5: You
+                  Understand Architecture: 4: You
+                section React Skills
+                  Build Components: 4: You
+                  Master Hooks: 3: You
+                section API Integration
+                  Connect WordPress: 3: You
+                  Fetch Data: 4: You
+                section Build Apps
+                  Create Blog: 4: You
+                  Add Features: 5: You
+                section SEO Mastery
+                  Optimize Performance: 5: You
+                  Achieve Excellence: 5: You, Teacher
+            </div>
+        </section>
+
+        <section class="features">
+            <h2>✨ What Makes This Course Special</h2>
+            <canvas id="featuresCanvas" width="600" height="300"></canvas>
+            <script>
+                const featCanvas = document.getElementById('featuresCanvas');
+                const featCtx = featCanvas.getContext('2d');
+                
+                // Title
+                featCtx.font = 'bold 18px Arial';
+                featCtx.fillStyle = '#333';
+                featCtx.textAlign = 'center';
+                featCtx.fillText('Interactive Learning Experience', 300, 30);
+                
+                // Feature boxes
+                const features = [
+                    {icon: '🎨', title: 'Visual Learning', desc: 'Animations & diagrams', x: 100, y: 80},
+                    {icon: '💻', title: 'Live Code', desc: 'Interactive examples', x: 300, y: 80},
+                    {icon: '🌍', title: 'Real Examples', desc: 'Industry case studies', x: 500, y: 80},
+                    {icon: '🏗️', title: 'Project-Based', desc: 'Build real apps', x: 100, y: 180},
+                    {icon: '🚀', title: 'Performance', desc: 'Optimization tips', x: 300, y: 180},
+                    {icon: '📱', title: 'Responsive', desc: 'Mobile-first approach', x: 500, y: 180}
+                ];
+                
+                features.forEach(feature => {
+                    // Box
+                    featCtx.fillStyle = '#f5f5f5';
+                    featCtx.strokeStyle = '#ddd';
+                    featCtx.lineWidth = 1;
+                    featCtx.fillRect(feature.x - 80, feature.y, 160, 80);
+                    featCtx.strokeRect(feature.x - 80, feature.y, 160, 80);
+                    
+                    // Icon
+                    featCtx.font = '24px Arial';
+                    featCtx.textAlign = 'center';
+                    featCtx.fillText(feature.icon, feature.x, feature.y + 30);
+                    
+                    // Title
+                    featCtx.fillStyle = '#333';
+                    featCtx.font = 'bold 12px Arial';
+                    featCtx.fillText(feature.title, feature.x, feature.y + 50);
+                    
+                    // Description
+                    featCtx.fillStyle = '#666';
+                    featCtx.font = '10px Arial';
+                    featCtx.fillText(feature.desc, feature.x, feature.y + 65);
+                });
+            </script>
+        </section>
+
+        <section class="testimonials">
+            <h2>🌟 Success Stories</h2>
+            <blockquote>
+                <p>"This course transformed how I build web applications. The React + WordPress combination is incredibly powerful!"</p>
+                <cite>- Sarah Chen, Full-Stack Developer</cite>
+            </blockquote>
+            <blockquote>
+                <p>"The visual explanations and real-world examples made complex concepts easy to understand. Best tutorial series I've found!"</p>
+                <cite>- Marcus Johnson, Frontend Engineer</cite>
+            </blockquote>
+            <blockquote>
+                <p>"After completing this course, I landed my dream job building headless WordPress sites with React. Game changer!"</p>
+                <cite>- Elena Rodriguez, Web Developer</cite>
+            </blockquote>
+        </section>
+
+        <section class="next-steps">
+            <h2>🎯 Ready to Start?</h2>
+            <p>Choose your path and begin your journey to becoming a React + WordPress expert!</p>
+            
+            <div style="text-align: center; margin: 40px 0;">
+                <a href="react_wordpress_intro.html" style="display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.3s;">
+                    🚀 Start with Lesson 1
+                </a>
+            </div>
+
+            <div class="quick-links">
+                <h3>Quick Navigation</h3>
+                <ul>
+                    <li>📖 <a href="react_wordpress_intro.html">Lesson 1: Introduction to React & WordPress</a></li>
+                    <li>⚛️ <a href="react_components_deep_dive.html">Lesson 2: React Components & Hooks</a></li>
+                    <li>🔌 <a href="wordpress_rest_api_mastery.html">Lesson 3: WordPress REST API</a></li>
+                    <li>🏗️ <a href="react_wordpress_integration.html">Lesson 4: Building Complete Apps</a></li>
+                    <li>🎯 <a href="react_wordpress_seo_mastery.html">Lesson 5: SEO Mastery</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <p>💡 <strong>Pro Tip:</strong> Complete the lessons in order for the best learning experience. Each lesson builds upon the previous one!</p>
+            <p>🎓 This comprehensive course includes 5 in-depth lessons with interactive visualizations, code examples, and real-world case studies.</p>
+            <p>Built with ❤️ for developers who want to master modern web development.</p>
+        </footer>
+    </main>
+
+    <style>
+        /* Additional inline styles for the index page */
+        .lesson-card {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .lesson-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #2196f3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .lesson-link:hover {
+            background: #1976d2;
+        }
+        
+        blockquote {
+            margin: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-left: 4px solid #2196f3;
+            font-style: italic;
+        }
+        
+        cite {
+            display: block;
+            margin-top: 10px;
+            text-align: right;
+            font-style: normal;
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .quick-links ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .quick-links li {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        
+        .quick-links a {
+            color: #2196f3;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .quick-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</body>
+</html>
