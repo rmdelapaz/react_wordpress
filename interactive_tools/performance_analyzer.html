@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Analyzer - Visual Performance Metrics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .input-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .analyze-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .metric-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .score-excellent { color: #4caf50; }
+        .score-good { color: #8bc34a; }
+        .score-average { color: #ff9800; }
+        .score-poor { color: #f44336; }
+
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .chart-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .recommendations {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .recommendation-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .recommendation-priority {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .priority-high {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .priority-medium {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .priority-low {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .waterfall-chart {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow-x: auto;
+        }
+
+        .waterfall-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .waterfall-label {
+            width: 150px;
+            padding-right: 10px;
+            text-align: right;
+            color: #666;
+        }
+
+        .waterfall-timeline {
+            flex: 1;
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .waterfall-segment {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .segment-dns { background: #9c27b0; }
+        .segment-tcp { background: #2196f3; }
+        .segment-request { background: #ff9800; }
+        .segment-response { background: #4caf50; }
+        .segment-dom { background: #00bcd4; }
+        .segment-load { background: #795548; }
+
+        .history-table {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .export-btn {
+            padding: 10px 20px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .clear-btn {
+            padding: 10px 20px;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: #e0e0e0;
+            border: none;
+            border-radius: 6px 6px 0 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: white;
+            transform: translateY(2px);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .gauge-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .resource-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .resource-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .resource-item:hover {
+            background: #f8f9fa;
+        }
+
+        .resource-size {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .resource-time {
+            color: #667eea;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Performance Analyzer - Visual Metrics</h1>
+
+        <div class="input-section">
+            <div class="input-group">
+                <input type="url" id="url-input" placeholder="Enter website URL (e.g., https://example.com)" value="https://example.com">
+                <button class="analyze-btn" onclick="analyzePerformance()">
+                    Analyze Performance
+                </button>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <label><input type="checkbox" id="mobile-check"> Mobile View</label>
+                <label><input type="checkbox" id="throttle-check"> 3G Throttling</label>
+                <label><input type="checkbox" id="cache-check" checked> Use Cache</label>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <h3 style="color: white;">Analyzing Performance...</h3>
+            <p style="color: white; opacity: 0.8;">This may take a few moments</p>
+        </div>
+
+        <div id="results" style="display: none;">
+            <!-- Performance Score Cards -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">🎯</div>
+                    <div class="metric-label">Performance Score</div>
+                    <div class="metric-value score-excellent" id="performance-score">95</div>
+                    <div style="background: #e0e0e0; height: 6px; border-radius: 3px; margin-top: 10px;">
+                        <div id="performance-bar" style="width: 95%; background: #4caf50; height: 100%; border-radius: 3px;"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon">⚡</div>
+                    <div class="metric-label">First Contentful Paint</div>
+                    <div class="metric-value score-good" id="fcp">1.2s</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon">🎨</div>
+                    <div class="metric-label">Largest Contentful Paint</div>
+                    <div class="metric-value score-good" id="lcp">2.5s</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon">⏱️</div>
+                    <div class="metric-label">Time to Interactive</div>
+                    <div class="metric-value score-average" id="tti">3.8s</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon">📊</div>
+                    <div class="metric-label">Total Blocking Time</div>
+                    <div class="metric-value score-excellent" id="tbt">50ms</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon">🔄</div>
+                    <div class="metric-label">Cumulative Layout Shift</div>
+                    <div class="metric-value score-excellent" id="cls">0.05</div>
+                </div>
+            </div>
+
+            <!-- Performance Timeline Chart -->
+            <div class="chart-container">
+                <h3 class="chart-title">📈 Performance Timeline</h3>
+                <canvas id="timeline-chart"></canvas>
+            </div>
+
+            <!-- Resource Waterfall -->
+            <div class="waterfall-chart">
+                <h3 class="chart-title">🌊 Resource Loading Waterfall</h3>
+                <div id="waterfall-container">
+                    <div class="waterfall-bar">
+                        <div class="waterfall-label">HTML Document</div>
+                        <div class="waterfall-timeline">
+                            <div class="waterfall-segment segment-dns" style="left: 0; width: 5%;">DNS</div>
+                            <div class="waterfall-segment segment-tcp" style="left: 5%; width: 10%;">TCP</div>
+                            <div class="waterfall-segment segment-request" style="left: 15%; width: 15%;">Request</div>
+                            <div class="waterfall-segment segment-response" style="left: 30%; width: 20%;">Response</div>
+                        </div>
+                    </div>
+                    <div class="waterfall-bar">
+                        <div class="waterfall-label">CSS Bundle</div>
+                        <div class="waterfall-timeline">
+                            <div class="waterfall-segment segment-request" style="left: 20%; width: 10%;">Req</div>
+                            <div class="waterfall-segment segment-response" style="left: 30%; width: 15%;">Response</div>
+                        </div>
+                    </div>
+                    <div class="waterfall-bar">
+                        <div class="waterfall-label">JavaScript Bundle</div>
+                        <div class="waterfall-timeline">
+                            <div class="waterfall-segment segment-request" style="left: 25%; width: 10%;">Req</div>
+                            <div class="waterfall-segment segment-response" style="left: 35%; width: 25%;">Response</div>
+                        </div>
+                    </div>
+                    <div class="waterfall-bar">
+                        <div class="waterfall-label">Images</div>
+                        <div class="waterfall-timeline">
+                            <div class="waterfall-segment segment-request" style="left: 40%; width: 10%;">Req</div>
+                            <div class="waterfall-segment segment-response" style="left: 50%; width: 30%;">Response</div>
+                        </div>
+                    </div>
+                    <div class="waterfall-bar">
+                        <div class="waterfall-label">Fonts</div>
+                        <div class="waterfall-timeline">
+                            <div class="waterfall-segment segment-request" style="left: 35%; width: 8%;">Req</div>
+                            <div class="waterfall-segment segment-response" style="left: 43%; width: 12%;">Resp</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resource Breakdown -->
+            <div class="chart-container">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('size')">Resource Size</button>
+                    <button class="tab" onclick="switchTab('count')">Request Count</button>
+                    <button class="tab" onclick="switchTab('timing')">Load Timing</button>
+                </div>
+
+                <div id="size-tab" class="tab-content active">
+                    <canvas id="size-chart"></canvas>
+                </div>
+                <div id="count-tab" class="tab-content">
+                    <canvas id="count-chart"></canvas>
+                </div>
+                <div id="timing-tab" class="tab-content">
+                    <canvas id="timing-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="recommendations">
+                <h3 class="chart-title">💡 Performance Recommendations</h3>
+                <div id="recommendations-list">
+                    <div class="recommendation-item">
+                        <span class="recommendation-priority priority-high">High Priority</span>
+                        <strong>Optimize Images:</strong> Compress and serve images in modern formats (WebP, AVIF). Potential savings: ~500KB
+                    </div>
+                    <div class="recommendation-item">
+                        <span class="recommendation-priority priority-high">High Priority</span>
+                        <strong>Minify JavaScript:</strong> Remove unused code and minify JS bundles. Potential savings: ~200KB
+                    </div>
+                    <div class="recommendation-item">
+                        <span class="recommendation-priority priority-medium">Medium Priority</span>
+                        <strong>Enable Text Compression:</strong> Use gzip or Brotli compression for text resources. Potential savings: ~150KB
+                    </div>
+                    <div class="recommendation-item">
+                        <span class="recommendation-priority priority-medium">Medium Priority</span>
+                        <strong>Leverage Browser Caching:</strong> Set appropriate cache headers for static resources
+                    </div>
+                    <div class="recommendation-item">
+                        <span class="recommendation-priority priority-low">Low Priority</span>
+                        <strong>Preconnect to Required Origins:</strong> Add preconnect hints for third-party domains
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resource Details -->
+            <div class="history-table">
+                <h3 class="chart-title">📋 Resource Details</h3>
+                <div class="resource-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Resource</th>
+                                <th>Type</th>
+                                <th>Size</th>
+                                <th>Load Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resource-table">
+                            <tr>
+                                <td>index.html</td>
+                                <td>Document</td>
+                                <td class="resource-size">12.5 KB</td>
+                                <td class="resource-time">250ms</td>
+                                <td style="color: #4caf50;">✓ 200</td>
+                            </tr>
+                            <tr>
+                                <td>styles.css</td>
+                                <td>Stylesheet</td>
+                                <td class="resource-size">45.2 KB</td>
+                                <td class="resource-time">180ms</td>
+                                <td style="color: #4caf50;">✓ 200</td>
+                            </tr>
+                            <tr>
+                                <td>app.js</td>
+                                <td>Script</td>
+                                <td class="resource-size">125.8 KB</td>
+                                <td class="resource-time">450ms</td>
+                                <td style="color: #4caf50;">✓ 200</td>
+                            </tr>
+                            <tr>
+                                <td>hero-image.jpg</td>
+                                <td>Image</td>
+                                <td class="resource-size">245.3 KB</td>
+                                <td class="resource-time">680ms</td>
+                                <td style="color: #4caf50;">✓ 200</td>
+                            </tr>
+                            <tr>
+                                <td>analytics.js</td>
+                                <td>Script</td>
+                                <td class="resource-size">18.7 KB</td>
+                                <td class="resource-time">320ms</td>
+                                <td style="color: #4caf50;">✓ 200</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button class="export-btn" onclick="exportResults()">📥 Export Report</button>
+                    <button class="clear-btn" onclick="clearResults()">🗑️ Clear Results</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timelineChart = null;
+        let sizeChart = null;
+        let countChart = null;
+        let timingChart = null;
+
+        function analyzePerformance() {
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            
+            loading.classList.add('active');
+            results.style.display = 'none';
+            
+            // Simulate analysis delay
+            setTimeout(() => {
+                loading.classList.remove('active');
+                results.style.display = 'block';
+                
+                // Generate random performance data
+                generatePerformanceData();
+                createCharts();
+            }, 2000);
+        }
+
+        function generatePerformanceData() {
+            // Generate random but realistic performance scores
+            const perfScore = Math.floor(Math.random() * 30) + 70;
+            const fcp = (Math.random() * 2 + 0.5).toFixed(1);
+            const lcp = (Math.random() * 3 + 1).toFixed(1);
+            const tti = (Math.random() * 4 + 2).toFixed(1);
+            const tbt = Math.floor(Math.random() * 200) + 50;
+            const cls = (Math.random() * 0.15).toFixed(3);
+            
+            // Update metric cards
+            updateMetricCard('performance-score', perfScore, 'performance-bar');
+            updateMetricCard('fcp', fcp + 's');
+            updateMetricCard('lcp', lcp + 's');
+            updateMetricCard('tti', tti + 's');
+            updateMetricCard('tbt', tbt + 'ms');
+            updateMetricCard('cls', cls);
+        }
+
+        function updateMetricCard(id, value, barId = null) {
+            const element = document.getElementById(id);
+            element.textContent = value;
+            
+            // Update color based on value
+            let scoreClass = 'score-excellent';
+            if (typeof value === 'number') {
+                if (value < 50) scoreClass = 'score-poor';
+                else if (value < 70) scoreClass = 'score-average';
+                else if (value < 90) scoreClass = 'score-good';
+                
+                if (barId) {
+                    const bar = document.getElementById(barId);
+                    bar.style.width = value + '%';
+                    bar.style.background = value >= 90 ? '#4caf50' : 
+                                          value >= 70 ? '#8bc34a' :
+                                          value >= 50 ? '#ff9800' : '#f44336';
+                }
+            }
+            
+            element.className = 'metric-value ' + scoreClass;
+        }
+
+        function createCharts() {
+            // Timeline Chart
+            const timelineCtx = document.getElementById('timeline-chart').getContext('2d');
+            if (timelineChart) timelineChart.destroy();
+            
+            timelineChart = new Chart(timelineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['0s', '0.5s', '1s', '1.5s', '2s', '2.5s', '3s', '3.5s', '4s'],
+                    datasets: [{
+                        label: 'Page Load Progress',
+                        data: [0, 15, 35, 55, 70, 82, 90, 95, 100],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'CPU Usage',
+                        data: [5, 25, 45, 60, 40, 25, 15, 10, 5],
+                        borderColor: '#ff9800',
+                        backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Size Chart
+            const sizeCtx = document.getElementById('size-chart').getContext('2d');
+            if (sizeChart) sizeChart.destroy();
+            
+            sizeChart = new Chart(sizeCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['JavaScript', 'Images', 'CSS', 'Fonts', 'HTML', 'Other'],
+                    datasets: [{
+                        data: [325, 450, 125, 85, 45, 70],
+                        backgroundColor: [
+                            '#f44336',
+                            '#2196f3',
+                            '#4caf50',
+                            '#ff9800',
+                            '#9c27b0',
+                            '#607d8b'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+
+            // Count Chart
+            const countCtx = document.getElementById('count-chart').getContext('2d');
+            if (countChart) countChart.destroy();
+            
+            countChart = new Chart(countCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['JavaScript', 'CSS', 'Images', 'Fonts', 'XHR', 'Other'],
+                    datasets: [{
+                        label: 'Number of Requests',
+                        data: [12, 5, 18, 4, 8, 3],
+                        backgroundColor: '#667eea'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Timing Chart
+            const timingCtx = document.getElementById('timing-chart').getContext('2d');
+            if (timingChart) timingChart.destroy();
+            
+            timingChart = new Chart(timingCtx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: ['DNS Lookup', 'TCP Connection', 'Request', 'Response', 'DOM Processing', 'Load Event'],
+                    datasets: [{
+                        label: 'Time (ms)',
+                        data: [50, 120, 200, 450, 300, 150],
+                        backgroundColor: [
+                            '#9c27b0',
+                            '#2196f3',
+                            '#ff9800',
+                            '#4caf50',
+                            '#00bcd4',
+                            '#795548'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tab + '-tab').classList.add('active');
+        }
+
+        function exportResults() {
+            const data = {
+                url: document.getElementById('url-input').value,
+                timestamp: new Date().toISOString(),
+                scores: {
+                    performance: document.getElementById('performance-score').textContent,
+                    fcp: document.getElementById('fcp').textContent,
+                    lcp: document.getElementById('lcp').textContent,
+                    tti: document.getElementById('tti').textContent,
+                    tbt: document.getElementById('tbt').textContent,
+                    cls: document.getElementById('cls').textContent
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'performance-report.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function clearResults() {
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('url-input').value = '';
+        }
+
+        // Initialize with demo data
+        document.addEventListener('DOMContentLoaded', () => {
+            // Auto-analyze for demo
+            setTimeout(() => {
+                analyzePerformance();
+            }, 500);
+        });
+    </script>
+</body>
+</html>

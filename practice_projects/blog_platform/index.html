@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Platform - React + WordPress Practice Project</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .search-bar {
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            border-color: #667eea;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+        }
+
+        .blog-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #f0f0f0;
+            color: #666;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-title {
+            font-size: 1.25rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-excerpt {
+            color: #666;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            color: #999;
+        }
+
+        .blog-author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .author-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #667eea;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover {
+            border-color: #667eea;
+        }
+
+        .page-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .comment-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .comment {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            flex-shrink: 0;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .comment-text {
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .comment-date {
+            font-size: 0.875rem;
+            color: #999;
+        }
+
+        .comment-form {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8f8f8;
+            border-radius: 8px;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-family: inherit;
+        }
+
+        .comment-submit {
+            padding: 0.75rem 1.5rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .comment-submit:hover {
+            background: #5a67d8;
+        }
+
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        // Mock data generation
+        const generateMockPosts = () => {
+            const categories = ['Technology', 'Design', 'Business', 'Lifestyle', 'Travel'];
+            const titles = [
+                'Building Modern Web Applications with React',
+                'The Future of WordPress Development',
+                'Mastering State Management in React',
+                'Creating Beautiful UI Components',
+                'Performance Optimization Techniques',
+                'SEO Best Practices for React Apps',
+                'Understanding React Hooks in Depth',
+                'WordPress REST API Complete Guide',
+                'Responsive Design Patterns',
+                'Modern JavaScript Features You Should Know'
+            ];
+            
+            const posts = [];
+            for (let i = 1; i <= 30; i++) {
+                posts.push({
+                    id: i,
+                    title: titles[Math.floor(Math.random() * titles.length)] + ` #${i}`,
+                    excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+                    category: categories[Math.floor(Math.random() * categories.length)],
+                    author: `Author ${Math.floor(Math.random() * 5) + 1}`,
+                    date: new Date(Date.now() - Math.random() * 10000000000).toLocaleDateString(),
+                    readTime: `${Math.floor(Math.random() * 10) + 1} min read`,
+                    comments: Math.floor(Math.random() * 20),
+                    likes: Math.floor(Math.random() * 100)
+                });
+            }
+            return posts;
+        };
+
+        const mockPosts = generateMockPosts();
+
+        // Blog Card Component
+        function BlogCard({ post, onClick }) {
+            return (
+                <article className="blog-card" onClick={() => onClick(post)}>
+                    <div className="blog-image">
+                        📝
+                    </div>
+                    <div className="blog-content">
+                        <span className="blog-category">{post.category}</span>
+                        <h3 className="blog-title">{post.title}</h3>
+                        <p className="blog-excerpt">{post.excerpt}</p>
+                        <div className="blog-meta">
+                            <div className="blog-author">
+                                <div className="author-avatar"></div>
+                                <span>{post.author}</span>
+                            </div>
+                            <span>{post.readTime}</span>
+                        </div>
+                    </div>
+                </article>
+            );
+        }
+
+        // Post Modal Component
+        function PostModal({ post, isOpen, onClose }) {
+            const [comments, setComments] = useState([
+                { id: 1, author: 'Jane Doe', text: 'Great article! Very informative.', date: '2 hours ago' },
+                { id: 2, author: 'John Smith', text: 'Thanks for sharing this insight.', date: '5 hours ago' }
+            ]);
+            const [commentText, setCommentText] = useState('');
+            const [commentAuthor, setCommentAuthor] = useState('');
+
+            const handleSubmitComment = (e) => {
+                e.preventDefault();
+                if (commentText && commentAuthor) {
+                    const newComment = {
+                        id: comments.length + 1,
+                        author: commentAuthor,
+                        text: commentText,
+                        date: 'Just now'
+                    };
+                    setComments([newComment, ...comments]);
+                    setCommentText('');
+                    setCommentAuthor('');
+                }
+            };
+
+            if (!isOpen || !post) return null;
+
+            return (
+                <div className="modal open">
+                    <div className="modal-content">
+                        <button className="close-btn" onClick={onClose}>&times;</button>
+                        <div className="modal-header">
+                            <span className="blog-category">{post.category}</span>
+                            <h2>{post.title}</h2>
+                            <div className="blog-meta" style={{ marginTop: '1rem' }}>
+                                <span>{post.author} • {post.date}</span>
+                                <span>{post.readTime}</span>
+                            </div>
+                        </div>
+                        <div className="modal-body">
+                            <p style={{ lineHeight: 1.8, marginBottom: '1rem' }}>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                            </p>
+                            <p style={{ lineHeight: 1.8, marginBottom: '1rem' }}>
+                                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            </p>
+                            <p style={{ lineHeight: 1.8 }}>
+                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                            </p>
+
+                            <div className="comment-section">
+                                <h3>Comments ({comments.length})</h3>
+                                
+                                <div className="comment-form">
+                                    <form onSubmit={handleSubmitComment}>
+                                        <input
+                                            type="text"
+                                            className="comment-input"
+                                            placeholder="Your name"
+                                            value={commentAuthor}
+                                            onChange={(e) => setCommentAuthor(e.target.value)}
+                                        />
+                                        <textarea
+                                            className="comment-input"
+                                            placeholder="Write a comment..."
+                                            rows="3"
+                                            value={commentText}
+                                            onChange={(e) => setCommentText(e.target.value)}
+                                        />
+                                        <button type="submit" className="comment-submit">
+                                            Post Comment
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <div style={{ marginTop: '2rem' }}>
+                                    {comments.map(comment => (
+                                        <div key={comment.id} className="comment">
+                                            <div className="comment-avatar"></div>
+                                            <div className="comment-content">
+                                                <div className="comment-author">{comment.author}</div>
+                                                <div className="comment-text">{comment.text}</div>
+                                                <div className="comment-date">{comment.date}</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Main Blog App Component
+        function BlogApp() {
+            const [posts, setPosts] = useState(mockPosts);
+            const [filteredPosts, setFilteredPosts] = useState(mockPosts);
+            const [searchTerm, setSearchTerm] = useState('');
+            const [selectedCategory, setSelectedCategory] = useState('All');
+            const [currentPage, setCurrentPage] = useState(1);
+            const [selectedPost, setSelectedPost] = useState(null);
+            const [isModalOpen, setIsModalOpen] = useState(false);
+            const [isLoading, setIsLoading] = useState(false);
+            
+            const postsPerPage = 6;
+            const categories = ['All', 'Technology', 'Design', 'Business', 'Lifestyle', 'Travel'];
+
+            // Filter posts based on search and category
+            useEffect(() => {
+                let filtered = posts;
+                
+                if (searchTerm) {
+                    filtered = filtered.filter(post =>
+                        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        post.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
+                    );
+                }
+                
+                if (selectedCategory !== 'All') {
+                    filtered = filtered.filter(post => post.category === selectedCategory);
+                }
+                
+                setFilteredPosts(filtered);
+                setCurrentPage(1);
+            }, [searchTerm, selectedCategory, posts]);
+
+            // Pagination
+            const indexOfLastPost = currentPage * postsPerPage;
+            const indexOfFirstPost = indexOfLastPost - postsPerPage;
+            const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+            const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+
+            const handleSearch = (e) => {
+                setSearchTerm(e.target.value);
+            };
+
+            const handleCategoryFilter = (category) => {
+                setSelectedCategory(category);
+            };
+
+            const handlePageChange = (page) => {
+                setCurrentPage(page);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            const handlePostClick = (post) => {
+                setSelectedPost(post);
+                setIsModalOpen(true);
+            };
+
+            const handleCloseModal = () => {
+                setIsModalOpen(false);
+                setSelectedPost(null);
+            };
+
+            // Simulate loading
+            useEffect(() => {
+                setIsLoading(true);
+                setTimeout(() => setIsLoading(false), 500);
+            }, [currentPage, selectedCategory]);
+
+            // Stats calculation
+            const stats = {
+                totalPosts: posts.length,
+                totalAuthors: new Set(posts.map(p => p.author)).size,
+                totalCategories: categories.length - 1,
+                avgReadTime: Math.round(posts.reduce((acc, post) => acc + parseInt(post.readTime), 0) / posts.length)
+            };
+
+            return (
+                <>
+                    <header className="header">
+                        <h1>📚 Modern Blog Platform</h1>
+                        <p>Built with React + WordPress REST API</p>
+                    </header>
+
+                    <div className="container">
+                        {/* Statistics */}
+                        <div className="stats-section">
+                            <div className="stat-card">
+                                <div className="stat-number">{stats.totalPosts}</div>
+                                <div className="stat-label">Total Posts</div>
+                            </div>
+                            <div className="stat-card">
+                                <div className="stat-number">{stats.totalAuthors}</div>
+                                <div className="stat-label">Authors</div>
+                            </div>
+                            <div className="stat-card">
+                                <div className="stat-number">{stats.totalCategories}</div>
+                                <div className="stat-label">Categories</div>
+                            </div>
+                            <div className="stat-card">
+                                <div className="stat-number">{stats.avgReadTime} min</div>
+                                <div className="stat-label">Avg Read Time</div>
+                            </div>
+                        </div>
+
+                        {/* Search Bar */}
+                        <div className="search-bar">
+                            <input
+                                type="text"
+                                className="search-input"
+                                placeholder="🔍 Search posts..."
+                                value={searchTerm}
+                                onChange={handleSearch}
+                            />
+                        </div>
+
+                        {/* Category Filters */}
+                        <div className="filter-section">
+                            {categories.map(category => (
+                                <button
+                                    key={category}
+                                    className={`filter-btn ${selectedCategory === category ? 'active' : ''}`}
+                                    onClick={() => handleCategoryFilter(category)}
+                                >
+                                    {category}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Blog Posts Grid */}
+                        {isLoading ? (
+                            <div className="loading">
+                                <div className="spinner"></div>
+                                <p>Loading posts...</p>
+                            </div>
+                        ) : (
+                            <>
+                                {currentPosts.length > 0 ? (
+                                    <div className="blog-grid">
+                                        {currentPosts.map(post => (
+                                            <BlogCard
+                                                key={post.id}
+                                                post={post}
+                                                onClick={handlePostClick}
+                                            />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="loading">
+                                        <p>No posts found matching your criteria.</p>
+                                    </div>
+                                )}
+
+                                {/* Pagination */}
+                                {totalPages > 1 && (
+                                    <div className="pagination">
+                                        <button
+                                            className="page-btn"
+                                            onClick={() => handlePageChange(currentPage - 1)}
+                                            disabled={currentPage === 1}
+                                        >
+                                            Previous
+                                        </button>
+                                        
+                                        {[...Array(totalPages)].map((_, index) => (
+                                            <button
+                                                key={index + 1}
+                                                className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
+                                                onClick={() => handlePageChange(index + 1)}
+                                            >
+                                                {index + 1}
+                                            </button>
+                                        ))}
+                                        
+                                        <button
+                                            className="page-btn"
+                                            onClick={() => handlePageChange(currentPage + 1)}
+                                            disabled={currentPage === totalPages}
+                                        >
+                                            Next
+                                        </button>
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </div>
+
+                    {/* Post Modal */}
+                    <PostModal
+                        post={selectedPost}
+                        isOpen={isModalOpen}
+                        onClose={handleCloseModal}
+                    />
+                </>
+            );
+        }
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<BlogApp />);
+    </script>
+</body>
+</html>

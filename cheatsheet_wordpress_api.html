@@ -489,14 +489,13 @@ fetch('/wp-json/wp/v2/posts', {
                         </tr>
                     </tbody>
                 </table>
-                <div class="example-box">
-<span class="comment">// Example: Get recent posts with pagination</span>
+                <div class="example-box"><pre><code><span class="comment">// Example: Get recent posts with pagination</span>
 fetch('https://example.com/wp-json/wp/v2/posts?per_page=10&page=1')
     .then(response => response.json())
     .then(posts => console.log(posts));
 
 <span class="comment">// Example: Search posts by term</span>
-fetch('https://example.com/wp-json/wp/v2/posts?search=wordpress')</div>
+fetch('https://example.com/wp-json/wp/v2/posts?search=wordpress')</code></pre></div>
             </div>
 
             <!-- Get Single Post -->
@@ -602,8 +601,7 @@ fetch('https://example.com/wp-json/wp/v2/posts?search=wordpress')</div>
                         </tr>
                     </tbody>
                 </table>
-                <div class="example-box">
-<span class="comment">// Create a new post</span>
+                <div class="example-box"><pre><code><span class="comment">// Create a new post</span>
 fetch('https://example.com/wp-json/wp/v2/posts', {
     method: 'POST',
     headers: {
@@ -617,7 +615,7 @@ fetch('https://example.com/wp-json/wp/v2/posts', {
         categories: [1, 2],
         tags: [3, 4]
     })
-});</div>
+});</code></pre></div>
             </div>
 
             <!-- Update Post -->
@@ -627,8 +625,7 @@ fetch('https://example.com/wp-json/wp/v2/posts', {
                     <span class="endpoint-path">/wp/v2/posts/{id}</span>
                 </div>
                 <p class="endpoint-description">Update an existing post</p>
-                <div class="example-box">
-<span class="comment">// Update post title and content</span>
+                <div class="example-box"><pre><code><span class="comment">// Update post title and content</span>
 fetch('https://example.com/wp-json/wp/v2/posts/123', {
     method: 'PUT',
     headers: {
@@ -639,7 +636,7 @@ fetch('https://example.com/wp-json/wp/v2/posts/123', {
         title: 'Updated Title',
         content: 'Updated content'
     })
-});</div>
+});</code></pre></div>
             </div>
 
             <!-- Delete Post -->
@@ -667,8 +664,7 @@ fetch('https://example.com/wp-json/wp/v2/posts/123', {
                         </tr>
                     </tbody>
                 </table>
-                <div class="example-box">
-<span class="comment">// Move to trash</span>
+                <div class="example-box"><pre><code><span class="comment">// Move to trash</span>
 fetch('https://example.com/wp-json/wp/v2/posts/123', {
     method: 'DELETE',
     headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
@@ -678,7 +674,7 @@ fetch('https://example.com/wp-json/wp/v2/posts/123', {
 fetch('https://example.com/wp-json/wp/v2/posts/123?force=true', {
     method: 'DELETE',
     headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
-});</div>
+});</code></pre></div>
             </div>
         </section>
 
@@ -717,8 +713,7 @@ fetch('https://example.com/wp-json/wp/v2/posts/123?force=true', {
                         </tr>
                     </tbody>
                 </table>
-                <div class="response-example">
-{
+                <div class="response-example"><pre><code>{
   "id": 456,
   "title": {
     "rendered": "My Image"
@@ -736,7 +731,7 @@ fetch('https://example.com/wp-json/wp/v2/posts/123?force=true', {
       }
     }
   }
-}</div>
+}</code></pre></div>
             </div>
 
             <!-- Upload Media -->
@@ -746,8 +741,7 @@ fetch('https://example.com/wp-json/wp/v2/posts/123?force=true', {
                     <span class="endpoint-path">/wp/v2/media</span>
                 </div>
                 <p class="endpoint-description">Upload new media file</p>
-                <div class="example-box">
-<span class="comment">// Upload image file</span>
+                <div class="example-box"><pre><code><span class="comment">// Upload image file</span>
 const formData = new FormData();
 formData.append('file', fileInput.files[0]);
 formData.append('title', 'My Image Title');
@@ -759,7 +753,7 @@ fetch('https://example.com/wp-json/wp/v2/media', {
         'Authorization': 'Bearer YOUR_TOKEN'
     },
     body: formData
-});</div>
+});</code></pre></div>
             </div>
         </section>
 
@@ -807,13 +801,12 @@ fetch('https://example.com/wp-json/wp/v2/media', {
                     <span class="endpoint-path">/wp/v2/users/me</span>
                 </div>
                 <p class="endpoint-description">Get current authenticated user</p>
-                <div class="example-box">
-<span class="comment">// Get current user info</span>
+                <div class="example-box"><pre><code><span class="comment">// Get current user info</span>
 fetch('https://example.com/wp-json/wp/v2/users/me', {
     headers: {
         'Authorization': 'Bearer YOUR_TOKEN'
     }
-});</div>
+});</code></pre></div>
             </div>
 
             <!-- Create User -->
@@ -912,8 +905,7 @@ fetch('https://example.com/wp-json/wp/v2/users/me', {
                     <span class="endpoint-path">/wp/v2/comments</span>
                 </div>
                 <p class="endpoint-description">Create new comment</p>
-                <div class="example-box">
-<span class="comment">// Submit a comment</span>
+                <div class="example-box"><pre><code><span class="comment">// Submit a comment</span>
 fetch('https://example.com/wp-json/wp/v2/comments', {
     method: 'POST',
     headers: {
@@ -925,7 +917,7 @@ fetch('https://example.com/wp-json/wp/v2/comments', {
         author_name: 'John Doe',
         author_email: 'john@example.com'
     })
-});</div>
+});</code></pre></div>
             </div>
         </section>
 
@@ -940,12 +932,11 @@ fetch('https://example.com/wp-json/wp/v2/comments', {
                     <span class="endpoint-path">/wp/v2/categories</span>
                 </div>
                 <p class="endpoint-description">Retrieve categories</p>
-                <div class="example-box">
-<span class="comment">// Get all categories</span>
+                <div class="example-box"><pre><code><span class="comment">// Get all categories</span>
 fetch('https://example.com/wp-json/wp/v2/categories')
 
 <span class="comment">// Get posts in specific category</span>
-fetch('https://example.com/wp-json/wp/v2/posts?categories=5')</div>
+fetch('https://example.com/wp-json/wp/v2/posts?categories=5')</code></pre></div>
             </div>
 
             <!-- Tags -->
@@ -955,8 +946,7 @@ fetch('https://example.com/wp-json/wp/v2/posts?categories=5')</div>
                     <span class="endpoint-path">/wp/v2/tags</span>
                 </div>
                 <p class="endpoint-description">Retrieve tags</p>
-                <div class="example-box">
-<span class="comment">// Get all tags</span>
+                <div class="example-box"><pre><code><span class="comment">// Get all tags</span>
 fetch('https://example.com/wp-json/wp/v2/tags')
 
 <span class="comment">// Create new tag (requires auth)</span>
@@ -970,7 +960,7 @@ fetch('https://example.com/wp-json/wp/v2/tags', {
         name: 'New Tag',
         slug: 'new-tag'
     })
-});</div>
+});</code></pre></div>
             </div>
         </section>
 
@@ -984,15 +974,14 @@ fetch('https://example.com/wp-json/wp/v2/tags', {
                     <span class="endpoint-path">/wp/v2/pages</span>
                 </div>
                 <p class="endpoint-description">Retrieve pages (similar to posts endpoints)</p>
-                <div class="example-box">
-<span class="comment">// Get all pages</span>
+                <div class="example-box"><pre><code><span class="comment">// Get all pages</span>
 fetch('https://example.com/wp-json/wp/v2/pages')
 
 <span class="comment">// Get page by slug</span>
 fetch('https://example.com/wp-json/wp/v2/pages?slug=about-us')
 
 <span class="comment">// Get child pages</span>
-fetch('https://example.com/wp-json/wp/v2/pages?parent=10')</div>
+fetch('https://example.com/wp-json/wp/v2/pages?parent=10')</code></pre></div>
             </div>
         </section>
 
@@ -1006,8 +995,7 @@ fetch('https://example.com/wp-json/wp/v2/pages?parent=10')</div>
                     <span class="endpoint-path">/wp/v2/{post_type}</span>
                 </div>
                 <p class="endpoint-description">Access custom post types registered with REST API support</p>
-                <div class="example-box">
-<span class="comment">// Example: Products custom post type</span>
+                <div class="example-box"><pre><code><span class="comment">// Example: Products custom post type</span>
 fetch('https://example.com/wp-json/wp/v2/products')
 
 <span class="comment">// Example: Portfolio items</span>
@@ -1018,7 +1006,7 @@ register_post_type('products', [
     'show_in_rest' => true,
     'rest_base' => 'products',
     'rest_controller_class' => 'WP_REST_Posts_Controller'
-]);</div>
+]);</code></pre></div>
             </div>
 
             <div class="endpoint-card">
@@ -1027,13 +1015,12 @@ register_post_type('products', [
                     <span class="endpoint-path">/wp/v2/types</span>
                 </div>
                 <p class="endpoint-description">Get all registered post types</p>
-                <div class="example-box">
-<span class="comment">// Discover available post types</span>
+                <div class="example-box"><pre><code><span class="comment">// Discover available post types</span>
 fetch('https://example.com/wp-json/wp/v2/types')
     .then(response => response.json())
     .then(types => {
         console.log('Available types:', Object.keys(types));
-    });</div>
+    });</code></pre></div>
             </div>
         </section>
 
@@ -1056,8 +1043,7 @@ fetch('https://example.com/wp-json/wp/v2/types')
         <section class="endpoint-section">
             <h2 class="section-title">🎯 Common Query Examples</h2>
             
-            <div class="example-box">
-<span class="comment">// Get posts with multiple filters</span>
+            <div class="example-box"><pre><code><span class="comment">// Get posts with multiple filters</span>
 '/wp/v2/posts?categories=5&tags=10,15&author=1&per_page=20'
 
 <span class="comment">// Search across multiple post types</span>
@@ -1079,14 +1065,13 @@ fetch('https://example.com/wp-json/wp/v2/types')
 '/wp/v2/posts?sticky=true'
 
 <span class="comment">// Order by menu order (for pages)</span>
-'/wp/v2/pages?orderby=menu_order&order=asc'</div>
+'/wp/v2/pages?orderby=menu_order&order=asc'</code></pre></div>
         </section>
 
         <!-- Error Handling -->
         <section class="auth-section">
             <h3>⚠️ Common Error Responses</h3>
-            <div class="example-box">
-<span class="comment">// 401 Unauthorized</span>
+            <div class="example-box"><pre><code><span class="comment">// 401 Unauthorized</span>
 {
     "code": "rest_forbidden",
     "message": "Sorry, you are not allowed to do that.",
@@ -1105,7 +1090,7 @@ fetch('https://example.com/wp-json/wp/v2/types')
     "code": "rest_invalid_param",
     "message": "Invalid parameter(s): per_page",
     "data": { "status": 400 }
-}</div>
+}</code></pre></div>
         </section>
 
         <footer style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #e0e0e0; text-align: center; color: #666;">

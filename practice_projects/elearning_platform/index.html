@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Learning Platform - Practice Project with Phases</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f7f9fc;
+            color: #1a202c;
+        }
+
+        /* Phase Selector */
+        .phase-selector {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #2d3748;
+            z-index: 2000;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .phase-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .phase-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .phase-btn {
+            padding: 0.5rem 1.5rem;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .phase-btn.active {
+            background: #4299e1;
+            border-color: #4299e1;
+        }
+
+        .phase-info {
+            color: #90cdf4;
+            font-size: 0.9rem;
+        }
+
+        /* Main App */
+        .elearning-app {
+            padding-top: 60px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 60px;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #667eea;
+        }
+
+        .user-section {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            padding: 1rem 2rem;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Dashboard Section */
+        .dashboard {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: fit-content;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-item {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .sidebar-item:hover {
+            background: #f7fafc;
+        }
+
+        .sidebar-item.active {
+            background: #edf2ff;
+            color: #667eea;
+        }
+
+        .progress-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .overall-progress {
+            margin-bottom: 1rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: #4a5568;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .content-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-tab {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tab.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Course Grid */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .course-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .course-image {
+            height: 180px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .course-content {
+            padding: 1.5rem;
+        }
+
+        .course-category {
+            font-size: 0.875rem;
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-instructor {
+            font-size: 0.875rem;
+            color: #718096;
+            margin-bottom: 1rem;
+        }
+
+        .course-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .course-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            color: #718096;
+        }
+
+        .course-progress {
+            margin-bottom: 1rem;
+        }
+
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .course-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .course-btn {
+            padding: 0.5rem 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .course-btn:hover {
+            background: #5a67d8;
+        }
+
+        /* Lesson View */
+        .lesson-view {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        .video-player {
+            background: #000;
+            border-radius: 12px;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .lesson-info {
+            margin-top: 2rem;
+        }
+
+        .lesson-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .lesson-description {
+            color: #4a5568;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-tab {
+            padding: 1rem;
+            background: none;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .lesson-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .lesson-sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .lessons-list {
+            list-style: none;
+        }
+
+        .lesson-item {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .lesson-item:hover {
+            background: #f7fafc;
+        }
+
+        .lesson-item.active {
+            background: #edf2ff;
+            color: #667eea;
+        }
+
+        .lesson-item.completed {
+            opacity: 0.7;
+        }
+
+        .lesson-check {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lesson-check.completed {
+            background: #48bb78;
+            border-color: #48bb78;
+            color: white;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-size: 0.875rem;
+        }
+
+        /* Incomplete Section */
+        .incomplete-section {
+            background: #f0f0f0;
+            padding: 2rem;
+            text-align: center;
+            border: 2px dashed #999;
+            margin: 2rem;
+            border-radius: 10px;
+        }
+
+        .incomplete-section h3 {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-number {
+            font-size: 0.875rem;
+            color: #718096;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .answer-option {
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .answer-option:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+
+        .answer-option.selected {
+            border-color: #667eea;
+            background: #edf2ff;
+        }
+
+        .answer-option.correct {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+
+        .answer-option.incorrect {
+            border-color: #f56565;
+            background: #fff5f5;
+        }
+
+        .quiz-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .lesson-view {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // Mock Course Data
+        const generateCourses = () => {
+            const categories = ['Programming', 'Design', 'Business', 'Marketing', 'Data Science'];
+            const levels = ['Beginner', 'Intermediate', 'Advanced'];
+            const courses = [];
+
+            for (let i = 1; i <= 20; i++) {
+                courses.push({
+                    id: i,
+                    title: `Course ${i}: ${categories[Math.floor(Math.random() * categories.length)]} Masterclass`,
+                    category: categories[Math.floor(Math.random() * categories.length)],
+                    instructor: `Instructor ${Math.floor(Math.random() * 5) + 1}`,
+                    level: levels[Math.floor(Math.random() * levels.length)],
+                    duration: `${Math.floor(Math.random() * 20) + 5} hours`,
+                    lessons: Math.floor(Math.random() * 20) + 10,
+                    students: Math.floor(Math.random() * 5000) + 100,
+                    rating: (Math.random() * 2 + 3).toFixed(1),
+                    price: Math.floor(Math.random() * 100) + 20,
+                    enrolled: Math.random() > 0.5,
+                    progress: Math.floor(Math.random() * 100),
+                    image: '📚'
+                });
+            }
+            return courses;
+        };
+
+        const mockCourses = generateCourses();
+
+        // Generate Lessons
+        const generateLessons = (courseId) => {
+            const lessons = [];
+            const lessonCount = 10;
+            
+            for (let i = 1; i <= lessonCount; i++) {
+                lessons.push({
+                    id: `${courseId}-${i}`,
+                    title: `Lesson ${i}: ${i === 1 ? 'Introduction' : i === lessonCount ? 'Final Project' : `Topic ${i}`}`,
+                    duration: `${Math.floor(Math.random() * 30) + 10} min`,
+                    completed: Math.random() > 0.5,
+                    type: i % 3 === 0 ? 'quiz' : 'video'
+                });
+            }
+            return lessons;
+        };
+
+        // Phase Selector Component
+        function PhaseSelector({ currentPhase, onPhaseChange }) {
+            const phases = [
+                { id: 'before', name: 'Before (Static)', description: 'Basic layout without functionality' },
+                { id: 'during', name: 'During (Partial)', description: 'Some interactive features working' },
+                { id: 'complete', name: 'Complete', description: 'Full e-learning platform with all features' }
+            ];
+
+            return (
+                <div className="phase-selector">
+                    <div className="phase-container">
+                        <div className="phase-buttons">
+                            {phases.map(phase => (
+                                <button
+                                    key={phase.id}
+                                    className={`phase-btn ${currentPhase === phase.id ? 'active' : ''}`}
+                                    onClick={() => onPhaseChange(phase.id)}
+                                >
+                                    {phase.name}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="phase-info">
+                            {phases.find(p => p.id === currentPhase)?.description}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Course Card Component
+        function CourseCard({ course, onEnroll, onContinue, isInteractive }) {
+            return (
+                <div className="course-card">
+                    <div className="course-image">{course.image}</div>
+                    <div className="course-content">
+                        <div className="course-category">{course.category}</div>
+                        <h3 className="course-title">{course.title}</h3>
+                        <p className="course-instructor">by {course.instructor}</p>
+                        <div className="course-stats">
+                            <span className="course-stat">⏱️ {course.duration}</span>
+                            <span className="course-stat">📖 {course.lessons} lessons</span>
+                            <span className="course-stat">⭐ {course.rating}</span>
+                        </div>
+                        {course.enrolled && (
+                            <div className="course-progress">
+                                <div className="progress-label">
+                                    <span>Progress</span>
+                                    <span>{course.progress}%</span>
+                                </div>
+                                <div className="progress-bar">
+                                    <div className="progress-fill" style={{ width: `${course.progress}%` }}></div>
+                                </div>
+                            </div>
+                        )}
+                        <div className="course-footer">
+                            <span className="course-price">
+                                {course.enrolled ? 'Enrolled' : `$${course.price}`}
+                            </span>
+                            {isInteractive && (
+                                course.enrolled ? (
+                                    <button className="course-btn" onClick={() => onContinue(course)}>
+                                        Continue
+                                    </button>
+                                ) : (
+                                    <button className="course-btn" onClick={() => onEnroll(course)}>
+                                        Enroll Now
+                                    </button>
+                                )
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Lesson Player Component
+        function LessonPlayer({ course, lessons, currentLesson, onLessonChange, onComplete }) {
+            const [activeTab, setActiveTab] = useState('overview');
+
+            return (
+                <div className="lesson-view">
+                    <div>
+                        <div className="video-player">
+                            ▶️ {currentLesson.title}
+                        </div>
+                        <div className="lesson-info">
+                            <h2 className="lesson-title">{currentLesson.title}</h2>
+                            <p className="lesson-description">
+                                This lesson covers important concepts that will help you master the subject.
+                                Pay attention to the key points and complete the exercises.
+                            </p>
+                            <div className="lesson-tabs">
+                                <button 
+                                    className={`lesson-tab ${activeTab === 'overview' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('overview')}
+                                >
+                                    Overview
+                                </button>
+                                <button 
+                                    className={`lesson-tab ${activeTab === 'notes' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('notes')}
+                                >
+                                    Notes
+                                </button>
+                                <button 
+                                    className={`lesson-tab ${activeTab === 'resources' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('resources')}
+                                >
+                                    Resources
+                                </button>
+                                <button 
+                                    className={`lesson-tab ${activeTab === 'discussion' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('discussion')}
+                                >
+                                    Discussion
+                                </button>
+                            </div>
+                            {activeTab === 'overview' && (
+                                <div>
+                                    <h3>Lesson Overview</h3>
+                                    <p>In this lesson, you will learn the fundamental concepts and practical applications.</p>
+                                </div>
+                            )}
+                            {activeTab === 'notes' && (
+                                <div>
+                                    <h3>Your Notes</h3>
+                                    <textarea 
+                                        style={{ width: '100%', height: '200px', padding: '1rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+                                        placeholder="Take notes here..."
+                                    ></textarea>
+                                </div>
+                            )}
+                            <button 
+                                className="btn btn-primary" 
+                                style={{ marginTop: '2rem', width: '100%' }}
+                                onClick={() => onComplete(currentLesson)}
+                            >
+                                Mark as Complete & Continue
+                            </button>
+                        </div>
+                    </div>
+                    <div className="lesson-sidebar">
+                        <h3 style={{ marginBottom: '1rem' }}>Course Content</h3>
+                        <ul className="lessons-list">
+                            {lessons.map((lesson, index) => (
+                                <li 
+                                    key={lesson.id}
+                                    className={`lesson-item ${lesson.completed ? 'completed' : ''} ${currentLesson.id === lesson.id ? 'active' : ''}`}
+                                    onClick={() => onLessonChange(lesson)}
+                                >
+                                    <span className={`lesson-check ${lesson.completed ? 'completed' : ''}`}>
+                                        {lesson.completed && '✓'}
+                                    </span>
+                                    <div>
+                                        <div>{lesson.title}</div>
+                                        <div style={{ fontSize: '0.875rem', color: '#718096' }}>{lesson.duration}</div>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            );
+        }
+
+        // Main E-Learning App
+        function ELearningApp() {
+            const [currentPhase, setCurrentPhase] = useState('complete');
+            const [currentView, setCurrentView] = useState('dashboard');
+            const [courses, setCourses] = useState(mockCourses);
+            const [selectedCategory, setSelectedCategory] = useState('all');
+            const [searchQuery, setSearchQuery] = useState('');
+            const [enrolledCourses, setEnrolledCourses] = useState(courses.filter(c => c.enrolled));
+            const [selectedCourse, setSelectedCourse] = useState(null);
+            const [currentLessons, setCurrentLessons] = useState([]);
+            const [currentLesson, setCurrentLesson] = useState(null);
+
+            // Calculate stats
+            const stats = {
+                totalCourses: enrolledCourses.length,
+                completedCourses: enrolledCourses.filter(c => c.progress === 100).length,
+                hoursLearned: Math.floor(enrolledCourses.reduce((sum, c) => sum + (c.progress / 100) * parseInt(c.duration), 0)),
+                certificates: enrolledCourses.filter(c => c.progress === 100).length
+            };
+
+            const overallProgress = Math.round(
+                enrolledCourses.reduce((sum, c) => sum + c.progress, 0) / enrolledCourses.length || 0
+            );
+
+            const handleEnroll = (course) => {
+                const updatedCourses = courses.map(c => 
+                    c.id === course.id ? { ...c, enrolled: true, progress: 0 } : c
+                );
+                setCourses(updatedCourses);
+                setEnrolledCourses(updatedCourses.filter(c => c.enrolled));
+                alert(`Successfully enrolled in ${course.title}!`);
+            };
+
+            const handleContinue = (course) => {
+                setSelectedCourse(course);
+                const lessons = generateLessons(course.id);
+                setCurrentLessons(lessons);
+                setCurrentLesson(lessons[0]);
+                setCurrentView('lesson');
+            };
+
+            const handleLessonComplete = (lesson) => {
+                const updatedLessons = currentLessons.map(l =>
+                    l.id === lesson.id ? { ...l, completed: true } : l
+                );
+                setCurrentLessons(updatedLessons);
+                
+                const nextIndex = currentLessons.findIndex(l => l.id === lesson.id) + 1;
+                if (nextIndex < currentLessons.length) {
+                    setCurrentLesson(currentLessons[nextIndex]);
+                }
+                
+                // Update course progress
+                const completedCount = updatedLessons.filter(l => l.completed).length;
+                const newProgress = Math.round((completedCount / updatedLessons.length) * 100);
+                
+                const updatedCourses = courses.map(c =>
+                    c.id === selectedCourse.id ? { ...c, progress: newProgress } : c
+                );
+                setCourses(updatedCourses);
+                setEnrolledCourses(updatedCourses.filter(c => c.enrolled));
+            };
+
+            const filteredCourses = useMemo(() => {
+                let filtered = currentView === 'my-courses' ? enrolledCourses : courses;
+                
+                if (selectedCategory !== 'all') {
+                    filtered = filtered.filter(c => c.category === selectedCategory);
+                }
+                
+                if (searchQuery) {
+                    filtered = filtered.filter(c => 
+                        c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        c.category.toLowerCase().includes(searchQuery.toLowerCase())
+                    );
+                }
+                
+                return filtered;
+            }, [courses, enrolledCourses, currentView, selectedCategory, searchQuery]);
+
+            // Render different versions based on phase
+            if (currentPhase === 'before') {
+                // Static version
+                return (
+                    <>
+                        <PhaseSelector currentPhase={currentPhase} onPhaseChange={setCurrentPhase} />
+                        <div className="elearning-app">
+                            <header className="header">
+                                <div className="nav-container">
+                                    <div className="logo">🎓 EduLearn</div>
+                                    <nav>
+                                        <ul className="nav-menu">
+                                            <li><a className="nav-link">Dashboard</a></li>
+                                            <li><a className="nav-link">Courses</a></li>
+                                            <li><a className="nav-link">Progress</a></li>
+                                        </ul>
+                                    </nav>
+                                    <div className="user-section">
+                                        <div className="user-avatar">JD</div>
+                                    </div>
+                                </div>
+                            </header>
+
+                            <section className="hero">
+                                <h1>Learn Without Limits</h1>
+                                <p>Access thousands of courses from expert instructors</p>
+                                <div className="search-bar">
+                                    <input className="search-input" placeholder="Search courses..." />
+                                    <button className="search-btn">Search</button>
+                                </div>
+                            </section>
+
+                            <div className="dashboard">
+                                <div className="main-content" style={{ gridColumn: '1 / -1' }}>
+                                    <h2 className="content-title">Featured Courses (Static Display)</h2>
+                                    <div className="courses-grid">
+                                        {courses.slice(0, 6).map(course => (
+                                            <CourseCard key={course.id} course={course} isInteractive={false} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="incomplete-section">
+                                <h3>🚧 Course Enrollment</h3>
+                                <p>Enrollment functionality not yet implemented</p>
+                            </div>
+
+                            <div className="incomplete-section">
+                                <h3>🚧 Progress Tracking</h3>
+                                <p>Progress tracking coming soon</p>
+                            </div>
+                        </div>
+                    </>
+                );
+            }
+
+            if (currentPhase === 'during') {
+                // Partially functional version
+                return (
+                    <>
+                        <PhaseSelector currentPhase={currentPhase} onPhaseChange={setCurrentPhase} />
+                        <div className="elearning-app">
+                            <header className="header">
+                                <div className="nav-container">
+                                    <div className="logo">🎓 EduLearn</div>
+                                    <nav>
+                                        <ul className="nav-menu">
+                                            <li>
+                                                <a 
+                                                    className={`nav-link ${currentView === 'dashboard' ? 'active' : ''}`}
+                                                    onClick={() => setCurrentView('dashboard')}
+                                                >
+                                                    Dashboard
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a 
+                                                    className={`nav-link ${currentView === 'all-courses' ? 'active' : ''}`}
+                                                    onClick={() => setCurrentView('all-courses')}
+                                                >
+                                                    All Courses
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a 
+                                                    className={`nav-link ${currentView === 'my-courses' ? 'active' : ''}`}
+                                                    onClick={() => setCurrentView('my-courses')}
+                                                >
+                                                    My Courses
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                    <div className="user-section">
+                                        <div className="user-avatar">JD</div>
+                                    </div>
+                                </div>
+                            </header>
+
+                            <section className="hero">
+                                <h1>Learn Without Limits</h1>
+                                <p>{courses.length} courses available • {enrolledCourses.length} enrolled</p>
+                                <div className="search-bar">
+                                    <input 
+                                        className="search-input" 
+                                        placeholder="Search courses..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                    <button className="search-btn">Search</button>
+                                </div>
+                            </section>
+
+                            <div className="dashboard">
+                                <div className="main-content" style={{ gridColumn: '1 / -1' }}>
+                                    <div className="content-header">
+                                        <h2 className="content-title">
+                                            {currentView === 'my-courses' ? 'My Courses' : 'All Courses'}
+                                        </h2>
+                                        <div className="filter-tabs">
+                                            {['all', 'Programming', 'Design', 'Business'].map(cat => (
+                                                <button
+                                                    key={cat}
+                                                    className={`filter-tab ${selectedCategory === cat ? 'active' : ''}`}
+                                                    onClick={() => setSelectedCategory(cat)}
+                                                >
+                                                    {cat === 'all' ? 'All' : cat}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="courses-grid">
+                                        {filteredCourses.map(course => (
+                                            <CourseCard 
+                                                key={course.id} 
+                                                course={course}
+                                                onEnroll={handleEnroll}
+                                                onContinue={() => alert('Lesson view coming in complete version!')}
+                                                isInteractive={true}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="incomplete-section">
+                                <h3>🚧 Lesson Player</h3>
+                                <p>Video lessons and progress tracking not yet complete</p>
+                            </div>
+                        </div>
+                    </>
+                );
+            }
+
+            // Complete version
+            return (
+                <>
+                    <PhaseSelector currentPhase={currentPhase} onPhaseChange={setCurrentPhase} />
+                    <div className="elearning-app">
+                        <header className="header">
+                            <div className="nav-container">
+                                <div className="logo">🎓 EduLearn</div>
+                                <nav>
+                                    <ul className="nav-menu">
+                                        <li>
+                                            <a 
+                                                className={`nav-link ${currentView === 'dashboard' ? 'active' : ''}`}
+                                                onClick={() => setCurrentView('dashboard')}
+                                            >
+                                                Dashboard
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a 
+                                                className={`nav-link ${currentView === 'all-courses' ? 'active' : ''}`}
+                                                onClick={() => setCurrentView('all-courses')}
+                                            >
+                                                All Courses
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a 
+                                                className={`nav-link ${currentView === 'my-courses' ? 'active' : ''}`}
+                                                onClick={() => setCurrentView('my-courses')}
+                                            >
+                                                My Courses
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a className="nav-link">Certificates</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                                <div className="user-section">
+                                    <span style={{ marginRight: '1rem', color: '#4a5568' }}>John Doe</span>
+                                    <div className="user-avatar">JD</div>
+                                </div>
+                            </div>
+                        </header>
+
+                        {currentView === 'lesson' ? (
+                            <div style={{ padding: '2rem' }}>
+                                <button 
+                                    className="btn btn-secondary"
+                                    onClick={() => setCurrentView('my-courses')}
+                                    style={{ marginBottom: '2rem' }}
+                                >
+                                    ← Back to Courses
+                                </button>
+                                <LessonPlayer
+                                    course={selectedCourse}
+                                    lessons={currentLessons}
+                                    currentLesson={currentLesson}
+                                    onLessonChange={setCurrentLesson}
+                                    onComplete={handleLessonComplete}
+                                />
+                            </div>
+                        ) : (
+                            <>
+                                <section className="hero">
+                                    <h1>Learn Without Limits</h1>
+                                    <p>{courses.length} courses available • {enrolledCourses.length} enrolled • {overallProgress}% complete</p>
+                                    <div className="search-bar">
+                                        <input 
+                                            className="search-input" 
+                                            placeholder="What do you want to learn today?"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                        />
+                                        <button className="search-btn">Search</button>
+                                    </div>
+                                </section>
+
+                                {currentView === 'dashboard' && (
+                                    <div style={{ maxWidth: '1400px', margin: '2rem auto', padding: '0 2rem' }}>
+                                        <div className="stats-grid">
+                                            <div className="stat-card">
+                                                <div className="stat-icon">📚</div>
+                                                <div className="stat-value">{stats.totalCourses}</div>
+                                                <div className="stat-label">Enrolled Courses</div>
+                                            </div>
+                                            <div className="stat-card">
+                                                <div className="stat-icon">✅</div>
+                                                <div className="stat-value">{stats.completedCourses}</div>
+                                                <div className="stat-label">Completed</div>
+                                            </div>
+                                            <div className="stat-card">
+                                                <div className="stat-icon">⏱️</div>
+                                                <div className="stat-value">{stats.hoursLearned}</div>
+                                                <div className="stat-label">Hours Learned</div>
+                                            </div>
+                                            <div className="stat-card">
+                                                <div className="stat-icon">🏆</div>
+                                                <div className="stat-value">{stats.certificates}</div>
+                                                <div className="stat-label">Certificates</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="dashboard">
+                                    <aside className="sidebar">
+                                        <div className="sidebar-section">
+                                            <h3 className="sidebar-title">Menu</h3>
+                                            <ul className="sidebar-menu">
+                                                <li 
+                                                    className={`sidebar-item ${currentView === 'dashboard' ? 'active' : ''}`}
+                                                    onClick={() => setCurrentView('dashboard')}
+                                                >
+                                                    📊 Dashboard
+                                                </li>
+                                                <li 
+                                                    className={`sidebar-item ${currentView === 'my-courses' ? 'active' : ''}`}
+                                                    onClick={() => setCurrentView('my-courses')}
+                                                >
+                                                    📚 My Courses
+                                                </li>
+                                                <li 
+                                                    className={`sidebar-item ${currentView === 'all-courses' ? 'active' : ''}`}
+                                                    onClick={() => setCurrentView('all-courses')}
+                                                >
+                                                    🔍 Browse Courses
+                                                </li>
+                                                <li className="sidebar-item">
+                                                    🏆 Certificates
+                                                </li>
+                                                <li className="sidebar-item">
+                                                    ⚙️ Settings
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div className="progress-section">
+                                            <h3 className="sidebar-title">Overall Progress</h3>
+                                            <div className="overall-progress">
+                                                <div className="progress-label">
+                                                    <span>Learning Progress</span>
+                                                    <span>{overallProgress}%</span>
+                                                </div>
+                                                <div className="progress-bar">
+                                                    <div className="progress-fill" style={{ width: `${overallProgress}%` }}></div>
+                                                </div>
+                                            </div>
+                                            <p style={{ fontSize: '0.875rem', color: '#718096', marginTop: '0.5rem' }}>
+                                                Keep going! You're doing great.
+                                            </p>
+                                        </div>
+                                    </aside>
+
+                                    <main className="main-content">
+                                        <div className="content-header">
+                                            <h2 className="content-title">
+                                                {currentView === 'dashboard' ? 'Continue Learning' :
+                                                 currentView === 'my-courses' ? 'My Courses' : 'All Courses'}
+                                            </h2>
+                                            <div className="filter-tabs">
+                                                {['all', 'Programming', 'Design', 'Business', 'Marketing', 'Data Science'].map(cat => (
+                                                    <button
+                                                        key={cat}
+                                                        className={`filter-tab ${selectedCategory === cat ? 'active' : ''}`}
+                                                        onClick={() => setSelectedCategory(cat)}
+                                                    >
+                                                        {cat === 'all' ? 'All' : cat}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        
+                                        {filteredCourses.length === 0 ? (
+                                            <div style={{ textAlign: 'center', padding: '3rem', color: '#718096' }}>
+                                                <h3>No courses found</h3>
+                                                <p>Try adjusting your search or filters</p>
+                                            </div>
+                                        ) : (
+                                            <div className="courses-grid">
+                                                {(currentView === 'dashboard' ? filteredCourses.slice(0, 6) : filteredCourses).map(course => (
+                                                    <CourseCard 
+                                                        key={course.id} 
+                                                        course={course}
+                                                        onEnroll={handleEnroll}
+                                                        onContinue={handleContinue}
+                                                        isInteractive={true}
+                                                    />
+                                                ))}
+                                            </div>
+                                        )}
+                                    </main>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </>
+            );
+        }
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<ELearningApp />);
+    </script>
+</body>
+</html>

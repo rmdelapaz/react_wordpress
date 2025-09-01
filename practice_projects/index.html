@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Projects - React & WordPress Development</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .project-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .project-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-subtitle {
+            opacity: 0.95;
+            font-size: 0.95rem;
+        }
+
+        .project-body {
+            padding: 2rem;
+        }
+
+        .project-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .features-list li {
+            padding: 0.5rem 0;
+            color: #333;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .features-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-tag {
+            padding: 0.25rem 0.75rem;
+            background: #f0f0f0;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .project-footer {
+            padding: 1.5rem 2rem;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .difficulty {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .difficulty-label {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .difficulty-stars {
+            color: #fbbf24;
+        }
+
+        .project-link {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .project-link:hover {
+            transform: scale(1.05);
+        }
+
+        .info-box {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .info-box h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .info-box p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .info-box ul {
+            margin-left: 2rem;
+            color: #666;
+        }
+
+        .info-box li {
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🚀 Practice Projects</h1>
+            <p>Master React & WordPress Development Through Hands-On Projects</p>
+        </header>
+
+        <div class="info-box">
+            <h2>📚 About These Projects</h2>
+            <p>
+                These practice projects are designed to help you master React and WordPress development through real-world applications. 
+                Each project includes a complete solution that you can study, modify, and use as a reference.
+            </p>
+            <p><strong>What you'll learn:</strong></p>
+            <ul>
+                <li>React Hooks and State Management</li>
+                <li>Component-Based Architecture</li>
+                <li>Responsive Design Patterns</li>
+                <li>User Interface Best Practices</li>
+                <li>Data Handling and Filtering</li>
+                <li>Shopping Cart Implementation</li>
+                <li>Form Handling and Validation</li>
+                <li>Modern CSS Techniques</li>
+            </ul>
+        </div>
+
+        <div class="projects-grid">
+            <!-- Blog Platform -->
+            <div class="project-card">
+                <div class="project-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="project-icon">📚</div>
+                    <h3 class="project-title">Blog Platform</h3>
+                    <p class="project-subtitle">Complete blogging solution with comments</p>
+                </div>
+                <div class="project-body">
+                    <p class="project-description">
+                        Build a fully-featured blog platform with post listings, categories, search functionality, 
+                        and an interactive comment system. Perfect for learning content management in React.
+                    </p>
+                    <ul class="features-list">
+                        <li>Dynamic post filtering and search</li>
+                        <li>Category-based navigation</li>
+                        <li>Pagination system</li>
+                        <li>Comment functionality</li>
+                        <li>Responsive grid layout</li>
+                        <li>Modal post viewer</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-tag">React Hooks</span>
+                        <span class="tech-tag">State Management</span>
+                        <span class="tech-tag">CSS Grid</span>
+                        <span class="tech-tag">Responsive Design</span>
+                    </div>
+                </div>
+                <div class="project-footer">
+                    <div class="difficulty">
+                        <span class="difficulty-label">Difficulty:</span>
+                        <span class="difficulty-stars">⭐⭐⭐</span>
+                    </div>
+                    <a href="blog_platform/index.html" class="project-link">Open Project →</a>
+                </div>
+            </div>
+
+            <!-- E-commerce Catalog -->
+            <div class="project-card">
+                <div class="project-header" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <div class="project-icon">🛍️</div>
+                    <h3 class="project-title">E-commerce Catalog</h3>
+                    <p class="project-subtitle">Product catalog with shopping cart</p>
+                </div>
+                <div class="project-body">
+                    <p class="project-description">
+                        Create a modern e-commerce product catalog with advanced filtering, sorting, 
+                        and a fully functional shopping cart system.
+                    </p>
+                    <ul class="features-list">
+                        <li>Product grid with filters</li>
+                        <li>Shopping cart functionality</li>
+                        <li>Price range filtering</li>
+                        <li>Category selection</li>
+                        <li>Sort by price, rating, newest</li>
+                        <li>Cart sidebar with quantity controls</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Shopping Cart</span>
+                        <span class="tech-tag">Filters</span>
+                        <span class="tech-tag">Product Grid</span>
+                    </div>
+                </div>
+                <div class="project-footer">
+                    <div class="difficulty">
+                        <span class="difficulty-label">Difficulty:</span>
+                        <span class="difficulty-stars">⭐⭐⭐⭐</span>
+                    </div>
+                    <a href="ecommerce_catalog/index.html" class="project-link">Open Project →</a>
+                </div>
+            </div>
+
+            <!-- Portfolio Website -->
+            <div class="project-card">
+                <div class="project-header" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <div class="project-icon">🎨</div>
+                    <h3 class="project-title">Portfolio Website</h3>
+                    <p class="project-subtitle">Professional portfolio with smooth scrolling</p>
+                </div>
+                <div class="project-body">
+                    <p class="project-description">
+                        Design and build a stunning portfolio website with smooth scrolling navigation, 
+                        animated sections, and a contact form.
+                    </p>
+                    <ul class="features-list">
+                        <li>Smooth scroll navigation</li>
+                        <li>Hero section with animations</li>
+                        <li>Project showcase grid</li>
+                        <li>Services section</li>
+                        <li>Contact form with validation</li>
+                        <li>Responsive mobile menu</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Animations</span>
+                        <span class="tech-tag">Forms</span>
+                        <span class="tech-tag">Smooth Scroll</span>
+                    </div>
+                </div>
+                <div class="project-footer">
+                    <div class="difficulty">
+                        <span class="difficulty-label">Difficulty:</span>
+                        <span class="difficulty-stars">⭐⭐</span>
+                    </div>
+                    <a href="portfolio_website/index.html" class="project-link">Open Project →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h2>💡 How to Use These Projects</h2>
+            <p><strong>For Learning:</strong></p>
+            <ul>
+                <li>Open each project and explore the functionality</li>
+                <li>View the source code to understand the implementation</li>
+                <li>Try modifying the code to add new features</li>
+                <li>Use as templates for your own projects</li>
+            </ul>
+            <p><strong>For Practice:</strong></p>
+            <ul>
+                <li>Try rebuilding the project from scratch</li>
+                <li>Add new features or improvements</li>
+                <li>Convert to use real APIs instead of mock data</li>
+                <li>Integrate with WordPress REST API</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

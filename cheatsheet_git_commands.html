@@ -323,8 +323,7 @@
         <!-- Quick Start -->
         <div class="tips-box">
             <h3>🚀 Quick Setup for New Team Members</h3>
-            <div class="command-syntax">
-# Configure your identity
+            <div class="command-syntax"><pre><code># Configure your identity
 git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
 
@@ -333,7 +332,7 @@ git clone https://github.com/team/project.git
 cd project
 
 # Check remote connections
-git remote -v</div>
+git remote -v</code></pre></div>
         </div>
 
         <!-- Essential Commands -->
@@ -403,7 +402,7 @@ git remote -v</div>
                     <span class="command-category">Branching</span>
                 </div>
                 <p class="command-description">List, create, or delete branches</p>
-                <div class="command-syntax"># List all branches
+                <div class="command-syntax"><pre><code># List all branches
 git branch -a
 
 # Create new branch
@@ -416,7 +415,7 @@ git branch -d feature-name
 git push origin --delete feature-name
 
 # Rename branch
-git branch -m old-name new-name</div>
+git branch -m old-name new-name</code></pre></div>
             </div>
 
             <div class="command-card">
@@ -425,7 +424,7 @@ git branch -m old-name new-name</div>
                     <span class="command-category">Branching</span>
                 </div>
                 <p class="command-description">Switch branches or restore files</p>
-                <div class="command-syntax"># Switch to existing branch
+                <div class="command-syntax"><pre><code># Switch to existing branch
 git checkout feature-branch
 # or (newer syntax)
 git switch feature-branch
@@ -436,7 +435,7 @@ git checkout -b new-feature
 git switch -c new-feature
 
 # Checkout remote branch
-git checkout -b feature-branch origin/feature-branch</div>
+git checkout -b feature-branch origin/feature-branch</code></pre></div>
             </div>
 
             <div class="command-card">
@@ -445,14 +444,14 @@ git checkout -b feature-branch origin/feature-branch</div>
                     <span class="command-category">Integration</span>
                 </div>
                 <p class="command-description">Merge branches together</p>
-                <div class="command-syntax"># Merge feature branch into current branch
+                <div class="command-syntax"><pre><code># Merge feature branch into current branch
 git merge feature-branch
 
 # Merge with no fast-forward (creates merge commit)
 git merge --no-ff feature-branch
 
 # Abort merge in case of conflicts
-git merge --abort</div>
+git merge --abort</code></pre></div>
             </div>
         </section>
 
@@ -462,32 +461,32 @@ git merge --abort</div>
             <ol class="workflow-steps">
                 <li>
                     <strong>Create feature branch:</strong>
-                    <div class="command-example">git checkout -b feature/user-authentication</div>
+                    <div class="command-example"><pre><code>git checkout -b feature/user-authentication</code></pre></div>
                 </li>
                 <li>
                     <strong>Make changes and commit:</strong>
-                    <div class="command-example">git add .
-git commit -m "Add login functionality"</div>
+                    <div class="command-example"><pre><code>git add .
+git commit -m "Add login functionality"</code></pre></div>
                 </li>
                 <li>
                     <strong>Keep branch updated with main:</strong>
-                    <div class="command-example">git fetch origin
+                    <div class="command-example"><pre><code>git fetch origin
 git merge origin/main
 # or rebase
-git rebase origin/main</div>
+git rebase origin/main</code></pre></div>
                 </li>
                 <li>
                     <strong>Push feature branch:</strong>
-                    <div class="command-example">git push -u origin feature/user-authentication</div>
+                    <div class="command-example"><pre><code>git push -u origin feature/user-authentication</code></pre></div>
                 </li>
                 <li>
                     <strong>Create Pull Request (on GitHub/GitLab)</strong>
                 </li>
                 <li>
                     <strong>After PR approval, clean up:</strong>
-                    <div class="command-example">git checkout main
+                    <div class="command-example"><pre><code>git checkout main
 git pull origin main
-git branch -d feature/user-authentication</div>
+git branch -d feature/user-authentication</code></pre></div>
                 </li>
             </ol>
         </div>
@@ -502,7 +501,7 @@ git branch -d feature/user-authentication</div>
                     <span class="command-category">Remote</span>
                 </div>
                 <p class="command-description">Manage remote repositories</p>
-                <div class="command-syntax"># View remotes
+                <div class="command-syntax"><pre><code># View remotes
 git remote -v
 
 # Add remote
@@ -515,7 +514,7 @@ git remote remove upstream
 git remote rename origin upstream
 
 # Update remote URL
-git remote set-url origin https://github.com/new/repo.git</div>
+git remote set-url origin https://github.com/new/repo.git</code></pre></div>
             </div>
 
             <div class="command-card">
@@ -524,7 +523,7 @@ git remote set-url origin https://github.com/new/repo.git</div>
                     <span class="command-category">Work Management</span>
                 </div>
                 <p class="command-description">Temporarily save uncommitted changes</p>
-                <div class="command-syntax"># Save current changes
+                <div class="command-syntax"><pre><code># Save current changes
 git stash
 # or with message
 git stash save "Work in progress on feature X"
@@ -544,7 +543,7 @@ git stash pop
 git stash drop stash@{1}
 
 # Clear all stashes
-git stash clear</div>
+git stash clear</code></pre></div>
             </div>
 
             <div class="command-card">
@@ -553,7 +552,7 @@ git stash clear</div>
                     <span class="command-category">History Management</span>
                 </div>
                 <p class="command-description">Reapply commits on top of another base</p>
-                <div class="command-syntax"># Rebase current branch onto main
+                <div class="command-syntax"><pre><code># Rebase current branch onto main
 git rebase main
 
 # Interactive rebase (last 3 commits)
@@ -566,7 +565,7 @@ git rebase --continue
 git rebase --abort
 
 # Pull with rebase
-git pull --rebase origin main</div>
+git pull --rebase origin main</code></pre></div>
             </div>
         </section>
 
@@ -576,7 +575,7 @@ git pull --rebase origin main</div>
             
             <div class="workflow-section">
                 <h3>Resolving Merge Conflicts</h3>
-                <div class="command-syntax"># When conflict occurs during merge
+                <div class="command-syntax"><pre><code># When conflict occurs during merge
 git status  # See conflicted files
 
 # Edit files to resolve conflicts
@@ -594,7 +593,7 @@ git add resolved-file.js
 git commit -m "Resolve merge conflicts"
 
 # Or abort if needed
-git merge --abort</div>
+git merge --abort</code></pre></div>
             </div>
         </section>
 
@@ -608,7 +607,7 @@ git merge --abort</div>
                     <span class="command-category">History</span>
                 </div>
                 <p class="command-description">View commit history</p>
-                <div class="command-syntax"># One line per commit
+                <div class="command-syntax"><pre><code># One line per commit
 git log --oneline
 
 # With graph
@@ -624,7 +623,7 @@ git log --since="2 weeks ago"
 git log -- path/to/file.js
 
 # Pretty format
-git log --pretty=format:"%h - %an, %ar : %s"</div>
+git log --pretty=format:"%h - %an, %ar : %s"</code></pre></div>
             </div>
 
             <div class="command-card">
@@ -633,14 +632,14 @@ git log --pretty=format:"%h - %an, %ar : %s"</div>
                     <span class="command-category">Inspection</span>
                 </div>
                 <p class="command-description">Show details of commits, tags, etc.</p>
-                <div class="command-syntax"># Show latest commit
+                <div class="command-syntax"><pre><code># Show latest commit
 git show
 
 # Show specific commit
 git show abc123
 
 # Show file at specific commit
-git show abc123:path/to/file.js</div>
+git show abc123:path/to/file.js</code></pre></div>
             </div>
 
             <div class="command-card">
@@ -649,14 +648,14 @@ git show abc123:path/to/file.js</div>
                     <span class="command-category">Investigation</span>
                 </div>
                 <p class="command-description">Show who modified each line</p>
-                <div class="command-syntax"># Show line-by-line authorship
+                <div class="command-syntax"><pre><code># Show line-by-line authorship
 git blame file.js
 
 # Show blame for specific lines
 git blame -L 10,20 file.js
 
 # Ignore whitespace changes
-git blame -w file.js</div>
+git blame -w file.js</code></pre></div>
             </div>
         </section>
 
@@ -670,7 +669,7 @@ git blame -w file.js</div>
                     <span class="command-category">Undo</span>
                 </div>
                 <p class="command-description">Reset current HEAD to specified state</p>
-                <div class="command-syntax"># Unstage files (keep changes)
+                <div class="command-syntax"><pre><code># Unstage files (keep changes)
 git reset HEAD file.js
 
 # Soft reset (keep changes staged)
@@ -683,7 +682,7 @@ git reset HEAD~1
 git reset --hard HEAD~1
 
 # Reset to specific commit
-git reset --hard abc123</div>
+git reset --hard abc123</code></pre></div>
             </div>
 
             <div class="command-card">
@@ -692,14 +691,14 @@ git reset --hard abc123</div>
                     <span class="command-category">Undo</span>
                 </div>
                 <p class="command-description">Create new commit that undoes previous commit</p>
-                <div class="command-syntax"># Revert last commit
+                <div class="command-syntax"><pre><code># Revert last commit
 git revert HEAD
 
 # Revert specific commit
 git revert abc123
 
 # Revert without creating commit immediately
-git revert -n abc123</div>
+git revert -n abc123</code></pre></div>
             </div>
 
             <div class="command-card">
@@ -708,14 +707,14 @@ git revert -n abc123</div>
                     <span class="command-category">Undo</span>
                 </div>
                 <p class="command-description">Restore working tree files (Git 2.23+)</p>
-                <div class="command-syntax"># Discard changes in working directory
+                <div class="command-syntax"><pre><code># Discard changes in working directory
 git restore file.js
 
 # Restore file from specific commit
 git restore --source=HEAD~2 file.js
 
 # Unstage file
-git restore --staged file.js</div>
+git restore --staged file.js</code></pre></div>
             </div>
         </section>
 
@@ -729,7 +728,7 @@ git restore --staged file.js</div>
                     <span class="command-category">Versioning</span>
                 </div>
                 <p class="command-description">Create, list, and manage tags</p>
-                <div class="command-syntax"># List tags
+                <div class="command-syntax"><pre><code># List tags
 git tag
 
 # Create lightweight tag
@@ -751,7 +750,7 @@ git push origin --tags
 git tag -d v1.0.0
 
 # Delete remote tag
-git push origin --delete v1.0.0</div>
+git push origin --delete v1.0.0</code></pre></div>
             </div>
         </section>
 
@@ -775,7 +774,7 @@ git push origin --delete v1.0.0</div>
         <!-- Commit Message Format -->
         <div class="workflow-section">
             <h3>📝 Commit Message Format</h3>
-            <div class="command-syntax"># Format
+            <div class="command-syntax"><pre><code># Format
 type(scope): subject
 
 body
@@ -789,7 +788,7 @@ docs(readme): update installation instructions
 style(components): format code according to prettier
 refactor(utils): simplify date formatting function
 test(auth): add unit tests for login
-chore(deps): update dependencies</div>
+chore(deps): update dependencies</code></pre></div>
             
             <p style="margin-top: 15px;"><strong>Types:</strong></p>
             <ul style="margin-left: 20px;">
@@ -807,7 +806,7 @@ chore(deps): update dependencies</div>
         <section class="section">
             <h2 class="section-title">⚡ Useful Git Aliases</h2>
             
-            <div class="command-syntax"># Add to ~/.gitconfig or use git config --global alias.name command
+            <div class="command-syntax"><pre><code># Add to ~/.gitconfig or use git config --global alias.name command
 
 [alias]
     # Shortcuts
@@ -829,13 +828,13 @@ chore(deps): update dependencies</div>
     contributors = shortlog --summary --numbered
     
     # List branches by date
-    recent = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'</div>
+    recent = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'</code></pre></div>
         </section>
 
         <!-- Danger Zone -->
         <div class="danger-box">
             <h3>⚠️ Dangerous Commands - Use with Caution!</h3>
-            <div class="command-syntax"># Force push (rewrites remote history)
+            <div class="command-syntax"><pre><code># Force push (rewrites remote history)
 git push --force origin branch-name
 # Safer alternative
 git push --force-with-lease origin branch-name
@@ -851,7 +850,7 @@ git checkout other-branch -- file.js
 
 # Amend pushed commit (requires force push)
 git commit --amend
-git push --force</div>
+git push --force</code></pre></div>
         </div>
 
         <footer style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #d1d5da; text-align: center; color: #586069;">

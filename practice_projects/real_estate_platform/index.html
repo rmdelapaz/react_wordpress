@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Platform - Practice Project with Phases</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #212529;
+        }
+
+        /* Phase Selector */
+        .phase-selector {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #1a365d;
+            z-index: 2000;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .phase-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .phase-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .phase-btn {
+            padding: 0.5rem 1.5rem;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .phase-btn.active {
+            background: #3182ce;
+            border-color: #3182ce;
+        }
+
+        .phase-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .phase-info {
+            color: #90cdf4;
+            font-size: 0.9rem;
+        }
+
+        /* Main App */
+        .real-estate-app {
+            padding-top: 60px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 60px;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: #4b5563;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            color: #2563eb;
+        }
+
+        .user-menu {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-outline {
+            padding: 0.5rem 1rem;
+            border: 2px solid #2563eb;
+            color: #2563eb;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary {
+            padding: 0.5rem 1rem;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 4rem 2rem;
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        /* Search Section */
+        .search-section {
+            max-width: 1000px;
+            margin: -3rem auto 3rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .search-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-tab {
+            padding: 0.5rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .search-tab.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .search-input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-label {
+            font-size: 0.875rem;
+            color: #4b5563;
+            margin-bottom: 0.5rem;
+        }
+
+        .search-input,
+        .search-select {
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .search-input:focus,
+        .search-select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-btn {
+            padding: 0.75rem 2rem;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* Filters Section */
+        .filters-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 2rem;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .filters-sidebar {
+            width: 300px;
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .filter-section {
+            margin-bottom: 2rem;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .filter-option input[type="checkbox"] {
+            margin-right: 0.75rem;
+        }
+
+        .price-range {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .price-input {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        /* Properties Grid */
+        .properties-container {
+            flex: 1;
+        }
+
+        .properties-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-count {
+            color: #6b7280;
+        }
+
+        .sort-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .property-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .property-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .property-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .property-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.25rem 0.75rem;
+            background: #10b981;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .property-favorite {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .property-favorite:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .property-favorite.active {
+            background: #ef4444;
+            color: white;
+        }
+
+        .property-content {
+            padding: 1.5rem;
+        }
+
+        .property-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .property-address {
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .property-features {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .property-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: #4b5563;
+            font-size: 0.875rem;
+        }
+
+        .property-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .agent-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .agent-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #d1d5db;
+        }
+
+        .agent-name {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        .view-details-btn {
+            padding: 0.5rem 1rem;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .view-details-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1500;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            position: relative;
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 5rem;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+
+        .modal-address {
+            font-size: 1.25rem;
+            color: #4b5563;
+            margin-bottom: 2rem;
+        }
+
+        .modal-features {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .modal-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-description {
+            margin-bottom: 2rem;
+        }
+
+        .modal-description h3 {
+            margin-bottom: 1rem;
+        }
+
+        .modal-description p {
+            color: #4b5563;
+            line-height: 1.8;
+        }
+
+        /* Incomplete Section */
+        .incomplete-section {
+            background: #f0f0f0;
+            padding: 2rem;
+            text-align: center;
+            border: 2px dashed #999;
+            margin: 2rem;
+            border-radius: 10px;
+        }
+
+        .incomplete-section h3 {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: white;
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+        }
+
+        .stats-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-card {
+            padding: 2rem;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .filters-sidebar {
+                display: none;
+            }
+            
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .properties-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // Generate mock properties
+        const generateProperties = () => {
+            const types = ['House', 'Apartment', 'Condo', 'Townhouse'];
+            const statuses = ['For Sale', 'For Rent', 'Sold'];
+            const neighborhoods = ['Downtown', 'Suburbs', 'Riverside', 'Historic District', 'Tech Quarter'];
+            const properties = [];
+
+            for (let i = 1; i <= 50; i++) {
+                const type = types[Math.floor(Math.random() * types.length)];
+                const forRent = Math.random() > 0.7;
+                const price = forRent 
+                    ? Math.floor(Math.random() * 3000) + 1000
+                    : Math.floor(Math.random() * 800000) + 200000;
+                
+                properties.push({
+                    id: i,
+                    title: `${type} in ${neighborhoods[Math.floor(Math.random() * neighborhoods.length)]}`,
+                    price: price,
+                    type: type,
+                    status: forRent ? 'For Rent' : 'For Sale',
+                    address: `${Math.floor(Math.random() * 9999)} Main Street, City, State`,
+                    bedrooms: Math.floor(Math.random() * 4) + 1,
+                    bathrooms: Math.floor(Math.random() * 3) + 1,
+                    sqft: Math.floor(Math.random() * 2000) + 800,
+                    yearBuilt: Math.floor(Math.random() * 40) + 1980,
+                    description: 'Beautiful property with modern amenities and great location. Recently renovated with high-end finishes.',
+                    agent: `Agent ${Math.floor(Math.random() * 10) + 1}`,
+                    featured: Math.random() > 0.8,
+                    image: '🏠'
+                });
+            }
+            
+            return properties;
+        };
+
+        const mockProperties = generateProperties();
+
+        // Phase Selector Component
+        function PhaseSelector({ currentPhase, onPhaseChange }) {
+            const phases = [
+                { id: 'before', name: 'Before (Static)', description: 'Basic HTML layout without functionality' },
+                { id: 'during', name: 'During (Partial)', description: 'Some filtering and search features' },
+                { id: 'complete', name: 'Complete', description: 'Full interactive real estate platform' }
+            ];
+
+            return (
+                <div className="phase-selector">
+                    <div className="phase-container">
+                        <div className="phase-buttons">
+                            {phases.map(phase => (
+                                <button
+                                    key={phase.id}
+                                    className={`phase-btn ${currentPhase === phase.id ? 'active' : ''}`}
+                                    onClick={() => onPhaseChange(phase.id)}
+                                >
+                                    {phase.name}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="phase-info">
+                            {phases.find(p => p.id === currentPhase)?.description}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Property Card Component
+        function PropertyCard({ property, onViewDetails, onToggleFavorite, isFavorite, isInteractive }) {
+            return (
+                <div className="property-card" onClick={() => isInteractive && onViewDetails(property)}>
+                    <div className="property-image">
+                        {property.featured && <span className="property-badge">Featured</span>}
+                        {isInteractive && (
+                            <div 
+                                className={`property-favorite ${isFavorite ? 'active' : ''}`}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onToggleFavorite(property.id);
+                                }}
+                            >
+                                ♥
+                            </div>
+                        )}
+                        {property.image}
+                    </div>
+                    <div className="property-content">
+                        <div className="property-price">
+                            ${property.status === 'For Rent' 
+                                ? `${property.price.toLocaleString()}/mo` 
+                                : property.price.toLocaleString()}
+                        </div>
+                        <div className="property-address">{property.address}</div>
+                        <div className="property-features">
+                            <span className="property-feature">🛏️ {property.bedrooms} beds</span>
+                            <span className="property-feature">🚿 {property.bathrooms} baths</span>
+                            <span className="property-feature">📐 {property.sqft} sqft</span>
+                        </div>
+                        <div className="property-footer">
+                            <div className="agent-info">
+                                <div className="agent-avatar"></div>
+                                <span className="agent-name">{property.agent}</span>
+                            </div>
+                            {isInteractive && (
+                                <button className="view-details-btn" onClick={(e) => {
+                                    e.stopPropagation();
+                                    onViewDetails(property);
+                                }}>
+                                    View Details
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Property Modal Component
+        function PropertyModal({ property, isOpen, onClose }) {
+            if (!isOpen || !property) return null;
+
+            return (
+                <div className="modal open">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button className="close-modal" onClick={onClose}>×</button>
+                            {property.image}
+                        </div>
+                        <div className="modal-body">
+                            <div className="modal-price">
+                                ${property.status === 'For Rent' 
+                                    ? `${property.price.toLocaleString()}/month` 
+                                    : property.price.toLocaleString()}
+                            </div>
+                            <div className="modal-address">{property.address}</div>
+                            <div className="modal-features">
+                                <div className="modal-feature">
+                                    <strong>Type:</strong> {property.type}
+                                </div>
+                                <div className="modal-feature">
+                                    <strong>Year Built:</strong> {property.yearBuilt}
+                                </div>
+                                <div className="modal-feature">
+                                    <strong>Status:</strong> {property.status}
+                                </div>
+                            </div>
+                            <div className="modal-features">
+                                <div className="modal-feature">🛏️ {property.bedrooms} Bedrooms</div>
+                                <div className="modal-feature">🚿 {property.bathrooms} Bathrooms</div>
+                                <div className="modal-feature">📐 {property.sqft} sq ft</div>
+                            </div>
+                            <div className="modal-description">
+                                <h3>Description</h3>
+                                <p>{property.description}</p>
+                                <p>This {property.type.toLowerCase()} features {property.bedrooms} bedrooms and {property.bathrooms} bathrooms across {property.sqft} square feet of living space. Built in {property.yearBuilt}, this property offers modern amenities and is located in a desirable neighborhood.</p>
+                            </div>
+                            <div style={{ display: 'flex', gap: '1rem' }}>
+                                <button className="btn-primary" style={{ flex: 1 }}>
+                                    Schedule Tour
+                                </button>
+                                <button className="btn-outline" style={{ flex: 1 }}>
+                                    Contact Agent
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Main Real Estate App
+        function RealEstateApp() {
+            const [currentPhase, setCurrentPhase] = useState('complete');
+            const [properties] = useState(mockProperties);
+            const [filteredProperties, setFilteredProperties] = useState(mockProperties);
+            const [searchTab, setSearchTab] = useState('buy');
+            const [searchQuery, setSearchQuery] = useState('');
+            const [propertyType, setPropertyType] = useState('all');
+            const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+            const [bedrooms, setBedrooms] = useState('any');
+            const [sortBy, setSortBy] = useState('featured');
+            const [favorites, setFavorites] = useState([]);
+            const [selectedProperty, setSelectedProperty] = useState(null);
+            const [isModalOpen, setIsModalOpen] = useState(false);
+
+            // Filters
+            const [filters, setFilters] = useState({
+                types: [],
+                amenities: []
+            });
+
+            // Apply filters
+            useEffect(() => {
+                let filtered = properties;
+
+                // Search tab filter
+                if (searchTab === 'buy') {
+                    filtered = filtered.filter(p => p.status === 'For Sale');
+                } else if (searchTab === 'rent') {
+                    filtered = filtered.filter(p => p.status === 'For Rent');
+                }
+
+                // Location search
+                if (searchQuery) {
+                    filtered = filtered.filter(p => 
+                        p.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        p.title.toLowerCase().includes(searchQuery.toLowerCase())
+                    );
+                }
+
+                // Property type filter
+                if (propertyType !== 'all') {
+                    filtered = filtered.filter(p => p.type === propertyType);
+                }
+
+                // Price range filter
+                if (priceRange.min || priceRange.max) {
+                    const min = priceRange.min ? parseFloat(priceRange.min) : 0;
+                    const max = priceRange.max ? parseFloat(priceRange.max) : Infinity;
+                    filtered = filtered.filter(p => p.price >= min && p.price <= max);
+                }
+
+                // Bedrooms filter
+                if (bedrooms !== 'any') {
+                    filtered = filtered.filter(p => p.bedrooms >= parseInt(bedrooms));
+                }
+
+                // Type filters
+                if (filters.types.length > 0) {
+                    filtered = filtered.filter(p => filters.types.includes(p.type));
+                }
+
+                // Sorting
+                switch (sortBy) {
+                    case 'price-low':
+                        filtered.sort((a, b) => a.price - b.price);
+                        break;
+                    case 'price-high':
+                        filtered.sort((a, b) => b.price - a.price);
+                        break;
+                    case 'newest':
+                        filtered.sort((a, b) => b.yearBuilt - a.yearBuilt);
+                        break;
+                    case 'featured':
+                    default:
+                        filtered.sort((a, b) => b.featured - a.featured);
+                        break;
+                }
+
+                setFilteredProperties(filtered);
+            }, [searchTab, searchQuery, propertyType, priceRange, bedrooms, sortBy, filters, properties]);
+
+            const handleToggleFavorite = (propertyId) => {
+                setFavorites(prev => 
+                    prev.includes(propertyId)
+                        ? prev.filter(id => id !== propertyId)
+                        : [...prev, propertyId]
+                );
+            };
+
+            const handleViewDetails = (property) => {
+                setSelectedProperty(property);
+                setIsModalOpen(true);
+            };
+
+            const handleTypeFilter = (type) => {
+                setFilters(prev => ({
+                    ...prev,
+                    types: prev.types.includes(type)
+                        ? prev.types.filter(t => t !== type)
+                        : [...prev.types, type]
+                }));
+            };
+
+            // Stats calculation
+            const stats = {
+                totalProperties: properties.length,
+                forSale: properties.filter(p => p.status === 'For Sale').length,
+                forRent: properties.filter(p => p.status === 'For Rent').length,
+                avgPrice: Math.round(properties.filter(p => p.status === 'For Sale').reduce((sum, p) => sum + p.price, 0) / properties.filter(p => p.status === 'For Sale').length)
+            };
+
+            // Render different versions based on phase
+            if (currentPhase === 'before') {
+                // Static version
+                return (
+                    <>
+                        <PhaseSelector currentPhase={currentPhase} onPhaseChange={setCurrentPhase} />
+                        <div className="real-estate-app">
+                            <header className="header">
+                                <div className="nav-container">
+                                    <div className="logo">🏡 RealtyPro</div>
+                                    <nav>
+                                        <ul className="nav-menu">
+                                            <li><a className="nav-link">Buy</a></li>
+                                            <li><a className="nav-link">Rent</a></li>
+                                            <li><a className="nav-link">Sell</a></li>
+                                            <li><a className="nav-link">Agents</a></li>
+                                        </ul>
+                                    </nav>
+                                    <div className="user-menu">
+                                        <button className="btn-outline">Sign In</button>
+                                        <button className="btn-primary">List Property</button>
+                                    </div>
+                                </div>
+                            </header>
+
+                            <section className="hero">
+                                <div className="hero-content">
+                                    <h1>Find Your Dream Home</h1>
+                                    <p>Discover properties in your area</p>
+                                </div>
+                            </section>
+
+                            <section className="search-section">
+                                <div className="search-card">
+                                    <div className="search-tabs">
+                                        <button className="search-tab active">Buy</button>
+                                        <button className="search-tab">Rent</button>
+                                        <button className="search-tab">Sold</button>
+                                    </div>
+                                    <div className="search-form">
+                                        <div className="search-input-group">
+                                            <label className="search-label">Location</label>
+                                            <input type="text" className="search-input" placeholder="City, neighborhood, ZIP" />
+                                        </div>
+                                        <div className="search-input-group">
+                                            <label className="search-label">Property Type</label>
+                                            <select className="search-select">
+                                                <option>All Types</option>
+                                            </select>
+                                        </div>
+                                        <div className="search-input-group">
+                                            <label className="search-label">Price Range</label>
+                                            <select className="search-select">
+                                                <option>Any Price</option>
+                                            </select>
+                                        </div>
+                                        <button className="search-btn">Search</button>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <div className="filters-container">
+                                <div className="properties-container">
+                                    <div className="properties-header">
+                                        <span className="results-count">Showing 6 properties (static)</span>
+                                    </div>
+                                    <div className="properties-grid">
+                                        {properties.slice(0, 6).map(property => (
+                                            <PropertyCard 
+                                                key={property.id} 
+                                                property={property}
+                                                isInteractive={false}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="incomplete-section">
+                                <h3>🚧 Advanced Filters</h3>
+                                <p>Filter functionality not yet implemented</p>
+                            </div>
+
+                            <div className="incomplete-section">
+                                <h3>🚧 Property Details Modal</h3>
+                                <p>Click functionality coming soon</p>
+                            </div>
+                        </div>
+                    </>
+                );
+            }
+
+            if (currentPhase === 'during') {
+                // Partially functional version
+                return (
+                    <>
+                        <PhaseSelector currentPhase={currentPhase} onPhaseChange={setCurrentPhase} />
+                        <div className="real-estate-app">
+                            <header className="header">
+                                <div className="nav-container">
+                                    <div className="logo">🏡 RealtyPro</div>
+                                    <nav>
+                                        <ul className="nav-menu">
+                                            <li><a className="nav-link">Buy</a></li>
+                                            <li><a className="nav-link">Rent</a></li>
+                                            <li><a className="nav-link">Sell</a></li>
+                                            <li><a className="nav-link">Agents</a></li>
+                                        </ul>
+                                    </nav>
+                                    <div className="user-menu">
+                                        <button className="btn-outline">❤️ {favorites.length}</button>
+                                        <button className="btn-primary">List Property</button>
+                                    </div>
+                                </div>
+                            </header>
+
+                            <section className="hero">
+                                <div className="hero-content">
+                                    <h1>Find Your Dream Home</h1>
+                                    <p>Search from {properties.length} properties</p>
+                                </div>
+                            </section>
+
+                            <section className="search-section">
+                                <div className="search-card">
+                                    <div className="search-tabs">
+                                        {['buy', 'rent', 'sold'].map(tab => (
+                                            <button
+                                                key={tab}
+                                                className={`search-tab ${searchTab === tab ? 'active' : ''}`}
+                                                onClick={() => setSearchTab(tab)}
+                                            >
+                                                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <div className="search-form">
+                                        <div className="search-input-group">
+                                            <label className="search-label">Location</label>
+                                            <input 
+                                                type="text" 
+                                                className="search-input" 
+                                                placeholder="Search location..."
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="search-input-group">
+                                            <label className="search-label">Property Type</label>
+                                            <select 
+                                                className="search-select"
+                                                value={propertyType}
+                                                onChange={(e) => setPropertyType(e.target.value)}
+                                            >
+                                                <option value="all">All Types</option>
+                                                <option value="House">House</option>
+                                                <option value="Apartment">Apartment</option>
+                                                <option value="Condo">Condo</option>
+                                                <option value="Townhouse">Townhouse</option>
+                                            </select>
+                                        </div>
+                                        <div className="search-input-group">
+                                            <label className="search-label">Bedrooms</label>
+                                            <select 
+                                                className="search-select"
+                                                value={bedrooms}
+                                                onChange={(e) => setBedrooms(e.target.value)}
+                                            >
+                                                <option value="any">Any</option>
+                                                <option value="1">1+</option>
+                                                <option value="2">2+</option>
+                                                <option value="3">3+</option>
+                                                <option value="4">4+</option>
+                                            </select>
+                                        </div>
+                                        <button className="search-btn">Search</button>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <div className="filters-container">
+                                <div className="properties-container">
+                                    <div className="properties-header">
+                                        <span className="results-count">
+                                            Found {filteredProperties.length} properties
+                                        </span>
+                                        <select 
+                                            className="sort-select"
+                                            value={sortBy}
+                                            onChange={(e) => setSortBy(e.target.value)}
+                                        >
+                                            <option value="featured">Featured</option>
+                                            <option value="price-low">Price: Low to High</option>
+                                            <option value="price-high">Price: High to Low</option>
+                                            <option value="newest">Newest</option>
+                                        </select>
+                                    </div>
+                                    <div className="properties-grid">
+                                        {filteredProperties.slice(0, 12).map(property => (
+                                            <PropertyCard 
+                                                key={property.id} 
+                                                property={property}
+                                                onToggleFavorite={handleToggleFavorite}
+                                                isFavorite={favorites.includes(property.id)}
+                                                isInteractive={true}
+                                                onViewDetails={() => alert('Modal coming in complete version!')}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="incomplete-section">
+                                <h3>🚧 Advanced Filters Sidebar</h3>
+                                <p>Price range and additional filters coming soon</p>
+                            </div>
+                        </div>
+                    </>
+                );
+            }
+
+            // Complete version
+            return (
+                <>
+                    <PhaseSelector currentPhase={currentPhase} onPhaseChange={setCurrentPhase} />
+                    <div className="real-estate-app">
+                        <header className="header">
+                            <div className="nav-container">
+                                <div className="logo">🏡 RealtyPro</div>
+                                <nav>
+                                    <ul className="nav-menu">
+                                        <li><a className="nav-link">Buy</a></li>
+                                        <li><a className="nav-link">Rent</a></li>
+                                        <li><a className="nav-link">Sell</a></li>
+                                        <li><a className="nav-link">Agents</a></li>
+                                        <li><a className="nav-link">Resources</a></li>
+                                    </ul>
+                                </nav>
+                                <div className="user-menu">
+                                    <button className="btn-outline">❤️ {favorites.length} Saved</button>
+                                    <button className="btn-primary">List Property</button>
+                                </div>
+                            </div>
+                        </header>
+
+                        <section className="hero">
+                            <div className="hero-content">
+                                <h1>Find Your Dream Home</h1>
+                                <p>Search from {properties.length} properties in your area</p>
+                            </div>
+                        </section>
+
+                        <section className="search-section">
+                            <div className="search-card">
+                                <div className="search-tabs">
+                                    {['buy', 'rent', 'sold'].map(tab => (
+                                        <button
+                                            key={tab}
+                                            className={`search-tab ${searchTab === tab ? 'active' : ''}`}
+                                            onClick={() => setSearchTab(tab)}
+                                        >
+                                            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="search-form">
+                                    <div className="search-input-group">
+                                        <label className="search-label">Location</label>
+                                        <input 
+                                            type="text" 
+                                            className="search-input" 
+                                            placeholder="City, neighborhood, ZIP"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="search-input-group">
+                                        <label className="search-label">Property Type</label>
+                                        <select 
+                                            className="search-select"
+                                            value={propertyType}
+                                            onChange={(e) => setPropertyType(e.target.value)}
+                                        >
+                                            <option value="all">All Types</option>
+                                            <option value="House">House</option>
+                                            <option value="Apartment">Apartment</option>
+                                            <option value="Condo">Condo</option>
+                                            <option value="Townhouse">Townhouse</option>
+                                        </select>
+                                    </div>
+                                    <div className="search-input-group">
+                                        <label className="search-label">Bedrooms</label>
+                                        <select 
+                                            className="search-select"
+                                            value={bedrooms}
+                                            onChange={(e) => setBedrooms(e.target.value)}
+                                        >
+                                            <option value="any">Any</option>
+                                            <option value="1">1+</option>
+                                            <option value="2">2+</option>
+                                            <option value="3">3+</option>
+                                            <option value="4">4+</option>
+                                        </select>
+                                    </div>
+                                    <button className="search-btn">Search</button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div className="filters-container">
+                            <aside className="filters-sidebar">
+                                <div className="filter-section">
+                                    <h3 className="filter-title">Price Range</h3>
+                                    <div className="price-range">
+                                        <input
+                                            type="number"
+                                            className="price-input"
+                                            placeholder="Min"
+                                            value={priceRange.min}
+                                            onChange={(e) => setPriceRange({...priceRange, min: e.target.value})}
+                                        />
+                                        <input
+                                            type="number"
+                                            className="price-input"
+                                            placeholder="Max"
+                                            value={priceRange.max}
+                                            onChange={(e) => setPriceRange({...priceRange, max: e.target.value})}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="filter-section">
+                                    <h3 className="filter-title">Property Type</h3>
+                                    {['House', 'Apartment', 'Condo', 'Townhouse'].map(type => (
+                                        <div key={type} className="filter-option">
+                                            <input
+                                                type="checkbox"
+                                                id={type}
+                                                checked={filters.types.includes(type)}
+                                                onChange={() => handleTypeFilter(type)}
+                                            />
+                                            <label htmlFor={type}>{type}</label>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="filter-section">
+                                    <h3 className="filter-title">Features</h3>
+                                    <div className="filter-option">
+                                        <input type="checkbox" id="parking" />
+                                        <label htmlFor="parking">Parking</label>
+                                    </div>
+                                    <div className="filter-option">
+                                        <input type="checkbox" id="pool" />
+                                        <label htmlFor="pool">Swimming Pool</label>
+                                    </div>
+                                    <div className="filter-option">
+                                        <input type="checkbox" id="gym" />
+                                        <label htmlFor="gym">Gym</label>
+                                    </div>
+                                    <div className="filter-option">
+                                        <input type="checkbox" id="garden" />
+                                        <label htmlFor="garden">Garden</label>
+                                    </div>
+                                </div>
+
+                                <button 
+                                    className="btn-primary" 
+                                    style={{ width: '100%', marginTop: '1rem' }}
+                                    onClick={() => {
+                                        setPriceRange({ min: '', max: '' });
+                                        setFilters({ types: [], amenities: [] });
+                                        setPropertyType('all');
+                                        setBedrooms('any');
+                                    }}
+                                >
+                                    Clear All Filters
+                                </button>
+                            </aside>
+
+                            <div className="properties-container">
+                                <div className="properties-header">
+                                    <span className="results-count">
+                                        Found {filteredProperties.length} properties
+                                    </span>
+                                    <select 
+                                        className="sort-select"
+                                        value={sortBy}
+                                        onChange={(e) => setSortBy(e.target.value)}
+                                    >
+                                        <option value="featured">Featured</option>
+                                        <option value="price-low">Price: Low to High</option>
+                                        <option value="price-high">Price: High to Low</option>
+                                        <option value="newest">Newest</option>
+                                    </select>
+                                </div>
+                                {filteredProperties.length === 0 ? (
+                                    <div style={{ textAlign: 'center', padding: '3rem', color: '#6b7280' }}>
+                                        <h3>No properties found</h3>
+                                        <p>Try adjusting your filters or search criteria</p>
+                                    </div>
+                                ) : (
+                                    <div className="properties-grid">
+                                        {filteredProperties.map(property => (
+                                            <PropertyCard 
+                                                key={property.id} 
+                                                property={property}
+                                                onViewDetails={handleViewDetails}
+                                                onToggleFavorite={handleToggleFavorite}
+                                                isFavorite={favorites.includes(property.id)}
+                                                isInteractive={true}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <section className="stats-section">
+                            <div className="stats-container">
+                                <div className="stat-card">
+                                    <div className="stat-number">{stats.totalProperties}</div>
+                                    <div className="stat-label">Total Properties</div>
+                                </div>
+                                <div className="stat-card">
+                                    <div className="stat-number">{stats.forSale}</div>
+                                    <div className="stat-label">For Sale</div>
+                                </div>
+                                <div className="stat-card">
+                                    <div className="stat-number">{stats.forRent}</div>
+                                    <div className="stat-label">For Rent</div>
+                                </div>
+                                <div className="stat-card">
+                                    <div className="stat-number">${(stats.avgPrice / 1000).toFixed(0)}K</div>
+                                    <div className="stat-label">Average Price</div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <PropertyModal
+                            property={selectedProperty}
+                            isOpen={isModalOpen}
+                            onClose={() => setIsModalOpen(false)}
+                        />
+                    </div>
+                </>
+            );
+        }
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<RealEstateApp />);
+    </script>
+</body>
+</html>

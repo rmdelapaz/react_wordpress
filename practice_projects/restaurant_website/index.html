@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Website - Practice Project with Phases</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #1a1a1a;
+            color: #333;
+        }
+
+        /* Phase Selector Styles */
+        .phase-selector {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #2c2c2c;
+            z-index: 2000;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .phase-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .phase-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .phase-btn {
+            padding: 0.5rem 1.5rem;
+            background: #444;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .phase-btn.active {
+            background: #d4af37;
+            color: #1a1a1a;
+        }
+
+        .phase-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .phase-info {
+            color: #d4af37;
+            font-size: 0.9rem;
+        }
+
+        /* Restaurant Styles */
+        .restaurant-app {
+            padding-top: 60px;
+        }
+
+        .header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23333"/><circle cx="300" cy="300" r="200" fill="%23444" opacity="0.5"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 2rem 0;
+            position: sticky;
+            top: 60px;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #d4af37;
+            font-family: 'Georgia', serif;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #d4af37;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #d4af37;
+            color: #1a1a1a;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), #2c2c2c;
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: #d4af37;
+            font-family: 'Georgia', serif;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #d4af37;
+            color: #1a1a1a;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background: #b8941f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #d4af37;
+            border: 2px solid #d4af37;
+        }
+
+        .btn-secondary:hover {
+            background: #d4af37;
+            color: #1a1a1a;
+        }
+
+        /* Menu Section */
+        .menu-section {
+            background: white;
+            padding: 4rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+            font-family: 'Georgia', serif;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+
+        .menu-categories {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid #d4af37;
+            color: #1a1a1a;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .category-btn.active,
+        .category-btn:hover {
+            background: #d4af37;
+            color: white;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .menu-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .menu-item-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .menu-item-content {
+            padding: 1.5rem;
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        .menu-item-price {
+            font-size: 1.25rem;
+            color: #d4af37;
+            font-weight: bold;
+        }
+
+        .menu-item-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .menu-item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dietary-badges {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dietary-badge {
+            padding: 0.25rem 0.5rem;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .add-to-cart-btn {
+            padding: 0.5rem 1rem;
+            background: #d4af37;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #b8941f;
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            right: 0;
+            top: 60px;
+            bottom: 0;
+            width: 400px;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transform: translateX(100%);
+            transition: transform 0.3s;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .cart-header {
+            padding: 1.5rem;
+            background: #1a1a1a;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .cart-item-price {
+            color: #d4af37;
+            font-weight: bold;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .quantity-btn {
+            width: 24px;
+            height: 24px;
+            border: 1px solid #d4af37;
+            background: white;
+            color: #d4af37;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-top: 2px solid #d4af37;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #d4af37;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background: #b8941f;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.open {
+            display: block;
+        }
+
+        /* Reservation Section */
+        .reservation-section {
+            background: #f8f9fa;
+            padding: 4rem 2rem;
+        }
+
+        .reservation-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #d4af37;
+        }
+
+        /* About Section */
+        .about-section {
+            background: white;
+            padding: 4rem 2rem;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+            font-family: 'Georgia', serif;
+        }
+
+        .about-text p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-title {
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 3rem 2rem 1rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: #d4af37;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p,
+        .footer-section ul {
+            color: #ccc;
+            line-height: 1.8;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #d4af37;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+            color: #999;
+        }
+
+        /* Incomplete Phase Styles */
+        .incomplete-section {
+            background: #f0f0f0;
+            padding: 2rem;
+            text-align: center;
+            border: 2px dashed #999;
+            margin: 2rem;
+            border-radius: 10px;
+        }
+
+        .incomplete-section h3 {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .incomplete-section p {
+            color: #999;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cart-sidebar {
+                width: 100%;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // Menu Data
+        const menuData = {
+            appetizers: [
+                { id: 1, name: "Bruschetta Trio", price: 12.99, description: "Toasted bread with tomato, basil, and mozzarella", dietary: ["vegetarian"], image: "🍞" },
+                { id: 2, name: "Calamari Fritti", price: 14.99, description: "Crispy fried squid with marinara sauce", dietary: [], image: "🦑" },
+                { id: 3, name: "Caesar Salad", price: 10.99, description: "Romaine lettuce, parmesan, croutons", dietary: [], image: "🥗" }
+            ],
+            mains: [
+                { id: 4, name: "Margherita Pizza", price: 18.99, description: "Fresh mozzarella, tomato, basil", dietary: ["vegetarian"], image: "🍕" },
+                { id: 5, name: "Grilled Salmon", price: 24.99, description: "Atlantic salmon with lemon butter", dietary: ["gluten-free"], image: "🐟" },
+                { id: 6, name: "Ribeye Steak", price: 32.99, description: "12oz ribeye with garlic butter", dietary: ["gluten-free"], image: "🥩" },
+                { id: 7, name: "Pasta Carbonara", price: 19.99, description: "Creamy pasta with pancetta", dietary: [], image: "🍝" },
+                { id: 8, name: "Vegetable Risotto", price: 17.99, description: "Creamy arborio rice with seasonal vegetables", dietary: ["vegetarian", "gluten-free"], image: "🍚" }
+            ],
+            desserts: [
+                { id: 9, name: "Tiramisu", price: 8.99, description: "Classic Italian coffee dessert", dietary: ["vegetarian"], image: "🍰" },
+                { id: 10, name: "Chocolate Lava Cake", price: 9.99, description: "Warm chocolate cake with molten center", dietary: ["vegetarian"], image: "🍫" },
+                { id: 11, name: "Gelato Selection", price: 6.99, description: "Three scoops of artisan gelato", dietary: ["vegetarian", "gluten-free"], image: "🍨" }
+            ],
+            beverages: [
+                { id: 12, name: "House Wine", price: 8.99, description: "Red or white selection", dietary: ["vegan"], image: "🍷" },
+                { id: 13, name: "Craft Beer", price: 6.99, description: "Local brewery selection", dietary: ["vegan"], image: "🍺" },
+                { id: 14, name: "Fresh Juice", price: 4.99, description: "Orange, apple, or mixed", dietary: ["vegan", "gluten-free"], image: "🥤" }
+            ]
+        };
+
+        // Phase Selector Component
+        function PhaseSelector({ currentPhase, onPhaseChange }) {
+            const phases = [
+                { id: 'before', name: 'Before (Static)', description: 'Basic HTML/CSS layout' },
+                { id: 'during', name: 'During (Partial)', description: 'Some React functionality' },
+                { id: 'complete', name: 'Complete', description: 'Full React implementation' }
+            ];
+
+            return (
+                <div className="phase-selector">
+                    <div className="phase-container">
+                        <div className="phase-buttons">
+                            {phases.map(phase => (
+                                <button
+                                    key={phase.id}
+                                    className={`phase-btn ${currentPhase === phase.id ? 'active' : ''}`}
+                                    onClick={() => onPhaseChange(phase.id)}
+                                >
+                                    {phase.name}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="phase-info">
+                            {phases.find(p => p.id === currentPhase)?.description}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Menu Item Component
+        function MenuItem({ item, onAddToCart, isInteractive }) {
+            return (
+                <div className="menu-item">
+                    <div className="menu-item-image">{item.image}</div>
+                    <div className="menu-item-content">
+                        <div className="menu-item-header">
+                            <h3 className="menu-item-name">{item.name}</h3>
+                            <span className="menu-item-price">${item.price}</span>
+                        </div>
+                        <p className="menu-item-description">{item.description}</p>
+                        <div className="menu-item-footer">
+                            <div className="dietary-badges">
+                                {item.dietary.map(diet => (
+                                    <span key={diet} className="dietary-badge">{diet}</span>
+                                ))}
+                            </div>
+                            {isInteractive && (
+                                <button 
+                                    className="add-to-cart-btn"
+                                    onClick={() => onAddToCart(item)}
+                                >
+                                    Add to Cart
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Cart Component
+        function Cart({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem }) {
+            const total = useMemo(() => {
+                return cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            }, [cartItems]);
+
+            return (
+                <>
+                    <div className={`overlay ${isOpen ? 'open' : ''}`} onClick={onClose}></div>
+                    <div className={`cart-sidebar ${isOpen ? 'open' : ''}`}>
+                        <div className="cart-header">
+                            <h2>Your Order</h2>
+                            <button className="close-cart" onClick={onClose}>×</button>
+                        </div>
+                        
+                        <div className="cart-items">
+                            {cartItems.length === 0 ? (
+                                <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>
+                                    <p>Your cart is empty</p>
+                                    <p>Add items from the menu to get started!</p>
+                                </div>
+                            ) : (
+                                cartItems.map(item => (
+                                    <div key={item.id} className="cart-item">
+                                        <div className="cart-item-info">
+                                            <div className="cart-item-name">{item.name}</div>
+                                            <div className="cart-item-price">${item.price}</div>
+                                            <div className="quantity-controls">
+                                                <button 
+                                                    className="quantity-btn"
+                                                    onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+                                                >
+                                                    -
+                                                </button>
+                                                <span>{item.quantity}</span>
+                                                <button 
+                                                    className="quantity-btn"
+                                                    onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                                                >
+                                                    +
+                                                </button>
+                                                <button 
+                                                    style={{ marginLeft: 'auto', color: '#d4af37', border: 'none', background: 'none', cursor: 'pointer' }}
+                                                    onClick={() => onRemoveItem(item.id)}
+                                                >
+                                                    Remove
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                        
+                        {cartItems.length > 0 && (
+                            <div className="cart-footer">
+                                <div className="cart-total">
+                                    <span>Total:</span>
+                                    <span>${total.toFixed(2)}</span>
+                                </div>
+                                <button className="checkout-btn">Proceed to Checkout</button>
+                            </div>
+                        )}
+                    </div>
+                </>
+            );
+        }
+
+        // Main Restaurant App
+        function RestaurantApp() {
+            const [currentPhase, setCurrentPhase] = useState('complete');
+            const [selectedCategory, setSelectedCategory] = useState('all');
+            const [cartItems, setCartItems] = useState([]);
+            const [isCartOpen, setIsCartOpen] = useState(false);
+            const [reservationForm, setReservationForm] = useState({
+                name: '',
+                email: '',
+                phone: '',
+                date: '',
+                time: '',
+                guests: '2',
+                notes: ''
+            });
+
+            const categories = ['all', 'appetizers', 'mains', 'desserts', 'beverages'];
+
+            const displayedItems = useMemo(() => {
+                if (selectedCategory === 'all') {
+                    return Object.values(menuData).flat();
+                }
+                return menuData[selectedCategory] || [];
+            }, [selectedCategory]);
+
+            const handleAddToCart = (item) => {
+                setCartItems(prev => {
+                    const existing = prev.find(cartItem => cartItem.id === item.id);
+                    if (existing) {
+                        return prev.map(cartItem =>
+                            cartItem.id === item.id
+                                ? { ...cartItem, quantity: cartItem.quantity + 1 }
+                                : cartItem
+                        );
+                    }
+                    return [...prev, { ...item, quantity: 1 }];
+                });
+                
+                if (currentPhase === 'complete') {
+                    setIsCartOpen(true);
+                }
+            };
+
+            const handleUpdateQuantity = (id, newQuantity) => {
+                if (newQuantity === 0) {
+                    handleRemoveItem(id);
+                } else {
+                    setCartItems(prev =>
+                        prev.map(item =>
+                            item.id === id ? { ...item, quantity: newQuantity } : item
+                        )
+                    );
+                }
+            };
+
+            const handleRemoveItem = (id) => {
+                setCartItems(prev => prev.filter(item => item.id !== id));
+            };
+
+            const handleReservationSubmit = (e) => {
+                e.preventDefault();
+                if (currentPhase === 'complete') {
+                    alert('Reservation submitted successfully! We will contact you soon.');
+                    setReservationForm({
+                        name: '',
+                        email: '',
+                        phone: '',
+                        date: '',
+                        time: '',
+                        guests: '2',
+                        notes: ''
+                    });
+                }
+            };
+
+            const cartItemsCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+            // Render different versions based on phase
+            if (currentPhase === 'before') {
+                // Static HTML version - no interactivity
+                return (
+                    <>
+                        <PhaseSelector currentPhase={currentPhase} onPhaseChange={setCurrentPhase} />
+                        <div className="restaurant-app">
+                            <header className="header">
+                                <div className="nav-container">
+                                    <div className="logo">Bella Vista</div>
+                                    <nav>
+                                        <ul className="nav-menu">
+                                            <li><a className="nav-link">Home</a></li>
+                                            <li><a className="nav-link">Menu</a></li>
+                                            <li><a className="nav-link">About</a></li>
+                                            <li><a className="nav-link">Reservations</a></li>
+                                        </ul>
+                                    </nav>
+                                    <div className="cart-icon">🛒</div>
+                                </div>
+                            </header>
+
+                            <section className="hero">
+                                <h1>Welcome to Bella Vista</h1>
+                                <p>Experience Fine Dining at Its Best</p>
+                                <div className="cta-buttons">
+                                    <button className="btn btn-primary">View Menu</button>
+                                    <button className="btn btn-secondary">Make Reservation</button>
+                                </div>
+                            </section>
+
+                            <section className="menu-section">
+                                <div className="container">
+                                    <h2 className="section-title">Our Menu</h2>
+                                    <p className="section-subtitle">Static menu display - no filtering or cart functionality</p>
+                                    <div className="menu-grid">
+                                        {displayedItems.slice(0, 6).map(item => (
+                                            <MenuItem key={item.id} item={item} isInteractive={false} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </section>
+
+                            <div className="incomplete-section">
+                                <h3>🚧 Reservation System</h3>
+                                <p>This section needs React implementation</p>
+                            </div>
+
+                            <div className="incomplete-section">
+                                <h3>🚧 Shopping Cart</h3>
+                                <p>Cart functionality not yet implemented</p>
+                            </div>
+                        </div>
+                    </>
+                );
+            }
+
+            if (currentPhase === 'during') {
+                // Partially functional version
+                return (
+                    <>
+                        <PhaseSelector currentPhase={currentPhase} onPhaseChange={setCurrentPhase} />
+                        <div className="restaurant-app">
+                            <header className="header">
+                                <div className="nav-container">
+                                    <div className="logo">Bella Vista</div>
+                                    <nav>
+                                        <ul className="nav-menu">
+                                            <li><a className="nav-link active">Home</a></li>
+                                            <li><a className="nav-link">Menu</a></li>
+                                            <li><a className="nav-link">About</a></li>
+                                            <li><a className="nav-link">Reservations</a></li>
+                                        </ul>
+                                    </nav>
+                                    <div className="cart-icon">
+                                        🛒
+                                        {cartItemsCount > 0 && (
+                                            <span className="cart-count">{cartItemsCount}</span>
+                                        )}
+                                    </div>
+                                </div>
+                            </header>
+
+                            <section className="hero">
+                                <h1>Welcome to Bella Vista</h1>
+                                <p>Experience Fine Dining at Its Best</p>
+                                <div className="cta-buttons">
+                                    <button className="btn btn-primary">View Menu</button>
+                                    <button className="btn btn-secondary">Make Reservation</button>
+                                </div>
+                            </section>
+
+                            <section className="menu-section">
+                                <div className="container">
+                                    <h2 className="section-title">Our Menu</h2>
+                                    <p className="section-subtitle">Category filtering works, cart adds items but doesn't open</p>
+                                    
+                                    <div className="menu-categories">
+                                        {categories.map(category => (
+                                            <button
+                                                key={category}
+                                                className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
+                                                onClick={() => setSelectedCategory(category)}
+                                            >
+                                                {category.charAt(0).toUpperCase() + category.slice(1)}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    <div className="menu-grid">
+                                        {displayedItems.map(item => (
+                                            <MenuItem 
+                                                key={item.id} 
+                                                item={item} 
+                                                onAddToCart={handleAddToCart}
+                                                isInteractive={true}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            </section>
+
+                            <div className="incomplete-section">
+                                <h3>🚧 Shopping Cart Sidebar</h3>
+                                <p>Items are being added ({cartItemsCount} items) but cart UI not yet complete</p>
+                            </div>
+
+                            <section className="reservation-section">
+                                <div className="container">
+                                    <h2 className="section-title">Make a Reservation</h2>
+                                    <form className="reservation-form">
+                                        <div className="form-grid">
+                                            <div className="form-group">
+                                                <label className="form-label">Name</label>
+                                                <input type="text" className="form-input" placeholder="Your name" />
+                                            </div>
+                                            <div className="form-group">
+                                                <label className="form-label">Email</label>
+                                                <input type="email" className="form-input" placeholder="your@email.com" />
+                                            </div>
+                                        </div>
+                                        <button type="button" className="btn btn-primary" style={{ width: '100%' }}>
+                                            Submit (Not functional yet)
+                                        </button>
+                                    </form>
+                                </div>
+                            </section>
+                        </div>
+                    </>
+                );
+            }
+
+            // Complete version
+            return (
+                <>
+                    <PhaseSelector currentPhase={currentPhase} onPhaseChange={setCurrentPhase} />
+                    <div className="restaurant-app">
+                        <header className="header">
+                            <div className="nav-container">
+                                <div className="logo">Bella Vista</div>
+                                <nav>
+                                    <ul className="nav-menu">
+                                        <li><a className="nav-link active">Home</a></li>
+                                        <li><a className="nav-link">Menu</a></li>
+                                        <li><a className="nav-link">About</a></li>
+                                        <li><a className="nav-link">Reservations</a></li>
+                                    </ul>
+                                </nav>
+                                <div className="cart-icon" onClick={() => setIsCartOpen(true)}>
+                                    🛒
+                                    {cartItemsCount > 0 && (
+                                        <span className="cart-count">{cartItemsCount}</span>
+                                    )}
+                                </div>
+                            </div>
+                        </header>
+
+                        <section className="hero">
+                            <h1>Welcome to Bella Vista</h1>
+                            <p>Experience Fine Dining at Its Best</p>
+                            <div className="cta-buttons">
+                                <button 
+                                    className="btn btn-primary"
+                                    onClick={() => document.getElementById('menu').scrollIntoView({ behavior: 'smooth' })}
+                                >
+                                    View Menu
+                                </button>
+                                <button 
+                                    className="btn btn-secondary"
+                                    onClick={() => document.getElementById('reservations').scrollIntoView({ behavior: 'smooth' })}
+                                >
+                                    Make Reservation
+                                </button>
+                            </div>
+                        </section>
+
+                        <section className="menu-section" id="menu">
+                            <div className="container">
+                                <h2 className="section-title">Our Menu</h2>
+                                <p className="section-subtitle">Fresh ingredients, expertly prepared</p>
+                                
+                                <div className="menu-categories">
+                                    {categories.map(category => (
+                                        <button
+                                            key={category}
+                                            className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
+                                            onClick={() => setSelectedCategory(category)}
+                                        >
+                                            {category.charAt(0).toUpperCase() + category.slice(1)}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div className="menu-grid">
+                                    {displayedItems.map(item => (
+                                        <MenuItem 
+                                            key={item.id} 
+                                            item={item} 
+                                            onAddToCart={handleAddToCart}
+                                            isInteractive={true}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section className="about-section">
+                            <div className="about-content">
+                                <div className="about-text">
+                                    <h3>Our Story</h3>
+                                    <p>
+                                        Founded in 2010, Bella Vista has been serving authentic Italian cuisine 
+                                        with a modern twist. Our chefs combine traditional recipes with innovative 
+                                        techniques to create unforgettable dining experiences.
+                                    </p>
+                                    <p>
+                                        We source our ingredients locally and seasonally, ensuring the freshest 
+                                        flavors in every dish. From our handmade pasta to our wood-fired pizzas, 
+                                        everything is prepared with passion and attention to detail.
+                                    </p>
+                                    <div className="about-features">
+                                        <div className="feature-card">
+                                            <div className="feature-icon">👨‍🍳</div>
+                                            <div className="feature-title">Expert Chefs</div>
+                                        </div>
+                                        <div className="feature-card">
+                                            <div className="feature-icon">🌿</div>
+                                            <div className="feature-title">Fresh Ingredients</div>
+                                        </div>
+                                        <div className="feature-card">
+                                            <div className="feature-icon">🍷</div>
+                                            <div className="feature-title">Fine Wine</div>
+                                        </div>
+                                        <div className="feature-card">
+                                            <div className="feature-icon">⭐</div>
+                                            <div className="feature-title">5-Star Service</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '8rem' }}>
+                                    🍽️
+                                </div>
+                            </div>
+                        </section>
+
+                        <section className="reservation-section" id="reservations">
+                            <div className="container">
+                                <h2 className="section-title">Make a Reservation</h2>
+                                <p className="section-subtitle">Book your table online</p>
+                                
+                                <form className="reservation-form" onSubmit={handleReservationSubmit}>
+                                    <div className="form-grid">
+                                        <div className="form-group">
+                                            <label className="form-label">Name *</label>
+                                            <input
+                                                type="text"
+                                                className="form-input"
+                                                value={reservationForm.name}
+                                                onChange={(e) => setReservationForm({...reservationForm, name: e.target.value})}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Email *</label>
+                                            <input
+                                                type="email"
+                                                className="form-input"
+                                                value={reservationForm.email}
+                                                onChange={(e) => setReservationForm({...reservationForm, email: e.target.value})}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Phone *</label>
+                                            <input
+                                                type="tel"
+                                                className="form-input"
+                                                value={reservationForm.phone}
+                                                onChange={(e) => setReservationForm({...reservationForm, phone: e.target.value})}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Number of Guests *</label>
+                                            <select
+                                                className="form-select"
+                                                value={reservationForm.guests}
+                                                onChange={(e) => setReservationForm({...reservationForm, guests: e.target.value})}
+                                            >
+                                                {[1,2,3,4,5,6,7,8].map(n => (
+                                                    <option key={n} value={n}>{n} {n === 1 ? 'Guest' : 'Guests'}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Date *</label>
+                                            <input
+                                                type="date"
+                                                className="form-input"
+                                                value={reservationForm.date}
+                                                onChange={(e) => setReservationForm({...reservationForm, date: e.target.value})}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Time *</label>
+                                            <select
+                                                className="form-select"
+                                                value={reservationForm.time}
+                                                onChange={(e) => setReservationForm({...reservationForm, time: e.target.value})}
+                                                required
+                                            >
+                                                <option value="">Select time</option>
+                                                <option value="17:00">5:00 PM</option>
+                                                <option value="17:30">5:30 PM</option>
+                                                <option value="18:00">6:00 PM</option>
+                                                <option value="18:30">6:30 PM</option>
+                                                <option value="19:00">7:00 PM</option>
+                                                <option value="19:30">7:30 PM</option>
+                                                <option value="20:00">8:00 PM</option>
+                                                <option value="20:30">8:30 PM</option>
+                                                <option value="21:00">9:00 PM</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group full-width">
+                                            <label className="form-label">Special Requests</label>
+                                            <textarea
+                                                className="form-textarea"
+                                                rows="3"
+                                                value={reservationForm.notes}
+                                                onChange={(e) => setReservationForm({...reservationForm, notes: e.target.value})}
+                                                placeholder="Any dietary restrictions or special occasions?"
+                                            ></textarea>
+                                        </div>
+                                    </div>
+                                    <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
+                                        Confirm Reservation
+                                    </button>
+                                </form>
+                            </div>
+                        </section>
+
+                        <footer className="footer">
+                            <div className="footer-content">
+                                <div className="footer-section">
+                                    <h4>Bella Vista</h4>
+                                    <p>Experience the finest Italian cuisine in an elegant atmosphere.</p>
+                                </div>
+                                <div className="footer-section">
+                                    <h4>Hours</h4>
+                                    <p>Monday - Thursday: 5:00 PM - 10:00 PM</p>
+                                    <p>Friday - Saturday: 5:00 PM - 11:00 PM</p>
+                                    <p>Sunday: 4:00 PM - 9:00 PM</p>
+                                </div>
+                                <div className="footer-section">
+                                    <h4>Contact</h4>
+                                    <p>123 Restaurant Street</p>
+                                    <p>City, State 12345</p>
+                                    <p>Phone: (555) 123-4567</p>
+                                    <p>Email: info@bellavista.com</p>
+                                </div>
+                                <div className="footer-section">
+                                    <h4>Follow Us</h4>
+                                    <p>
+                                        <a href="#">Facebook</a> | 
+                                        <a href="#"> Instagram</a> | 
+                                        <a href="#"> Twitter</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="footer-bottom">
+                                <p>&copy; 2024 Bella Vista Restaurant. All rights reserved.</p>
+                            </div>
+                        </footer>
+
+                        <Cart
+                            isOpen={isCartOpen}
+                            onClose={() => setIsCartOpen(false)}
+                            cartItems={cartItems}
+                            onUpdateQuantity={handleUpdateQuantity}
+                            onRemoveItem={handleRemoveItem}
+                        />
+                    </div>
+                </>
+            );
+        }
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<RestaurantApp />);
+    </script>
+</body>
+</html>

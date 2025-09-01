@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Checker - Real-time SEO Scoring Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .input-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .url-input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: #43cea2;
+        }
+
+        .check-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .live-editor {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 968px) {
+            .live-editor {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .editor-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .editor-title {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #43cea2;
+        }
+
+        .input-field {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .input-field label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .input-field input,
+        .input-field textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .input-field textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        .char-good { color: #4caf50; }
+        .char-warning { color: #ff9800; }
+        .char-bad { color: #f44336; }
+
+        .seo-score-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .score-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            font-weight: bold;
+        }
+
+        .score-label {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #666;
+        }
+
+        .score-excellent { color: #4caf50; }
+        .score-good { color: #8bc34a; }
+        .score-average { color: #ff9800; }
+        .score-poor { color: #f44336; }
+
+        .checks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .check-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .check-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .check-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .check-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .check-status {
+            margin-left: auto;
+        }
+
+        .status-pass {
+            color: #4caf50;
+            font-size: 1.5em;
+        }
+
+        .status-fail {
+            color: #f44336;
+            font-size: 1.5em;
+        }
+
+        .status-warning {
+            color: #ff9800;
+            font-size: 1.5em;
+        }
+
+        .check-description {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .preview-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .serp-preview {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fff;
+        }
+
+        .serp-title {
+            color: #1a0dab;
+            font-size: 20px;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .serp-title:hover {
+            text-decoration: underline;
+        }
+
+        .serp-url {
+            color: #006621;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .serp-description {
+            color: #545454;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .social-preview {
+            margin-top: 20px;
+        }
+
+        .social-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .social-card-image {
+            width: 100%;
+            height: 200px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+
+        .social-card-content {
+            padding: 15px;
+        }
+
+        .social-card-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .social-card-description {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .recommendations {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .recommendation-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #43cea2;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .recommendation-priority {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .priority-critical {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .priority-important {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .priority-minor {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .keyword-analysis {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .keyword-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .keyword-input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+        }
+
+        .add-keyword-btn {
+            padding: 10px 20px;
+            background: #43cea2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .keyword-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .keyword-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 15px;
+            background: #e3f2fd;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .keyword-density {
+            margin-left: 10px;
+            font-weight: bold;
+            color: #185a9d;
+        }
+
+        .remove-keyword {
+            margin-left: 10px;
+            cursor: pointer;
+            color: #f44336;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+            transition: width 0.3s;
+        }
+
+        .export-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .export-btn {
+            padding: 12px 30px;
+            margin: 10px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .export-btn:hover {
+            background: #45a049;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #43cea2;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 SEO Checker - Real-time Analysis Tool</h1>
+
+        <div class="input-section">
+            <div class="url-input-group">
+                <input type="url" class="url-input" id="url-input" placeholder="Enter website URL to analyze (optional)">
+                <button class="check-btn" onclick="analyzeURL()">Analyze URL</button>
+            </div>
+            <p style="color: #666; font-size: 0.9em;">
+                Or use the live editor below to test SEO elements in real-time
+            </p>
+        </div>
+
+        <!-- Live Editor -->
+        <div class="live-editor">
+            <div class="editor-panel">
+                <h3 class="editor-title">📝 SEO Content Editor</h3>
+                
+                <div class="input-field">
+                    <label>Page Title</label>
+                    <input type="text" id="page-title" placeholder="Enter page title" 
+                           oninput="updateSEO()" 
+                           value="Best React WordPress Integration Guide 2024">
+                    <div class="char-count">
+                        <span id="title-count" class="char-good">50/60</span> characters
+                    </div>
+                </div>
+
+                <div class="input-field">
+                    <label>Meta Description</label>
+                    <textarea id="meta-description" placeholder="Enter meta description" 
+                              oninput="updateSEO()">Learn how to seamlessly integrate React with WordPress. Step-by-step tutorials, best practices, and expert tips for modern web development.</textarea>
+                    <div class="char-count">
+                        <span id="description-count" class="char-good">140/160</span> characters
+                    </div>
+                </div>
+
+                <div class="input-field">
+                    <label>URL Slug</label>
+                    <input type="text" id="url-slug" placeholder="url-slug" 
+                           oninput="updateSEO()" 
+                           value="react-wordpress-integration-guide">
+                </div>
+
+                <div class="input-field">
+                    <label>H1 Heading</label>
+                    <input type="text" id="h1-heading" placeholder="Main heading" 
+                           oninput="updateSEO()" 
+                           value="Complete Guide to React WordPress Integration">
+                </div>
+
+                <div class="input-field">
+                    <label>Content (Sample)</label>
+                    <textarea id="content-sample" placeholder="Enter sample content for keyword analysis" 
+                              oninput="updateSEO()" rows="6">React and WordPress are two powerful technologies that can work together to create amazing web experiences. This comprehensive guide will show you how to integrate React with WordPress, covering everything from setup to deployment. Learn about the WordPress REST API, create custom React components, and build modern, performant websites.</textarea>
+                </div>
+            </div>
+
+            <div class="editor-panel">
+                <h3 class="editor-title">👁️ Live Preview</h3>
+                
+                <div class="serp-preview">
+                    <a href="#" class="serp-title" id="serp-title">Best React WordPress Integration Guide 2024</a>
+                    <div class="serp-url" id="serp-url">https://example.com/react-wordpress-integration-guide</div>
+                    <div class="serp-description" id="serp-description">Learn how to seamlessly integrate React with WordPress. Step-by-step tutorials, best practices, and expert tips for modern web development.</div>
+                </div>
+
+                <div class="social-preview">
+                    <h4 style="margin: 20px 0 10px; color: #333;">Facebook/Twitter Preview</h4>
+                    <div class="social-card">
+                        <div class="social-card-image">
+                            <span>📷 Image Preview</span>
+                        </div>
+                        <div class="social-card-content">
+                            <div class="social-card-title" id="social-title">Best React WordPress Integration Guide 2024</div>
+                            <div class="social-card-description" id="social-description">Learn how to seamlessly integrate React with WordPress...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEO Score -->
+        <div class="seo-score-card">
+            <div class="score-circle">
+                <svg width="200" height="200">
+                    <circle cx="100" cy="100" r="90" stroke="#e0e0e0" stroke-width="10" fill="none"/>
+                    <circle id="score-circle" cx="100" cy="100" r="90" stroke="#4caf50" stroke-width="10" fill="none"
+                            stroke-dasharray="565" stroke-dashoffset="113" 
+                            transform="rotate(-90 100 100)"
+                            style="transition: stroke-dashoffset 0.5s, stroke 0.5s;"/>
+                </svg>
+                <div class="score-value score-excellent" id="seo-score">85</div>
+                <div class="score-label">SEO Score</div>
+            </div>
+            <h2 style="color: #333; margin-bottom: 10px;">Overall SEO Health</h2>
+            <p style="color: #666;">Your page is well-optimized for search engines</p>
+        </div>
+
+        <!-- SEO Checks -->
+        <div class="checks-grid">
+            <div class="check-card">
+                <div class="check-header">
+                    <span class="check-icon">📏</span>
+                    <span class="check-title">Title Length</span>
+                    <span class="check-status status-pass" id="title-check">✓</span>
+                </div>
+                <div class="check-description">
+                    Title is within optimal length (50-60 characters)
+                </div>
+            </div>
+
+            <div class="check-card">
+                <div class="check-header">
+                    <span class="check-icon">📝</span>
+                    <span class="check-title">Meta Description</span>
+                    <span class="check-status status-pass" id="description-check">✓</span>
+                </div>
+                <div class="check-description">
+                    Description is within optimal length (150-160 characters)
+                </div>
+            </div>
+
+            <div class="check-card">
+                <div class="check-header">
+                    <span class="check-icon">🔗</span>
+                    <span class="check-title">URL Structure</span>
+                    <span class="check-status status-pass" id="url-check">✓</span>
+                </div>
+                <div class="check-description">
+                    URL is clean and SEO-friendly
+                </div>
+            </div>
+
+            <div class="check-card">
+                <div class="check-header">
+                    <span class="check-icon">📑</span>
+                    <span class="check-title">H1 Tag</span>
+                    <span class="check-status status-pass" id="h1-check">✓</span>
+                </div>
+                <div class="check-description">
+                    Page has a proper H1 heading
+                </div>
+            </div>
+
+            <div class="check-card">
+                <div class="check-header">
+                    <span class="check-icon">🔤</span>
+                    <span class="check-title">Content Length</span>
+                    <span class="check-status status-warning" id="content-check">⚠</span>
+                </div>
+                <div class="check-description">
+                    Content could be longer (minimum 300 words recommended)
+                </div>
+            </div>
+
+            <div class="check-card">
+                <div class="check-header">
+                    <span class="check-icon">🎯</span>
+                    <span class="check-title">Keyword Usage</span>
+                    <span class="check-status status-pass" id="keyword-check">✓</span>
+                </div>
+                <div class="check-description">
+                    Keywords are properly distributed
+                </div>
+            </div>
+        </div>
+
+        <!-- Keyword Analysis -->
+        <div class="keyword-analysis">
+            <h3 class="editor-title">🎯 Keyword Analysis</h3>
+            
+            <div class="keyword-input-group">
+                <input type="text" class="keyword-input" id="keyword-input" placeholder="Enter target keyword">
+                <button class="add-keyword-btn" onclick="addKeyword()">Add Keyword</button>
+            </div>
+
+            <div class="keyword-list" id="keyword-list">
+                <div class="keyword-tag">
+                    React
+                    <span class="keyword-density">2.5%</span>
+                    <span class="remove-keyword" onclick="removeKeyword(this)">✕</span>
+                </div>
+                <div class="keyword-tag">
+                    WordPress
+                    <span class="keyword-density">2.1%</span>
+                    <span class="remove-keyword" onclick="removeKeyword(this)">✕</span>
+                </div>
+                <div class="keyword-tag">
+                    Integration
+                    <span class="keyword-density">1.8%</span>
+                    <span class="remove-keyword" onclick="removeKeyword(this)">✕</span>
+                </div>
+            </div>
+
+            <div>
+                <strong>Keyword Density Score</strong>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="recommendations">
+            <h3 class="editor-title">💡 SEO Recommendations</h3>
+            
+            <div id="recommendations-list">
+                <div class="recommendation-item">
+                    <span class="recommendation-priority priority-important">Important</span>
+                    <strong>Increase Content Length:</strong> Add more valuable content. Aim for at least 300-500 words for better SEO performance.
+                </div>
+                <div class="recommendation-item">
+                    <span class="recommendation-priority priority-minor">Minor</span>
+                    <strong>Add Internal Links:</strong> Include links to related pages on your website to improve site structure.
+                </div>
+                <div class="recommendation-item">
+                    <span class="recommendation-priority priority-minor">Minor</span>
+                    <strong>Optimize Images:</strong> Add alt text to images and ensure they're properly compressed.
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Options -->
+        <div class="export-section">
+            <h3 style="margin-bottom: 20px; color: #333;">📊 Export SEO Report</h3>
+            <button class="export-btn" onclick="exportPDF()">📄 Export as PDF</button>
+            <button class="export-btn" onclick="exportJSON()">📋 Export as JSON</button>
+            <button class="export-btn" onclick="copyReport()">📋 Copy Report</button>
+        </div>
+    </div>
+
+    <script>
+        let seoData = {
+            score: 85,
+            checks: {}
+        };
+
+        function updateSEO() {
+            // Get values
+            const title = document.getElementById('page-title').value;
+            const description = document.getElementById('meta-description').value;
+            const urlSlug = document.getElementById('url-slug').value;
+            const h1 = document.getElementById('h1-heading').value;
+            const content = document.getElementById('content-sample').value;
+
+            // Update character counts
+            updateCharCount('title', title, 60);
+            updateCharCount('description', description, 160);
+
+            // Update previews
+            document.getElementById('serp-title').textContent = title || 'Page Title';
+            document.getElementById('serp-description').textContent = description || 'Meta description';
+            document.getElementById('serp-url').textContent = `https://example.com/${urlSlug || 'page-url'}`;
+            document.getElementById('social-title').textContent = title || 'Page Title';
+            document.getElementById('social-description').textContent = (description || 'Meta description').substring(0, 100) + '...';
+
+            // Perform checks
+            let score = 0;
+            let maxScore = 0;
+
+            // Title check
+            if (title.length >= 30 && title.length <= 60) {
+                updateCheck('title-check', 'pass');
+                score += 20;
+            } else if (title.length > 0) {
+                updateCheck('title-check', 'warning');
+                score += 10;
+            } else {
+                updateCheck('title-check', 'fail');
+            }
+            maxScore += 20;
+
+            // Description check
+            if (description.length >= 120 && description.length <= 160) {
+                updateCheck('description-check', 'pass');
+                score += 20;
+            } else if (description.length > 0) {
+                updateCheck('description-check', 'warning');
+                score += 10;
+            } else {
+                updateCheck('description-check', 'fail');
+            }
+            maxScore += 20;
+
+            // URL check
+            if (urlSlug && /^[a-z0-9-]+$/.test(urlSlug)) {
+                updateCheck('url-check', 'pass');
+                score += 15;
+            } else if (urlSlug) {
+                updateCheck('url-check', 'warning');
+                score += 7;
+            } else {
+                updateCheck('url-check', 'fail');
+            }
+            maxScore += 15;
+
+            // H1 check
+            if (h1.length > 10) {
+                updateCheck('h1-check', 'pass');
+                score += 15;
+            } else if (h1.length > 0) {
+                updateCheck('h1-check', 'warning');
+                score += 7;
+            } else {
+                updateCheck('h1-check', 'fail');
+            }
+            maxScore += 15;
+
+            // Content check
+            const wordCount = content.split(' ').filter(word => word.length > 0).length;
+            if (wordCount >= 300) {
+                updateCheck('content-check', 'pass');
+                score += 20;
+            } else if (wordCount >= 100) {
+                updateCheck('content-check', 'warning');
+                score += 10;
+            } else {
+                updateCheck('content-check', 'fail');
+            }
+            maxScore += 20;
+
+            // Keyword check (simplified)
+            updateCheck('keyword-check', 'pass');
+            score += 10;
+            maxScore += 10;
+
+            // Calculate final score
+            const finalScore = Math.round((score / maxScore) * 100);
+            updateScore(finalScore);
+        }
+
+        function updateCharCount(field, value, optimal) {
+            const countElement = document.getElementById(`${field}-count`);
+            const length = value.length;
+            countElement.textContent = `${length}/${optimal}`;
+            
+            if (length === 0) {
+                countElement.className = 'char-bad';
+            } else if (length >= optimal * 0.8 && length <= optimal) {
+                countElement.className = 'char-good';
+            } else if (length < optimal * 1.2) {
+                countElement.className = 'char-warning';
+            } else {
+                countElement.className = 'char-bad';
+            }
+        }
+
+        function updateCheck(checkId, status) {
+            const element = document.getElementById(checkId);
+            if (status === 'pass') {
+                element.textContent = '✓';
+                element.className = 'check-status status-pass';
+            } else if (status === 'warning') {
+                element.textContent = '⚠';
+                element.className = 'check-status status-warning';
+            } else {
+                element.textContent = '✗';
+                element.className = 'check-status status-fail';
+            }
+        }
+
+        function updateScore(score) {
+            const scoreElement = document.getElementById('seo-score');
+            const scoreCircle = document.getElementById('score-circle');
+            
+            scoreElement.textContent = score;
+            
+            // Update color based on score
+            let colorClass = 'score-poor';
+            let strokeColor = '#f44336';
+            if (score >= 80) {
+                colorClass = 'score-excellent';
+                strokeColor = '#4caf50';
+            } else if (score >= 60) {
+                colorClass = 'score-good';
+                strokeColor = '#8bc34a';
+            } else if (score >= 40) {
+                colorClass = 'score-average';
+                strokeColor = '#ff9800';
+            }
+            
+            scoreElement.className = 'score-value ' + colorClass;
+            scoreCircle.style.stroke = strokeColor;
+            
+            // Update circle progress
+            const circumference = 2 * Math.PI * 90;
+            const offset = circumference - (score / 100 * circumference);
+            scoreCircle.style.strokeDashoffset = offset;
+        }
+
+        function addKeyword() {
+            const input = document.getElementById('keyword-input');
+            const keyword = input.value.trim();
+            
+            if (keyword) {
+                const keywordList = document.getElementById('keyword-list');
+                const density = (Math.random() * 3 + 0.5).toFixed(1);
+                
+                const keywordTag = document.createElement('div');
+                keywordTag.className = 'keyword-tag';
+                keywordTag.innerHTML = `
+                    ${keyword}
+                    <span class="keyword-density">${density}%</span>
+                    <span class="remove-keyword" onclick="removeKeyword(this)">✕</span>
+                `;
+                
+                keywordList.appendChild(keywordTag);
+                input.value = '';
+                updateSEO();
+            }
+        }
+
+        function removeKeyword(element) {
+            element.parentElement.remove();
+            updateSEO();
+        }
+
+        function analyzeURL() {
+            const url = document.getElementById('url-input').value;
+            if (url) {
+                // Simulate URL analysis
+                alert('URL analysis would fetch and analyze: ' + url);
+                // In a real implementation, this would make an API call
+            }
+        }
+
+        function exportPDF() {
+            alert('PDF export functionality would generate a downloadable report');
+        }
+
+        function exportJSON() {
+            const data = {
+                url: document.getElementById('url-input').value || 'manual-entry',
+                timestamp: new Date().toISOString(),
+                score: document.getElementById('seo-score').textContent,
+                title: document.getElementById('page-title').value,
+                description: document.getElementById('meta-description').value,
+                urlSlug: document.getElementById('url-slug').value,
+                h1: document.getElementById('h1-heading').value,
+                content: document.getElementById('content-sample').value
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'seo-report.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function copyReport() {
+            const report = `SEO Report
+==========
+Score: ${document.getElementById('seo-score').textContent}/100
+Title: ${document.getElementById('page-title').value}
+Description: ${document.getElementById('meta-description').value}
+URL: ${document.getElementById('url-slug').value}
+H1: ${document.getElementById('h1-heading').value}
+Generated: ${new Date().toLocaleString()}`;
+            
+            navigator.clipboard.writeText(report).then(() => {
+                alert('Report copied to clipboard!');
+            });
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateSEO();
+        });
+    </script>
+</body>
+</html>
