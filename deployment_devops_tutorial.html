@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React-WordPress Deployment & DevOps: Production-Ready Infrastructure</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="icon" href="/favicon.png">
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ 
+        startOnLoad: true,
+        theme: 'default',
+        flowchart: {
+          useMaxWidth: true,
+          htmlLabels: true
+        }
+      });
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed;
+        }
+        
+        header {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        main {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .pipeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .pipeline-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .pipeline-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+        }
+        
+        .code-block::before {
+            content: attr(data-language);
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #333;
+            color: #fff;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0 8px 0 8px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        
+        .architecture-diagram {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .feature-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .monitoring-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .backup-box {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .warning-box {
+            background: #fff5f5;
+            border-left: 4px solid #fc8181;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .success-box {
+            background: #f0fff4;
+            border-left: 4px solid #48bb78;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .info-box {
+            background: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .deployment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+        
+        .deployment-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+        
+        .deployment-table td {
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .deployment-table tr:nth-child(even) {
+            background: #f7fafc;
+        }
+        
+        .mermaid {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .code-comment { color: #6a9955; }
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        .code-variable { color: #9cdcfe; }
+        .code-number { color: #b5cea8; }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 0;
+        }
+        
+        .step {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #667eea;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        h2 {
+            color: #2d3748;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+        
+        h3 {
+            color: #4a5568;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚀 React-WordPress Deployment & DevOps</h1>
+        <p>Master CI/CD, Docker, Kubernetes, CDN, monitoring, and enterprise-grade deployment strategies</p>
+        
+        <div class="step-indicator">
+            <div class="step active">1</div>
+            <div class="step active">2</div>
+            <div class="step active">3</div>
+            <div class="step active">4</div>
+            <div class="step active">5</div>
+            <div class="step active">6</div>
+        </div>
+    </header>
+
+    <main>
+        <section>
+            <h2>📊 Complete Deployment Architecture Overview</h2>
+            <p>Modern deployment isn't just about getting code to production—it's about creating a resilient, scalable, and observable infrastructure that can handle millions of users while maintaining sub-second response times.</p>
+
+            <div class="mermaid">
+            graph TB
+                subgraph "Development"
+                    A[Local Dev] --> B[Git Push]
+                    B --> C[GitHub/GitLab]
+                end
+                
+                subgraph "CI/CD Pipeline"
+                    C --> D[GitHub Actions]
+                    D --> E[Build & Test]
+                    E --> F[Docker Build]
+                    F --> G[Push to Registry]
+                end
+                
+                subgraph "Container Orchestration"
+                    G --> H[Kubernetes Cluster]
+                    H --> I[Pod Deployment]
+                    I --> J[Service Mesh]
+                    J --> K[Load Balancer]
+                end
+                
+                subgraph "CDN & Edge"
+                    K --> L[CloudFlare CDN]
+                    L --> M[Edge Workers]
+                    M --> N[Global PoPs]
+                end
+                
+                subgraph "Monitoring"
+                    H --> O[Prometheus]
+                    O --> P[Grafana]
+                    H --> Q[ELK Stack]
+                    Q --> R[Kibana]
+                end
+                
+                style A fill:#f9f,stroke:#333,stroke-width:4px
+                style H fill:#bbf,stroke:#333,stroke-width:4px
+                style L fill:#bfb,stroke:#333,stroke-width:4px
+            </div>
+
+            <div class="pipeline-grid">
+                <div class="pipeline-card">
+                    <h3>⚡ Zero-Downtime Deployments</h3>
+                    <p>Blue-green deployments with automatic rollback capabilities</p>
+                </div>
+                <div class="pipeline-card">
+                    <h3>🔄 Auto-Scaling</h3>
+                    <p>Horizontal pod autoscaling based on CPU, memory, and custom metrics</p>
+                </div>
+                <div class="pipeline-card">
+                    <h3>🌍 Global Distribution</h3>
+                    <p>Multi-region deployment with geo-distributed databases</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>🔄 CI/CD Pipelines: Automated Excellence</h2>
+            <p>Continuous Integration and Continuous Deployment pipelines are the backbone of modern software delivery. Let's build a bulletproof pipeline that tests, builds, and deploys your React-WordPress application automatically.</p>
+
+            <h3>GitHub Actions Complete Pipeline</h3>
+            <div class="code-block" data-language="yaml">
+<pre><span class="code-comment"># .github/workflows/production-deployment.yml</span>
+<span class="code-keyword">name:</span> <span class="code-string">Production Deployment Pipeline</span>
+
+<span class="code-keyword">on:</span>
+  <span class="code-keyword">push:</span>
+    <span class="code-keyword">branches:</span> [main]
+  <span class="code-keyword">pull_request:</span>
+    <span class="code-keyword">branches:</span> [main]
+
+<span class="code-keyword">jobs:</span>
+  <span class="code-comment"># Job 1: Testing & Quality Gates</span>
+  <span class="code-keyword">test-and-quality:</span>
+    <span class="code-keyword">runs-on:</span> ubuntu-latest
+    <span class="code-keyword">steps:</span>
+      - <span class="code-keyword">uses:</span> actions/checkout@v4
+      - <span class="code-keyword">uses:</span> actions/setup-node@v4
+        <span class="code-keyword">with:</span>
+          <span class="code-keyword">node-version:</span> 20
+      - <span class="code-keyword">run:</span> |
+          npm ci
+          npm run test:unit
+          npm run test:e2e
+          npm audit --audit-level=moderate
+
+  <span class="code-comment"># Job 2: Build Docker Images</span>
+  <span class="code-keyword">build-and-push:</span>
+    <span class="code-keyword">needs:</span> test-and-quality
+    <span class="code-keyword">runs-on:</span> ubuntu-latest
+    <span class="code-keyword">steps:</span>
+      - <span class="code-keyword">uses:</span> docker/build-push-action@v5
+        <span class="code-keyword">with:</span>
+          <span class="code-keyword">push:</span> true
+          <span class="code-keyword">tags:</span> ghcr.io/${{ github.repository }}:${{ github.sha }}
+
+  <span class="code-comment"># Job 3: Deploy to Kubernetes</span>
+  <span class="code-keyword">deploy:</span>
+    <span class="code-keyword">needs:</span> build-and-push
+    <span class="code-keyword">runs-on:</span> ubuntu-latest
+    <span class="code-keyword">steps:</span>
+      - <span class="code-keyword">run:</span> |
+          helm upgrade --install app ./helm \
+            --set image.tag=${{ github.sha }}</pre>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Pipeline Best Practices:</strong>
+                <ul>
+                    <li>Use matrix builds to test multiple versions</li>
+                    <li>Implement quality gates that block bad code</li>
+                    <li>Sign container images for supply chain security</li>
+                    <li>Generate SBOMs for vulnerability tracking</li>
+                    <li>Always run smoke tests after deployment</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>🐳 Docker Containerization: Production-Ready Images</h2>
+            <p>Docker containers ensure your application runs consistently across all environments. Let's create optimized, secure containers for both React and WordPress.</p>
+
+            <h3>Multi-Stage React Dockerfile</h3>
+            <div class="code-block" data-language="dockerfile">
+<pre><span class="code-comment"># Dockerfile.react - Optimized React production build</span>
+<span class="code-comment"># Stage 1: Dependencies</span>
+<span class="code-keyword">FROM</span> node:20-alpine <span class="code-keyword">AS</span> deps
+<span class="code-keyword">WORKDIR</span> /app
+<span class="code-keyword">COPY</span> package*.json ./
+<span class="code-keyword">RUN</span> npm ci --only=production
+
+<span class="code-comment"># Stage 2: Builder</span>
+<span class="code-keyword">FROM</span> node:20-alpine <span class="code-keyword">AS</span> builder
+<span class="code-keyword">WORKDIR</span> /app
+<span class="code-keyword">COPY</span> --from=deps /app/node_modules ./node_modules
+<span class="code-keyword">COPY</span> . .
+<span class="code-keyword">RUN</span> npm run build
+
+<span class="code-comment"># Stage 3: Production</span>
+<span class="code-keyword">FROM</span> nginx:alpine
+<span class="code-keyword">COPY</span> --from=builder /app/build /usr/share/nginx/html
+<span class="code-keyword">COPY</span> nginx.conf /etc/nginx/nginx.conf
+<span class="code-keyword">EXPOSE</span> 80
+<span class="code-keyword">CMD</span> ["nginx", "-g", "daemon off;"]</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>☸️ Kubernetes Deployment: Enterprise Scale</h2>
+            <p>Kubernetes provides orchestration, scaling, and self-healing capabilities for your containerized applications.</p>
+
+            <h3>Kubernetes Deployment Manifest</h3>
+            <div class="code-block" data-language="yaml">
+<pre><span class="code-comment"># k8s/deployment.yaml</span>
+<span class="code-keyword">apiVersion:</span> apps/v1
+<span class="code-keyword">kind:</span> Deployment
+<span class="code-keyword">metadata:</span>
+  <span class="code-keyword">name:</span> react-wordpress
+<span class="code-keyword">spec:</span>
+  <span class="code-keyword">replicas:</span> 3
+  <span class="code-keyword">selector:</span>
+    <span class="code-keyword">matchLabels:</span>
+      <span class="code-keyword">app:</span> react-wordpress
+  <span class="code-keyword">template:</span>
+    <span class="code-keyword">metadata:</span>
+      <span class="code-keyword">labels:</span>
+        <span class="code-keyword">app:</span> react-wordpress
+    <span class="code-keyword">spec:</span>
+      <span class="code-keyword">containers:</span>
+      - <span class="code-keyword">name:</span> app
+        <span class="code-keyword">image:</span> ghcr.io/yourorg/app:latest
+        <span class="code-keyword">ports:</span>
+        - <span class="code-keyword">containerPort:</span> 80
+        <span class="code-keyword">resources:</span>
+          <span class="code-keyword">requests:</span>
+            <span class="code-keyword">memory:</span> "128Mi"
+            <span class="code-keyword">cpu:</span> "100m"
+          <span class="code-keyword">limits:</span>
+            <span class="code-keyword">memory:</span> "256Mi"
+            <span class="code-keyword">cpu:</span> "200m"</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>🌐 CDN Configuration: Global Performance</h2>
+            <p>Content Delivery Networks ensure your application loads blazing fast from anywhere in the world. Let's configure CloudFlare for optimal performance.</p>
+
+            <h3>CloudFlare Workers Edge Caching</h3>
+            <div class="code-block" data-language="javascript">
+<pre><span class="code-comment">// cloudflare-worker.js - Edge caching and optimization</span>
+addEventListener(<span class="code-string">'fetch'</span>, event => {
+    event.respondWith(handleRequest(event.request))
+})
+
+async <span class="code-keyword">function</span> handleRequest(request) {
+    <span class="code-keyword">const</span> url = <span class="code-keyword">new</span> URL(request.url)
+    
+    <span class="code-comment">// Cache static assets aggressively</span>
+    <span class="code-keyword">if</span> (url.pathname.match(/\.(js|css|jpg|png|gif|svg|woff2?)$/)) {
+        <span class="code-keyword">const</span> cache = caches.default
+        <span class="code-keyword">let</span> response = await cache.match(request)
+        
+        <span class="code-keyword">if</span> (!response) {
+            response = await fetch(request)
+            <span class="code-keyword">const</span> headers = <span class="code-keyword">new</span> Headers(response.headers)
+            headers.set(<span class="code-string">'Cache-Control'</span>, <span class="code-string">'public, max-age=31536000'</span>)
+            
+            response = <span class="code-keyword">new</span> Response(response.body, {
+                status: response.status,
+                statusText: response.statusText,
+                headers: headers
+            })
+            
+            event.waitUntil(cache.put(request, response.clone()))
+        }
+        
+        <span class="code-keyword">return</span> response
+    }
+    
+    <span class="code-comment">// Add security headers</span>
+    <span class="code-keyword">const</span> response = await fetch(request)
+    <span class="code-keyword">const</span> newHeaders = <span class="code-keyword">new</span> Headers(response.headers)
+    
+    newHeaders.set(<span class="code-string">'X-Content-Type-Options'</span>, <span class="code-string">'nosniff'</span>)
+    newHeaders.set(<span class="code-string">'X-Frame-Options'</span>, <span class="code-string">'DENY'</span>)
+    newHeaders.set(<span class="code-string">'X-XSS-Protection'</span>, <span class="code-string">'1; mode=block'</span>)
+    newHeaders.set(<span class="code-string">'Referrer-Policy'</span>, <span class="code-string">'strict-origin-when-cross-origin'</span>)
+    
+    <span class="code-keyword">return</span> <span class="code-keyword">new</span> Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: newHeaders
+    })
+}</pre>
+            </div>
+
+            <div class="feature-box">
+                <h3>🚀 CDN Performance Optimizations</h3>
+                <ul>
+                    <li>✅ Image optimization with WebP/AVIF conversion</li>
+                    <li>✅ Brotli compression for text assets</li>
+                    <li>✅ HTTP/3 with QUIC protocol</li>
+                    <li>✅ Automatic minification of CSS/JS</li>
+                    <li>✅ Smart routing to nearest edge location</li>
+                    <li>✅ DDoS protection and rate limiting</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>📊 Monitoring and Logging: Complete Observability</h2>
+            <p>You can't improve what you can't measure. Let's implement comprehensive monitoring and logging for complete system observability.</p>
+
+            <div class="monitoring-box">
+                <h3>🔍 Monitoring Stack Components</h3>
+                <ul>
+                    <li><strong>Prometheus:</strong> Metrics collection and storage</li>
+                    <li><strong>Grafana:</strong> Visualization and dashboards</li>
+                    <li><strong>Elasticsearch:</strong> Log aggregation and search</li>
+                    <li><strong>Kibana:</strong> Log visualization and analysis</li>
+                    <li><strong>Jaeger:</strong> Distributed tracing</li>
+                    <li><strong>AlertManager:</strong> Alert routing and management</li>
+                </ul>
+            </div>
+
+            <h3>Prometheus Configuration</h3>
+            <div class="code-block" data-language="yaml">
+<pre><span class="code-comment"># prometheus-config.yaml</span>
+<span class="code-keyword">global:</span>
+  <span class="code-keyword">scrape_interval:</span> 15s
+  <span class="code-keyword">evaluation_interval:</span> 15s
+
+<span class="code-keyword">alerting:</span>
+  <span class="code-keyword">alertmanagers:</span>
+    - <span class="code-keyword">static_configs:</span>
+        - <span class="code-keyword">targets:</span>
+            - alertmanager:9093
+
+<span class="code-keyword">rule_files:</span>
+  - <span class="code-string">"alerts.yml"</span>
+
+<span class="code-keyword">scrape_configs:</span>
+  - <span class="code-keyword">job_name:</span> <span class="code-string">'kubernetes-pods'</span>
+    <span class="code-keyword">kubernetes_sd_configs:</span>
+      - <span class="code-keyword">role:</span> pod
+    <span class="code-keyword">relabel_configs:</span>
+      - <span class="code-keyword">source_labels:</span> [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        <span class="code-keyword">action:</span> keep
+        <span class="code-keyword">regex:</span> true
+      - <span class="code-keyword">source_labels:</span> [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        <span class="code-keyword">action:</span> replace
+        <span class="code-keyword">target_label:</span> __metrics_path__
+        <span class="code-keyword">regex:</span> (.+)</pre>
+            </div>
+
+            <h3>Application Metrics Implementation</h3>
+            <div class="code-block" data-language="javascript">
+<pre><span class="code-comment">// metrics.js - Custom application metrics</span>
+<span class="code-keyword">const</span> prometheus = require(<span class="code-string">'prom-client'</span>);
+
+<span class="code-comment">// Create a Registry</span>
+<span class="code-keyword">const</span> register = <span class="code-keyword">new</span> prometheus.Registry();
+
+<span class="code-comment">// Add default metrics</span>
+prometheus.collectDefaultMetrics({ register });
+
+<span class="code-comment">// Custom metrics</span>
+<span class="code-keyword">const</span> httpRequestDuration = <span class="code-keyword">new</span> prometheus.Histogram({
+    name: <span class="code-string">'http_request_duration_seconds'</span>,
+    help: <span class="code-string">'Duration of HTTP requests in seconds'</span>,
+    labelNames: [<span class="code-string">'method'</span>, <span class="code-string">'route'</span>, <span class="code-string">'status'</span>],
+    buckets: [0.1, 0.5, 1, 2, 5]
+});
+
+<span class="code-keyword">const</span> activeUsers = <span class="code-keyword">new</span> prometheus.Gauge({
+    name: <span class="code-string">'active_users_total'</span>,
+    help: <span class="code-string">'Number of active users'</span>
+});
+
+<span class="code-keyword">const</span> apiErrors = <span class="code-keyword">new</span> prometheus.Counter({
+    name: <span class="code-string">'api_errors_total'</span>,
+    help: <span class="code-string">'Total number of API errors'</span>,
+    labelNames: [<span class="code-string">'endpoint'</span>, <span class="code-string">'error_type'</span>]
+});
+
+register.registerMetric(httpRequestDuration);
+register.registerMetric(activeUsers);
+register.registerMetric(apiErrors);
+
+<span class="code-comment">// Middleware to track metrics</span>
+<span class="code-keyword">const</span> metricsMiddleware = (req, res, next) => {
+    <span class="code-keyword">const</span> end = httpRequestDuration.startTimer();
+    
+    res.on(<span class="code-string">'finish'</span>, () => {
+        end({ 
+            method: req.method, 
+            route: req.route?.path || req.path, 
+            status: res.statusCode 
+        });
+    });
+    
+    next();
+};
+
+module.exports = { register, metricsMiddleware };</pre>
+            </div>
+
+            <h3>Logging Configuration</h3>
+            <div class="code-block" data-language="javascript">
+<pre><span class="code-comment">// logger.js - Structured logging with Winston</span>
+<span class="code-keyword">const</span> winston = require(<span class="code-string">'winston'</span>);
+<span class="code-keyword">const</span> { ElasticsearchTransport } = require(<span class="code-string">'winston-elasticsearch'</span>);
+
+<span class="code-keyword">const</span> logger = winston.createLogger({
+    level: process.env.LOG_LEVEL || <span class="code-string">'info'</span>,
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.errors({ stack: true }),
+        winston.format.json()
+    ),
+    defaultMeta: { 
+        service: <span class="code-string">'react-wordpress'</span>,
+        environment: process.env.NODE_ENV
+    },
+    transports: [
+        <span class="code-comment">// Console transport for development</span>
+        <span class="code-keyword">new</span> winston.transports.Console({
+            format: winston.format.combine(
+                winston.format.colorize(),
+                winston.format.simple()
+            )
+        }),
+        
+        <span class="code-comment">// Elasticsearch transport for production</span>
+        <span class="code-keyword">new</span> ElasticsearchTransport({
+            level: <span class="code-string">'info'</span>,
+            clientOpts: { 
+                node: process.env.ELASTICSEARCH_URL || <span class="code-string">'http://localhost:9200'</span>
+            },
+            index: <span class="code-string">'logs-react-wordpress'</span>
+        })
+    ]
+});
+
+<span class="code-comment">// Log request details</span>
+<span class="code-keyword">const</span> requestLogger = (req, res, next) => {
+    logger.info(<span class="code-string">'Request received'</span>, {
+        method: req.method,
+        url: req.url,
+        ip: req.ip,
+        userAgent: req.get(<span class="code-string">'user-agent'</span>)
+    });
+    next();
+};
+
+module.exports = { logger, requestLogger };</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>💾 Backup Strategies: Never Lose Data</h2>
+            <p>A robust backup strategy is your insurance policy against data loss. Let's implement comprehensive backup and disaster recovery procedures.</p>
+
+            <div class="backup-box">
+                <h3>📦 3-2-1 Backup Rule</h3>
+                <ul>
+                    <li><strong>3</strong> copies of important data</li>
+                    <li><strong>2</strong> different storage media</li>
+                    <li><strong>1</strong> offsite backup location</li>
+                </ul>
+            </div>
+
+            <h3>Automated Backup Script</h3>
+            <div class="code-block" data-language="bash">
+<pre><span class="code-comment">#!/bin/bash</span>
+<span class="code-comment"># backup.sh - Comprehensive backup script</span>
+
+<span class="code-comment"># Configuration</span>
+<span class="code-variable">BACKUP_DIR</span>="/backups"
+<span class="code-variable">DATE</span>=$(date +%Y%m%d_%H%M%S)
+<span class="code-variable">RETENTION_DAYS</span>=30
+
+<span class="code-comment"># Database backup</span>
+<span class="code-keyword">echo</span> <span class="code-string">"Starting database backup..."</span>
+mysqldump \
+    --host=$DB_HOST \
+    --user=$DB_USER \
+    --password=$DB_PASS \
+    --single-transaction \
+    --routines \
+    --triggers \
+    --all-databases > ${BACKUP_DIR}/mysql_${DATE}.sql
+
+<span class="code-comment"># Compress the backup</span>
+gzip ${BACKUP_DIR}/mysql_${DATE}.sql
+
+<span class="code-comment"># WordPress files backup</span>
+<span class="code-keyword">echo</span> <span class="code-string">"Backing up WordPress files..."</span>
+tar -czf ${BACKUP_DIR}/wordpress_${DATE}.tar.gz \
+    --exclude='*/cache/*' \
+    --exclude='*/backup/*' \
+    /var/www/html
+
+<span class="code-comment"># Upload to S3</span>
+<span class="code-keyword">echo</span> <span class="code-string">"Uploading to S3..."</span>
+aws s3 cp ${BACKUP_DIR}/mysql_${DATE}.sql.gz \
+    s3://your-backup-bucket/mysql/ \
+    --storage-class GLACIER
+
+aws s3 cp ${BACKUP_DIR}/wordpress_${DATE}.tar.gz \
+    s3://your-backup-bucket/wordpress/ \
+    --storage-class GLACIER
+
+<span class="code-comment"># Clean up old backups</span>
+<span class="code-keyword">echo</span> <span class="code-string">"Cleaning up old backups..."</span>
+find ${BACKUP_DIR} -type f -mtime +${RETENTION_DAYS} -delete
+
+<span class="code-comment"># Verify backup integrity</span>
+<span class="code-keyword">echo</span> <span class="code-string">"Verifying backup..."</span>
+gunzip -t ${BACKUP_DIR}/mysql_${DATE}.sql.gz
+<span class="code-keyword">if</span> [ $? -eq 0 ]; <span class="code-keyword">then</span>
+    <span class="code-keyword">echo</span> <span class="code-string">"Backup completed successfully"</span>
+    <span class="code-comment"># Send success notification</span>
+    curl -X POST $SLACK_WEBHOOK \
+        -H <span class="code-string">'Content-Type: application/json'</span> \
+        -d '{"text":"✅ Backup completed successfully"}'
+<span class="code-keyword">else</span>
+    <span class="code-keyword">echo</span> <span class="code-string">"Backup verification failed!"</span>
+    <span class="code-comment"># Send failure alert</span>
+    curl -X POST $SLACK_WEBHOOK \
+        -H <span class="code-string">'Content-Type: application/json'</span> \
+        -d '{"text":"❌ Backup failed! Immediate attention required"}'
+    exit 1
+<span class="code-keyword">fi</span></pre>
+            </div>
+
+            <h3>Kubernetes Persistent Volume Backup</h3>
+            <div class="code-block" data-language="yaml">
+<pre><span class="code-comment"># velero-backup.yaml - Kubernetes cluster backup with Velero</span>
+<span class="code-keyword">apiVersion:</span> velero.io/v1
+<span class="code-keyword">kind:</span> Schedule
+<span class="code-keyword">metadata:</span>
+  <span class="code-keyword">name:</span> daily-backup
+  <span class="code-keyword">namespace:</span> velero
+<span class="code-keyword">spec:</span>
+  <span class="code-keyword">schedule:</span> <span class="code-string">"0 2 * * *"</span>  <span class="code-comment"># Daily at 2 AM</span>
+  <span class="code-keyword">template:</span>
+    <span class="code-keyword">ttl:</span> 720h  <span class="code-comment"># Keep backups for 30 days</span>
+    <span class="code-keyword">includedNamespaces:</span>
+      - react-wordpress
+      - production
+    <span class="code-keyword">includedResources:</span>
+      - persistentvolumeclaims
+      - persistentvolumes
+      - deployments
+      - services
+      - configmaps
+      - secrets
+    <span class="code-keyword">storageLocation:</span> aws-backup
+    <span class="code-keyword">volumeSnapshotLocations:</span>
+      - aws-snapshots</pre>
+            </div>
+
+            <table class="deployment-table">
+                <thead>
+                    <tr>
+                        <th>Backup Type</th>
+                        <th>Frequency</th>
+                        <th>Retention</th>
+                        <th>Storage Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Database (Full)</td>
+                        <td>Daily</td>
+                        <td>30 days</td>
+                        <td>S3 Glacier</td>
+                    </tr>
+                    <tr>
+                        <td>Database (Incremental)</td>
+                        <td>Hourly</td>
+                        <td>7 days</td>
+                        <td>S3 Standard</td>
+                    </tr>
+                    <tr>
+                        <td>WordPress Files</td>
+                        <td>Daily</td>
+                        <td>30 days</td>
+                        <td>S3 Glacier</td>
+                    </tr>
+                    <tr>
+                        <td>Container Images</td>
+                        <td>On Build</td>
+                        <td>90 days</td>
+                        <td>Container Registry</td>
+                    </tr>
+                    <tr>
+                        <td>Kubernetes Config</td>
+                        <td>On Change</td>
+                        <td>Indefinite</td>
+                        <td>Git Repository</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>🎯 Complete DevOps Checklist</h2>
+            <p>Use this checklist to ensure your deployment pipeline is production-ready:</p>
+
+            <div class="success-box">
+                <h3>✅ Pre-Deployment Checklist</h3>
+                <ul>
+                    <li>☑️ All tests passing (unit, integration, e2e)</li>
+                    <li>☑️ Security scan completed (no critical vulnerabilities)</li>
+                    <li>☑️ Performance benchmarks met</li>
+                    <li>☑️ Documentation updated</li>
+                    <li>☑️ Database migrations tested</li>
+                    <li>☑️ Rollback procedure documented</li>
+                    <li>☑️ Monitoring alerts configured</li>
+                    <li>☑️ Backup verified and tested</li>
+                    <li>☑️ Load testing completed</li>
+                    <li>☑️ SSL certificates valid</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ Common Pitfalls to Avoid</h3>
+                <ul>
+                    <li>❌ Hardcoding secrets in code or Docker images</li>
+                    <li>❌ Not setting resource limits on containers</li>
+                    <li>❌ Ignoring backup restoration testing</li>
+                    <li>❌ Skipping security headers configuration</li>
+                    <li>❌ Not implementing rate limiting</li>
+                    <li>❌ Forgetting to set up alerting</li>
+                    <li>❌ Using latest tags in production</li>
+                    <li>❌ Not documenting runbooks</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <div class="feature-box">
+                <h2 style="color: white;">🚀 DevOps Mastery Achieved!</h2>
+                <p style="color: white;">You now have a complete, production-ready deployment pipeline that includes:</p>
+                <ul style="color: white;">
+                    <li>✅ Automated CI/CD with GitHub Actions</li>
+                    <li>✅ Optimized Docker containers</li>
+                    <li>✅ Kubernetes orchestration with auto-scaling</li>
+                    <li>✅ Global CDN distribution</li>
+                    <li>✅ Comprehensive monitoring and logging</li>
+                    <li>✅ Robust backup and disaster recovery</li>
+                </ul>
+                <p style="color: white; font-weight: bold; margin-top: 1rem;">
+                    Your React-WordPress application is now ready to scale to millions of users with 99.99% uptime!
+                </p>
+            </div>
+            
+            <div style="margin-top: 2rem; padding: 1.5rem; background: #f7fafc; border-radius: 8px;">
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="https://kubernetes.io/docs/">Kubernetes Documentation</a></li>
+                    <li><a href="https://docs.docker.com/">Docker Documentation</a></li>
+                    <li><a href="https://prometheus.io/docs/">Prometheus Monitoring Guide</a></li>
+                    <li><a href="https://www.elastic.co/guide/">Elasticsearch & Kibana Guides</a></li>
+                    <li><a href="https://docs.github.com/actions">GitHub Actions Documentation</a></li>
+                    <li><a href="https://helm.sh/docs/">Helm Charts Guide</a></li>
+                </ul>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>
