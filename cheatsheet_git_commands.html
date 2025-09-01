@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Commands for Team Collaboration - Complete Cheat Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        @media print {
+            body {
+                font-size: 10pt;
+            }
+            .no-print {
+                display: none;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+            .command-card {
+                break-inside: avoid;
+            }
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #24292e;
+            background: #f6f8fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #f05032;
+            border-bottom: 3px solid #f05032;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .download-btn {
+            background: #f05032;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .download-btn:hover {
+            background: #d03820;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            background: linear-gradient(135deg, #f05032 0%, #e84a2f 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .command-card {
+            border: 2px solid #e1e4e8;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: #fafbfc;
+        }
+        
+        .command-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .command-name {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #0366d6;
+            font-size: 1.1em;
+            background: #f1f8ff;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        .command-category {
+            background: #28a745;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        
+        .command-description {
+            color: #586069;
+            margin: 10px 0;
+        }
+        
+        .command-syntax {
+            background: #24292e;
+            color: #f6f8fa;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            overflow-x: auto;
+        }
+        
+        .command-example {
+            background: #f3f4f6;
+            border-left: 3px solid #f05032;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .command-options {
+            margin: 10px 0;
+        }
+        
+        .command-options h4 {
+            color: #24292e;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        
+        .option-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .option-list li {
+            padding: 5px 0;
+            font-size: 0.9em;
+        }
+        
+        .option-name {
+            font-family: 'Courier New', monospace;
+            background: #e3f2fd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #0366d6;
+            font-weight: bold;
+        }
+        
+        .workflow-section {
+            background: #f6f8fa;
+            border: 2px solid #d1d5da;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .workflow-section h3 {
+            color: #24292e;
+            margin-bottom: 15px;
+        }
+        
+        .workflow-steps {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+        
+        .workflow-steps li {
+            counter-increment: step-counter;
+            margin: 15px 0;
+            padding-left: 40px;
+            position: relative;
+        }
+        
+        .workflow-steps li:before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #f05032;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .tips-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .tips-box h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .tips-box ul {
+            margin-left: 20px;
+            color: #856404;
+        }
+        
+        .danger-box {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .danger-box h3 {
+            color: #721c24;
+            margin-bottom: 10px;
+        }
+        
+        .branch-diagram {
+            background: #f6f8fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.8;
+        }
+        
+        .quick-ref-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .quick-ref-table th,
+        .quick-ref-table td {
+            border: 1px solid #d1d5da;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .quick-ref-table th {
+            background: #f05032;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .quick-ref-table tr:nth-child(even) {
+            background: #f6f8fa;
+        }
+        
+        .quick-ref-table code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .best-practices {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .best-practices h3 {
+            color: #0366d6;
+            margin-bottom: 15px;
+        }
+        
+        .best-practices ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .best-practices li {
+            padding: 8px 0;
+            border-bottom: 1px solid #bbdefb;
+        }
+        
+        .best-practices li:before {
+            content: "✓ ";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <span>🔀 Git Commands for Team Collaboration</span>
+            <button onclick="window.print()" class="download-btn no-print">📥 Print/Save as PDF</button>
+        </h1>
+
+        <!-- Quick Start -->
+        <div class="tips-box">
+            <h3>🚀 Quick Setup for New Team Members</h3>
+            <div class="command-syntax">
+# Configure your identity
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+# Clone the repository
+git clone https://github.com/team/project.git
+cd project
+
+# Check remote connections
+git remote -v</div>
+        </div>
+
+        <!-- Essential Commands -->
+        <section class="section">
+            <h2 class="section-title">📌 Essential Daily Commands</h2>
+            
+            <table class="quick-ref-table">
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>git status</code></td>
+                        <td>Check working directory status</td>
+                        <td><code>git status</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>git add</code></td>
+                        <td>Stage changes for commit</td>
+                        <td><code>git add .</code> or <code>git add filename.js</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>git commit</code></td>
+                        <td>Commit staged changes</td>
+                        <td><code>git commit -m "Add new feature"</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>git pull</code></td>
+                        <td>Fetch and merge remote changes</td>
+                        <td><code>git pull origin main</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>git push</code></td>
+                        <td>Push commits to remote</td>
+                        <td><code>git push origin feature-branch</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>git fetch</code></td>
+                        <td>Download remote changes without merging</td>
+                        <td><code>git fetch origin</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>git log</code></td>
+                        <td>View commit history</td>
+                        <td><code>git log --oneline --graph</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>git diff</code></td>
+                        <td>Show changes between commits</td>
+                        <td><code>git diff HEAD~1</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Branch Management -->
+        <section class="section">
+            <h2 class="section-title">🌿 Branch Management</h2>
+            
+            <div class="command-card">
+                <div class="command-header">
+                    <span class="command-name">git branch</span>
+                    <span class="command-category">Branching</span>
+                </div>
+                <p class="command-description">List, create, or delete branches</p>
+                <div class="command-syntax"># List all branches
+git branch -a
+
+# Create new branch
+git branch feature-name
+
+# Delete local branch
+git branch -d feature-name
+
+# Delete remote branch
+git push origin --delete feature-name
+
+# Rename branch
+git branch -m old-name new-name</div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <span class="command-name">git checkout / git switch</span>
+                    <span class="command-category">Branching</span>
+                </div>
+                <p class="command-description">Switch branches or restore files</p>
+                <div class="command-syntax"># Switch to existing branch
+git checkout feature-branch
+# or (newer syntax)
+git switch feature-branch
+
+# Create and switch to new branch
+git checkout -b new-feature
+# or
+git switch -c new-feature
+
+# Checkout remote branch
+git checkout -b feature-branch origin/feature-branch</div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <span class="command-name">git merge</span>
+                    <span class="command-category">Integration</span>
+                </div>
+                <p class="command-description">Merge branches together</p>
+                <div class="command-syntax"># Merge feature branch into current branch
+git merge feature-branch
+
+# Merge with no fast-forward (creates merge commit)
+git merge --no-ff feature-branch
+
+# Abort merge in case of conflicts
+git merge --abort</div>
+            </div>
+        </section>
+
+        <!-- Feature Branch Workflow -->
+        <div class="workflow-section">
+            <h3>🚀 Feature Branch Workflow</h3>
+            <ol class="workflow-steps">
+                <li>
+                    <strong>Create feature branch:</strong>
+                    <div class="command-example">git checkout -b feature/user-authentication</div>
+                </li>
+                <li>
+                    <strong>Make changes and commit:</strong>
+                    <div class="command-example">git add .
+git commit -m "Add login functionality"</div>
+                </li>
+                <li>
+                    <strong>Keep branch updated with main:</strong>
+                    <div class="command-example">git fetch origin
+git merge origin/main
+# or rebase
+git rebase origin/main</div>
+                </li>
+                <li>
+                    <strong>Push feature branch:</strong>
+                    <div class="command-example">git push -u origin feature/user-authentication</div>
+                </li>
+                <li>
+                    <strong>Create Pull Request (on GitHub/GitLab)</strong>
+                </li>
+                <li>
+                    <strong>After PR approval, clean up:</strong>
+                    <div class="command-example">git checkout main
+git pull origin main
+git branch -d feature/user-authentication</div>
+                </li>
+            </ol>
+        </div>
+
+        <!-- Collaboration Commands -->
+        <section class="section page-break">
+            <h2 class="section-title">👥 Team Collaboration Commands</h2>
+            
+            <div class="command-card">
+                <div class="command-header">
+                    <span class="command-name">git remote</span>
+                    <span class="command-category">Remote</span>
+                </div>
+                <p class="command-description">Manage remote repositories</p>
+                <div class="command-syntax"># View remotes
+git remote -v
+
+# Add remote
+git remote add upstream https://github.com/original/repo.git
+
+# Remove remote
+git remote remove upstream
+
+# Rename remote
+git remote rename origin upstream
+
+# Update remote URL
+git remote set-url origin https://github.com/new/repo.git</div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <span class="command-name">git stash</span>
+                    <span class="command-category">Work Management</span>
+                </div>
+                <p class="command-description">Temporarily save uncommitted changes</p>
+                <div class="command-syntax"># Save current changes
+git stash
+# or with message
+git stash save "Work in progress on feature X"
+
+# List stashes
+git stash list
+
+# Apply most recent stash
+git stash apply
+# or specific stash
+git stash apply stash@{2}
+
+# Apply and remove stash
+git stash pop
+
+# Delete stash
+git stash drop stash@{1}
+
+# Clear all stashes
+git stash clear</div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <span class="command-name">git rebase</span>
+                    <span class="command-category">History Management</span>
+                </div>
+                <p class="command-description">Reapply commits on top of another base</p>
+                <div class="command-syntax"># Rebase current branch onto main
+git rebase main
+
+# Interactive rebase (last 3 commits)
+git rebase -i HEAD~3
+
+# Continue after resolving conflicts
+git rebase --continue
+
+# Abort rebase
+git rebase --abort
+
+# Pull with rebase
+git pull --rebase origin main</div>
+            </div>
+        </section>
+
+        <!-- Conflict Resolution -->
+        <section class="section">
+            <h2 class="section-title">⚠️ Conflict Resolution</h2>
+            
+            <div class="workflow-section">
+                <h3>Resolving Merge Conflicts</h3>
+                <div class="command-syntax"># When conflict occurs during merge
+git status  # See conflicted files
+
+# Edit files to resolve conflicts
+# Look for conflict markers:
+# <<<<<<< HEAD
+# Your changes
+# =======
+# Their changes
+# >>>>>>> feature-branch
+
+# After resolving, add files
+git add resolved-file.js
+
+# Complete the merge
+git commit -m "Resolve merge conflicts"
+
+# Or abort if needed
+git merge --abort</div>
+            </div>
+        </section>
+
+        <!-- Reviewing Changes -->
+        <section class="section">
+            <h2 class="section-title">🔍 Reviewing Changes & History</h2>
+            
+            <div class="command-card">
+                <div class="command-header">
+                    <span class="command-name">git log</span>
+                    <span class="command-category">History</span>
+                </div>
+                <p class="command-description">View commit history</p>
+                <div class="command-syntax"># One line per commit
+git log --oneline
+
+# With graph
+git log --graph --oneline --all
+
+# Show commits by author
+git log --author="John Doe"
+
+# Show commits since date
+git log --since="2 weeks ago"
+
+# Show commits affecting specific file
+git log -- path/to/file.js
+
+# Pretty format
+git log --pretty=format:"%h - %an, %ar : %s"</div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <span class="command-name">git show</span>
+                    <span class="command-category">Inspection</span>
+                </div>
+                <p class="command-description">Show details of commits, tags, etc.</p>
+                <div class="command-syntax"># Show latest commit
+git show
+
+# Show specific commit
+git show abc123
+
+# Show file at specific commit
+git show abc123:path/to/file.js</div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <span class="command-name">git blame</span>
+                    <span class="command-category">Investigation</span>
+                </div>
+                <p class="command-description">Show who modified each line</p>
+                <div class="command-syntax"># Show line-by-line authorship
+git blame file.js
+
+# Show blame for specific lines
+git blame -L 10,20 file.js
+
+# Ignore whitespace changes
+git blame -w file.js</div>
+            </div>
+        </section>
+
+        <!-- Undoing Changes -->
+        <section class="section page-break">
+            <h2 class="section-title">↩️ Undoing Changes</h2>
+            
+            <div class="command-card">
+                <div class="command-header">
+                    <span class="command-name">git reset</span>
+                    <span class="command-category">Undo</span>
+                </div>
+                <p class="command-description">Reset current HEAD to specified state</p>
+                <div class="command-syntax"># Unstage files (keep changes)
+git reset HEAD file.js
+
+# Soft reset (keep changes staged)
+git reset --soft HEAD~1
+
+# Mixed reset (keep changes unstaged) - default
+git reset HEAD~1
+
+# Hard reset (discard changes) - DANGER!
+git reset --hard HEAD~1
+
+# Reset to specific commit
+git reset --hard abc123</div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <span class="command-name">git revert</span>
+                    <span class="command-category">Undo</span>
+                </div>
+                <p class="command-description">Create new commit that undoes previous commit</p>
+                <div class="command-syntax"># Revert last commit
+git revert HEAD
+
+# Revert specific commit
+git revert abc123
+
+# Revert without creating commit immediately
+git revert -n abc123</div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <span class="command-name">git restore</span>
+                    <span class="command-category">Undo</span>
+                </div>
+                <p class="command-description">Restore working tree files (Git 2.23+)</p>
+                <div class="command-syntax"># Discard changes in working directory
+git restore file.js
+
+# Restore file from specific commit
+git restore --source=HEAD~2 file.js
+
+# Unstage file
+git restore --staged file.js</div>
+            </div>
+        </section>
+
+        <!-- Tags -->
+        <section class="section">
+            <h2 class="section-title">🏷️ Tagging Releases</h2>
+            
+            <div class="command-card">
+                <div class="command-header">
+                    <span class="command-name">git tag</span>
+                    <span class="command-category">Versioning</span>
+                </div>
+                <p class="command-description">Create, list, and manage tags</p>
+                <div class="command-syntax"># List tags
+git tag
+
+# Create lightweight tag
+git tag v1.0.0
+
+# Create annotated tag
+git tag -a v1.0.0 -m "Release version 1.0.0"
+
+# Tag specific commit
+git tag v1.0.0 abc123
+
+# Push tag to remote
+git push origin v1.0.0
+
+# Push all tags
+git push origin --tags
+
+# Delete local tag
+git tag -d v1.0.0
+
+# Delete remote tag
+git push origin --delete v1.0.0</div>
+            </div>
+        </section>
+
+        <!-- Best Practices -->
+        <div class="best-practices">
+            <h3>📋 Team Collaboration Best Practices</h3>
+            <ul>
+                <li><strong>Write clear commit messages:</strong> Use present tense, be descriptive (e.g., "Add user authentication" not "added auth")</li>
+                <li><strong>Commit frequently:</strong> Make small, logical commits that are easy to review and revert if needed</li>
+                <li><strong>Pull before push:</strong> Always pull latest changes before pushing to avoid conflicts</li>
+                <li><strong>Use feature branches:</strong> Never commit directly to main/master branch</li>
+                <li><strong>Keep branches short-lived:</strong> Merge feature branches quickly to avoid divergence</li>
+                <li><strong>Review before merging:</strong> Use pull requests for code review</li>
+                <li><strong>Don't rewrite public history:</strong> Never force push to shared branches</li>
+                <li><strong>Use .gitignore:</strong> Keep sensitive data and build artifacts out of the repository</li>
+                <li><strong>Tag releases:</strong> Use semantic versioning (v1.2.3) for releases</li>
+                <li><strong>Document your workflow:</strong> Maintain a CONTRIBUTING.md file with team conventions</li>
+            </ul>
+        </div>
+
+        <!-- Commit Message Format -->
+        <div class="workflow-section">
+            <h3>📝 Commit Message Format</h3>
+            <div class="command-syntax"># Format
+type(scope): subject
+
+body
+
+footer
+
+# Examples
+feat(auth): add login functionality
+fix(api): resolve timeout issue in user endpoint
+docs(readme): update installation instructions
+style(components): format code according to prettier
+refactor(utils): simplify date formatting function
+test(auth): add unit tests for login
+chore(deps): update dependencies</div>
+            
+            <p style="margin-top: 15px;"><strong>Types:</strong></p>
+            <ul style="margin-left: 20px;">
+                <li><code>feat</code>: New feature</li>
+                <li><code>fix</code>: Bug fix</li>
+                <li><code>docs</code>: Documentation changes</li>
+                <li><code>style</code>: Code style changes (formatting, etc.)</li>
+                <li><code>refactor</code>: Code refactoring</li>
+                <li><code>test</code>: Adding or updating tests</li>
+                <li><code>chore</code>: Maintenance tasks</li>
+            </ul>
+        </div>
+
+        <!-- Common Aliases -->
+        <section class="section">
+            <h2 class="section-title">⚡ Useful Git Aliases</h2>
+            
+            <div class="command-syntax"># Add to ~/.gitconfig or use git config --global alias.name command
+
+[alias]
+    # Shortcuts
+    st = status
+    co = checkout
+    br = branch
+    ci = commit
+    
+    # Pretty log
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    
+    # Show last commit
+    last = log -1 HEAD
+    
+    # Undo last commit (keep changes)
+    undo = reset HEAD~1 --mixed
+    
+    # List contributors
+    contributors = shortlog --summary --numbered
+    
+    # List branches by date
+    recent = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'</div>
+        </section>
+
+        <!-- Danger Zone -->
+        <div class="danger-box">
+            <h3>⚠️ Dangerous Commands - Use with Caution!</h3>
+            <div class="command-syntax"># Force push (rewrites remote history)
+git push --force origin branch-name
+# Safer alternative
+git push --force-with-lease origin branch-name
+
+# Hard reset (loses uncommitted changes)
+git reset --hard HEAD
+
+# Clean untracked files (permanent deletion)
+git clean -fd
+
+# Checkout file from another branch (overwrites current)
+git checkout other-branch -- file.js
+
+# Amend pushed commit (requires force push)
+git commit --amend
+git push --force</div>
+        </div>
+
+        <footer style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #d1d5da; text-align: center; color: #586069;">
+            <p>📘 Git Commands Cheat Sheet v2.0 | For Git 2.23+ | Created with ❤️ for teams</p>
+            <p style="margin-top: 10px;">Print this page or save as PDF for offline reference</p>
+        </footer>
+    </div>
+</body>
+</html>

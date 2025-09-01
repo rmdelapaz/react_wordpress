@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VS Code Shortcuts & Extensions - Ultimate Developer Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        @media print {
+            body {
+                font-size: 10pt;
+            }
+            .no-print {
+                display: none;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+            .shortcut-card {
+                break-inside: avoid;
+            }
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f3f3f3;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #007ACC;
+            border-bottom: 3px solid #007ACC;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .download-btn {
+            background: #007ACC;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .download-btn:hover {
+            background: #005a9e;
+        }
+        
+        .platform-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .platform-tab {
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .platform-tab.active {
+            background: #007ACC;
+            color: white;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            background: linear-gradient(135deg, #007ACC 0%, #0098ff 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .shortcuts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .shortcut-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 12px;
+            background: #fafafa;
+            transition: all 0.2s;
+        }
+        
+        .shortcut-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .shortcut-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .shortcut-keys {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .key {
+            background: #333;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            box-shadow: 0 2px 0 #000;
+            display: inline-block;
+        }
+        
+        .plus {
+            display: inline-block;
+            margin: 0 5px;
+            color: #666;
+            font-weight: bold;
+        }
+        
+        .shortcut-desc {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .extension-card {
+            border: 2px solid #007ACC;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: #f8fbff;
+        }
+        
+        .extension-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+        
+        .extension-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #007ACC;
+        }
+        
+        .extension-category {
+            background: #28a745;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+        
+        .extension-id {
+            font-family: 'Courier New', monospace;
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .extension-features {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+        
+        .extension-features li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .extension-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .tips-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .tips-box h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .command-palette {
+            background: #2d2d30;
+            color: #cccccc;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .command-palette .command {
+            color: #9cdcfe;
+        }
+        
+        .settings-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .settings-table th,
+        .settings-table td {
+            border: 1px solid #d0d0d0;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .settings-table th {
+            background: #007ACC;
+            color: white;
+        }
+        
+        .settings-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .settings-table code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            background: #007ACC;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        
+        .multi-cursor-demo {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+        
+        .cursor {
+            background: #aeafad;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .workflow-section {
+            background: #f6f8fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .workflow-section h3 {
+            color: #007ACC;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            💻 VS Code Shortcuts & Extensions Guide
+            <button onclick="window.print()" class="download-btn no-print">📥 Print/Save as PDF</button>
+        </h1>
+
+        <!-- Platform Note -->
+        <div class="tips-box">
+            <h3>📝 Platform Keys</h3>
+            <p><strong>Windows/Linux:</strong> Ctrl = Control key, Alt = Alt key, Shift = Shift key</p>
+            <p><strong>macOS:</strong> Cmd = Command key (⌘), Alt = Option key (⌥), Shift = Shift key (⇧)</p>
+            <p style="margin-top: 10px;">💡 <strong>Tip:</strong> Access all commands with <span class="key">Ctrl</span><span class="plus">+</span><span class="key">Shift</span><span class="plus">+</span><span class="key">P</span> (Windows/Linux) or <span class="key">Cmd</span><span class="plus">+</span><span class="key">Shift</span><span class="plus">+</span><span class="key">P</span> (Mac)</p>
+        </div>
+
+        <!-- Essential Shortcuts -->
+        <section class="section">
+            <h2 class="section-title">⚡ Essential Shortcuts</h2>
+            
+            <div class="shortcuts-grid">
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Command Palette</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">Shift</span>
+                        <span class="plus">+</span>
+                        <span class="key">P</span>
+                    </div>
+                    <div class="shortcut-desc">Access all commands</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Quick Open File</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">P</span>
+                    </div>
+                    <div class="shortcut-desc">Open files by name</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Settings</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">,</span>
+                    </div>
+                    <div class="shortcut-desc">Open settings</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Toggle Terminal</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">`</span>
+                    </div>
+                    <div class="shortcut-desc">Show/hide integrated terminal</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Toggle Sidebar</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">B</span>
+                    </div>
+                    <div class="shortcut-desc">Show/hide sidebar</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Save All</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">K</span>
+                        <span class="key">S</span>
+                    </div>
+                    <div class="shortcut-desc">Save all open files</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Editing Shortcuts -->
+        <section class="section">
+            <h2 class="section-title">✏️ Editing Shortcuts</h2>
+            
+            <div class="shortcuts-grid">
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Cut Line</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">X</span>
+                    </div>
+                    <div class="shortcut-desc">Cut entire line (empty selection)</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Copy Line Down/Up</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Alt</span>
+                        <span class="plus">+</span>
+                        <span class="key">Shift</span>
+                        <span class="plus">+</span>
+                        <span class="key">↓/↑</span>
+                    </div>
+                    <div class="shortcut-desc">Duplicate line</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Move Line Up/Down</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Alt</span>
+                        <span class="plus">+</span>
+                        <span class="key">↓/↑</span>
+                    </div>
+                    <div class="shortcut-desc">Move entire line</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Delete Line</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">Shift</span>
+                        <span class="plus">+</span>
+                        <span class="key">K</span>
+                    </div>
+                    <div class="shortcut-desc">Delete entire line</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Comment Line</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">/</span>
+                    </div>
+                    <div class="shortcut-desc">Toggle line comment</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Block Comment</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Alt</span>
+                        <span class="plus">+</span>
+                        <span class="key">Shift</span>
+                        <span class="plus">+</span>
+                        <span class="key">A</span>
+                    </div>
+                    <div class="shortcut-desc">Toggle block comment</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Format Document</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Alt</span>
+                        <span class="plus">+</span>
+                        <span class="key">Shift</span>
+                        <span class="plus">+</span>
+                        <span class="key">F</span>
+                    </div>
+                    <div class="shortcut-desc">Format entire file</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Format Selection</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">K</span>
+                        <span class="key">F</span>
+                    </div>
+                    <div class="shortcut-desc">Format selected code</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Multi-Cursor & Selection -->
+        <section class="section page-break">
+            <h2 class="section-title">🎯 Multi-Cursor & Selection</h2>
+            
+            <div class="shortcuts-grid">
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Add Cursor</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Alt</span>
+                        <span class="plus">+</span>
+                        <span class="key">Click</span>
+                    </div>
+                    <div class="shortcut-desc">Insert cursor at click position</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Add Cursor Above/Below</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">Alt</span>
+                        <span class="plus">+</span>
+                        <span class="key">↓/↑</span>
+                    </div>
+                    <div class="shortcut-desc">Add cursor on lines above/below</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Select Next Match</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">D</span>
+                    </div>
+                    <div class="shortcut-desc">Add selection to next match</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Select All Occurrences</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">Shift</span>
+                        <span class="plus">+</span>
+                        <span class="key">L</span>
+                    </div>
+                    <div class="shortcut-desc">Select all occurrences of selection</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Expand Selection</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Alt</span>
+                        <span class="plus">+</span>
+                        <span class="key">Shift</span>
+                        <span class="plus">+</span>
+                        <span class="key">→</span>
+                    </div>
+                    <div class="shortcut-desc">Expand selection by scope</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Column Selection</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Shift</span>
+                        <span class="plus">+</span>
+                        <span class="key">Alt</span>
+                        <span class="plus">+</span>
+                        <span class="key">Drag</span>
+                    </div>
+                    <div class="shortcut-desc">Select column/box</div>
+                </div>
+            </div>
+
+            <div class="multi-cursor-demo">
+                <p># Multi-cursor example</p>
+                <p>const user<span class="cursor">|</span> = "John";</p>
+                <p>const user<span class="cursor">|</span> = "Jane";</p>
+                <p>const user<span class="cursor">|</span> = "Bob";</p>
+                <p style="margin-top: 10px; color: #608b4e;">// Edit all at once!</p>
+            </div>
+        </section>
+
+        <!-- Search & Navigation -->
+        <section class="section">
+            <h2 class="section-title">🔍 Search & Navigation</h2>
+            
+            <div class="shortcuts-grid">
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Find</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">F</span>
+                    </div>
+                    <div class="shortcut-desc">Find in file</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Find & Replace</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">H</span>
+                    </div>
+                    <div class="shortcut-desc">Replace in file</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Find in Files</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">Shift</span>
+                        <span class="plus">+</span>
+                        <span class="key">F</span>
+                    </div>
+                    <div class="shortcut-desc">Search across files</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Go to Line</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">G</span>
+                    </div>
+                    <div class="shortcut-desc">Jump to line number</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Go to Symbol</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">Shift</span>
+                        <span class="plus">+</span>
+                        <span class="key">O</span>
+                    </div>
+                    <div class="shortcut-desc">Go to symbol in file</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Go to Definition</div>
+                    <div class="shortcut-keys">
+                        <span class="key">F12</span>
+                    </div>
+                    <div class="shortcut-desc">Jump to definition</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Peek Definition</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Alt</span>
+                        <span class="plus">+</span>
+                        <span class="key">F12</span>
+                    </div>
+                    <div class="shortcut-desc">Show definition inline</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Navigate Back/Forward</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Alt</span>
+                        <span class="plus">+</span>
+                        <span class="key">←/→</span>
+                    </div>
+                    <div class="shortcut-desc">Navigate cursor history</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Intelligence -->
+        <section class="section">
+            <h2 class="section-title">🧠 Code Intelligence</h2>
+            
+            <div class="shortcuts-grid">
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Trigger IntelliSense</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">Space</span>
+                    </div>
+                    <div class="shortcut-desc">Show suggestions</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Quick Fix</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">.</span>
+                    </div>
+                    <div class="shortcut-desc">Show quick fixes</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Rename Symbol</div>
+                    <div class="shortcut-keys">
+                        <span class="key">F2</span>
+                    </div>
+                    <div class="shortcut-desc">Rename all occurrences</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Show Hover</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">K</span>
+                        <span class="key">I</span>
+                    </div>
+                    <div class="shortcut-desc">Show hover information</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Find References</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Shift</span>
+                        <span class="plus">+</span>
+                        <span class="key">F12</span>
+                    </div>
+                    <div class="shortcut-desc">Find all references</div>
+                </div>
+                
+                <div class="shortcut-card">
+                    <div class="shortcut-name">Extract Method</div>
+                    <div class="shortcut-keys">
+                        <span class="key">Ctrl/Cmd</span>
+                        <span class="plus">+</span>
+                        <span class="key">.</span>
+                    </div>
+                    <div class="shortcut-desc">Refactor: Extract to method</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Essential Extensions -->
+        <section class="section page-break">
+            <h2 class="section-title">🔌 Essential Extensions for React & WordPress Development</h2>
+            
+            <!-- React Extensions -->
+            <div class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-name">ES7+ React/Redux/React-Native snippets</div>
+                    <span class="extension-category">React</span>
+                </div>
+                <div class="extension-id">dsznajder.es7-react-js-snippets</div>
+                <ul class="extension-features">
+                    <li>React component snippets (rafce, rfc, rcc)</li>
+                    <li>Hook snippets (useState, useEffect)</li>
+                    <li>Redux snippets</li>
+                    <li>PropTypes snippets</li>
+                </ul>
+                <div class="command-palette">
+                    <p># Quick snippets:</p>
+                    <p><span class="command">rafce</span> → React Arrow Function Component Export</p>
+                    <p><span class="command">usf</span> → useState Hook</p>
+                    <p><span class="command">uef</span> → useEffect Hook</p>
+                </div>
+            </div>
+
+            <div class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-name">Prettier - Code formatter</div>
+                    <span class="extension-category">Formatting</span>
+                </div>
+                <div class="extension-id">esbenp.prettier-vscode</div>
+                <ul class="extension-features">
+                    <li>Auto-format on save</li>
+                    <li>Consistent code style</li>
+                    <li>Supports JS, CSS, HTML, JSON</li>
+                    <li>Configurable via .prettierrc</li>
+                </ul>
+            </div>
+
+            <div class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-name">ESLint</div>
+                    <span class="extension-category">Linting</span>
+                </div>
+                <div class="extension-id">dbaeumer.vscode-eslint</div>
+                <ul class="extension-features">
+                    <li>Real-time error detection</li>
+                    <li>Auto-fix on save</li>
+                    <li>React hooks rules</li>
+                    <li>Custom rule configuration</li>
+                </ul>
+            </div>
+
+            <div class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-name">Auto Rename Tag</div>
+                    <span class="extension-category">HTML/JSX</span>
+                </div>
+                <div class="extension-id">formulahendry.auto-rename-tag</div>
+                <ul class="extension-features">
+                    <li>Automatically rename paired HTML/JSX tags</li>
+                    <li>Works with React components</li>
+                    <li>Saves time on refactoring</li>
+                </ul>
+            </div>
+
+            <div class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-name">Tailwind CSS IntelliSense</div>
+                    <span class="extension-category">CSS</span>
+                </div>
+                <div class="extension-id">bradlc.vscode-tailwindcss</div>
+                <ul class="extension-features">
+                    <li>Autocomplete for Tailwind classes</li>
+                    <li>Hover preview of CSS</li>
+                    <li>Linting for class conflicts</li>
+                    <li>Color decorators</li>
+                </ul>
+            </div>
+
+            <!-- WordPress Extensions -->
+            <div class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-name">WordPress Snippets</div>
+                    <span class="extension-category">WordPress</span>
+                </div>
+                <div class="extension-id">wordpresstoolbox.wordpress-toolbox</div>
+                <ul class="extension-features">
+                    <li>WordPress function snippets</li>
+                    <li>Hook suggestions</li>
+                    <li>WP-CLI commands</li>
+                    <li>Custom post type snippets</li>
+                </ul>
+            </div>
+
+            <!-- Git Extensions -->
+            <div class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-name">GitLens</div>
+                    <span class="extension-category">Git</span>
+                </div>
+                <div class="extension-id">eamodio.gitlens</div>
+                <ul class="extension-features">
+                    <li>Inline blame annotations</li>
+                    <li>File history exploration</li>
+                    <li>Compare branches/commits</li>
+                    <li>Visual commit graph</li>
+                </ul>
+            </div>
+
+            <!-- Productivity Extensions -->
+            <div class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-name">Live Server</div>
+                    <span class="extension-category">Development</span>
+                </div>
+                <div class="extension-id">ritwickdey.liveserver</div>
+                <ul class="extension-features">
+                    <li>Local development server</li>
+                    <li>Live reload on save</li>
+                    <li>HTTPS support</li>
+                    <li>Customizable port</li>
+                </ul>
+            </div>
+
+            <div class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-name">Thunder Client</div>
+                    <span class="extension-category">API Testing</span>
+                </div>
+                <div class="extension-id">rangav.vscode-thunder-client</div>
+                <ul class="extension-features">
+                    <li>REST API testing</li>
+                    <li>Collections & environments</li>
+                    <li>GraphQL support</li>
+                    <li>No external dependencies</li>
+                </ul>
+            </div>
+
+            <div class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-name">Path Intellisense</div>
+                    <span class="extension-category">Navigation</span>
+                </div>
+                <div class="extension-id">christian-kohler.path-intellisense</div>
+                <ul class="extension-features">
+                    <li>Autocomplete file paths</li>
+                    <li>Works with imports</li>
+                    <li>Supports all file types</li>
+                </ul>
+            </div>
+
+            <div class="extension-card">
+                <div class="extension-header">
+                    <div class="extension-name">Bracket Pair Colorizer</div>
+                    <span class="extension-category">Visual</span>
+                </div>
+                <div class="extension-id">CoenraadS.bracket-pair-colorizer-2</div>
+                <ul class="extension-features">
+                    <li>Color-matched brackets</li>
+                    <li>Easier code navigation</li>
+                    <li>Customizable colors</li>
+                    <li>Note: Now built into VS Code!</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Recommended Settings -->
+        <section class="section">
+            <h2 class="section-title">⚙️ Recommended VS Code Settings</h2>
+            
+            <div class="workflow-section">
+                <h3>settings.json Configuration</h3>
+                <div class="command-palette">
+{
+  <span class="command">// Editor Settings</span>
+  "editor.fontSize": 14,
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.linkedEditing": true,
+  "editor.bracketPairColorization.enabled": true,
+  
+  <span class="command">// Terminal</span>
+  "terminal.integrated.fontSize": 14,
+  
+  <span class="command">// Files</span>
+  "files.autoSave": "onFocusChange",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  
+  <span class="command">// Prettier</span>
+  "prettier.singleQuote": true,
+  "prettier.semi": true,
+  "prettier.tabWidth": 2,
+  
+  <span class="command">// Emmet for JSX</span>
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  
+  <span class="command">// Git</span>
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  
+  <span class="command">// Explorer</span>
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false
+}</div>
+            </div>
+        </section>
+
+        <!-- Useful Commands -->
+        <section class="section">
+            <h2 class="section-title">🎨 Useful Command Palette Commands</h2>
+            
+            <table class="settings-table">
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>></code></td>
+                        <td>Show all commands</td>
+                    </tr>
+                    <tr>
+                        <td><code>@</code></td>
+                        <td>Go to symbol in file</td>
+                    </tr>
+                    <tr>
+                        <td><code>#</code></td>
+                        <td>Go to symbol in workspace</td>
+                    </tr>
+                    <tr>
+                        <td><code>:</code></td>
+                        <td>Go to line number</td>
+                    </tr>
+                    <tr>
+                        <td><code>?</code></td>
+                        <td>Show help</td>
+                    </tr>
+                    <tr>
+                        <td><code>task</code></td>
+                        <td>Run tasks</td>
+                    </tr>
+                    <tr>
+                        <td><code>ext install</code></td>
+                        <td>Install extensions</td>
+                    </tr>
+                    <tr>
+                        <td><code>reload window</code></td>
+                        <td>Reload VS Code window</td>
+                    </tr>
+                    <tr>
+                        <td><code>zen mode</code></td>
+                        <td>Toggle zen mode</td>
+                    </tr>
+                    <tr>
+                        <td><code>theme</code></td>
+                        <td>Change color theme</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Productivity Tips -->
+        <div class="tips-box">
+            <h3>💡 Productivity Tips</h3>
+            <ul style="margin-left: 20px;">
+                <li><strong>Use Snippets:</strong> Create custom snippets for repetitive code patterns</li>
+                <li><strong>Multi-cursor editing:</strong> Master multi-cursor for bulk edits</li>
+                <li><strong>Keyboard shortcuts:</strong> Learn shortcuts for common actions</li>
+                <li><strong>Integrated terminal:</strong> Use multiple terminal instances</li>
+                <li><strong>Source control:</strong> Use built-in Git features</li>
+                <li><strong>Extensions sync:</strong> Sync settings across devices</li>
+                <li><strong>Workspace settings:</strong> Use workspace-specific settings</li>
+                <li><strong>Live Share:</strong> Collaborate in real-time with team members</li>
+            </ul>
+        </div>
+
+        <footer style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #e0e0e0; text-align: center; color: #666;">
+            <p>📘 VS Code Cheat Sheet v1.0 | Updated for VS Code 1.85+ | Created with ❤️ for developers</p>
+            <p style="margin-top: 10px;">Print this page or save as PDF for offline reference</p>
+        </footer>
+    </div>
+</body>
+</html>
