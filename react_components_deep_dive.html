@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Components and Hooks: Building Interactive Magic</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="icon" href="/favicon.png">
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>React Components and Hooks: Building Interactive Magic</h1>
+        <p>Transform static HTML into living, breathing user interfaces that respond, adapt, and delight!</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>Components: The Living Cells of Your Application</h2>
+            <p>Imagine each React component as a living cell in an organism. Just like cells have membranes (component boundaries), DNA (props), and can communicate with other cells (event handling), React components are self-contained units that work together to create complex applications.</p>
+
+            <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+                <!-- Cell/Component Diagram -->
+                <defs>
+                    <radialGradient id="cellGradient">
+                        <stop offset="0%" style="stop-color:#61dafb;stop-opacity:0.8" />
+                        <stop offset="100%" style="stop-color:#4fa8c5;stop-opacity:1" />
+                    </radialGradient>
+                </defs>
+                
+                <!-- Main Component Cell -->
+                <ellipse cx="300" cy="200" rx="150" ry="100" fill="url(#cellGradient)" stroke="#333" stroke-width="3"/>
+                
+                <!-- Nucleus (State) -->
+                <circle cx="300" cy="200" r="40" fill="#2c3e50" opacity="0.8"/>
+                <text x="300" y="205" text-anchor="middle" fill="white" font-size="14" font-weight="bold">State</text>
+                
+                <!-- Props entering -->
+                <circle cx="150" cy="200" r="15" fill="#e74c3c"/>
+                <text x="150" y="205" text-anchor="middle" fill="white" font-size="10">Props</text>
+                <path d="M 165 200 L 220 200" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrowhead)"/>
+                
+                <!-- Events leaving -->
+                <circle cx="450" cy="200" r="15" fill="#2ecc71"/>
+                <text x="450" y="205" text-anchor="middle" fill="white" font-size="10">Events</text>
+                <path d="M 380 200 L 435 200" stroke="#2ecc71" stroke-width="2" marker-end="url(#arrowhead)"/>
+                
+                <!-- Markers -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+                    </marker>
+                </defs>
+                
+                <!-- Labels -->
+                <text x="300" y="50" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">React Component Anatomy</text>
+                <text x="300" y="350" text-anchor="middle" fill="#666" font-size="12">Props flow in → State lives inside → Events flow out</text>
+            </svg>
+
+            <h3>Real-World Example: Instagram's Like Button</h3>
+            <p>Every like button on Instagram is a React component. It receives props (which post it belongs to), maintains state (is it liked?), and emits events (user clicked like). Multiply this by millions of posts, and you see the power of component reusability!</p>
+        </section>
+
+        <section>
+            <h2>Function Components: The Modern Recipe Cards</h2>
+            <p>Think of function components like recipe cards in a kitchen. Each card (component) takes ingredients (props) and produces a dish (UI). The chef (React) follows the recipe exactly every time, ensuring consistent results.</p>
+
+            <canvas id="recipeCanvas" width="600" height="400"></canvas>
+            <script>
+                const recipeCanvas = document.getElementById('recipeCanvas');
+                const recipeCtx = recipeCanvas.getContext('2d');
+                
+                // Title
+                recipeCtx.font = 'bold 18px Arial';
+                recipeCtx.fillStyle = '#333';
+                recipeCtx.textAlign = 'center';
+                recipeCtx.fillText('Function Component Recipe', 300, 30);
+                
+                // Recipe Card
+                recipeCtx.fillStyle = '#fff8dc';
+                recipeCtx.strokeStyle = '#8b4513';
+                recipeCtx.lineWidth = 3;
+                recipeCtx.fillRect(150, 60, 300, 320);
+                recipeCtx.strokeRect(150, 60, 300, 320);
+                
+                // Recipe Header
+                recipeCtx.fillStyle = '#8b4513';
+                recipeCtx.font = 'bold 16px Courier';
+                recipeCtx.textAlign = 'left';
+                recipeCtx.fillText('function Button(props) {', 170, 90);
+                
+                // Ingredients (Props)
+                recipeCtx.font = '14px Courier';
+                recipeCtx.fillText('  // Ingredients (Props)', 170, 120);
+                recipeCtx.fillStyle = '#2c3e50';
+                recipeCtx.fillText('  const { text, onClick,', 170, 140);
+                recipeCtx.fillText('          color } = props;', 170, 160);
+                
+                // Preparation (Hooks)
+                recipeCtx.fillStyle = '#8b4513';
+                recipeCtx.fillText('  // Preparation (State)', 170, 190);
+                recipeCtx.fillStyle = '#2c3e50';
+                recipeCtx.fillText('  const [clicks, setClicks]', 170, 210);
+                recipeCtx.fillText('    = useState(0);', 170, 230);
+                
+                // Cooking (Logic)
+                recipeCtx.fillStyle = '#8b4513';
+                recipeCtx.fillText('  // Cooking (Logic)', 170, 260);
+                recipeCtx.fillStyle = '#2c3e50';
+                recipeCtx.fillText('  const handleClick = () => {', 170, 280);
+                recipeCtx.fillText('    setClicks(clicks + 1);', 170, 300);
+                recipeCtx.fillText('    onClick();', 170, 320);
+                recipeCtx.fillText('  };', 170, 340);
+                
+                // Serve (Return JSX)
+                recipeCtx.fillStyle = '#8b4513';
+                recipeCtx.fillText('  // Serve (Return JSX)', 170, 370);
+                recipeCtx.fillText('  return <button>...', 170, 390);
+                recipeCtx.fillText('}', 170, 410);
+                
+                // Arrow pointing to result
+                recipeCtx.strokeStyle = '#666';
+                recipeCtx.lineWidth = 2;
+                recipeCtx.beginPath();
+                recipeCtx.moveTo(450, 220);
+                recipeCtx.lineTo(520, 220);
+                recipeCtx.stroke();
+                
+                // Draw arrow head
+                recipeCtx.beginPath();
+                recipeCtx.moveTo(515, 215);
+                recipeCtx.lineTo(525, 220);
+                recipeCtx.lineTo(515, 225);
+                recipeCtx.closePath();
+                recipeCtx.fillStyle = '#666';
+                recipeCtx.fill();
+                
+                // Result button
+                recipeCtx.fillStyle = '#3498db';
+                recipeCtx.fillRect(530, 200, 60, 40);
+                recipeCtx.fillStyle = 'white';
+                recipeCtx.font = '14px Arial';
+                recipeCtx.textAlign = 'center';
+                recipeCtx.fillText('Click!', 560, 225);
+            </script>
+        </section>
+
+        <section>
+            <h2>Props: The Messenger Pigeons of React</h2>
+            <p>Props are like messenger pigeons carrying information from parent to child components. Once a pigeon delivers its message, it can't be changed by the receiver - they can only read it and act upon it.</p>
+
+            <div class="mermaid">
+            graph TD
+                A[Parent Component<br/>Sending Props] -->|name='John'| B[Child Component 1<br/>Receives Props]
+                A -->|name='Jane'| C[Child Component 2<br/>Receives Props]
+                A -->|name='Bob'| D[Child Component 3<br/>Receives Props]
+                B -->|Read Only!| E[Display: Hello John]
+                C -->|Read Only!| F[Display: Hello Jane]
+                D -->|Read Only!| G[Display: Hello Bob]
+                
+                style A fill:#3498db,stroke:#333,stroke-width:2px,color:#fff
+                style B fill:#e74c3c,stroke:#333,stroke-width:2px,color:#fff
+                style C fill:#e74c3c,stroke:#333,stroke-width:2px,color:#fff
+                style D fill:#e74c3c,stroke:#333,stroke-width:2px,color:#fff
+            </div>
+
+            <h3>Real-World Example: Netflix Movie Cards</h3>
+            <p>Each movie card on Netflix receives props like title, thumbnail URL, rating, and duration. The card component can't change these values - it just displays them beautifully. This is why every movie card looks consistent but shows different content!</p>
+        </section>
+
+        <section>
+            <h2>State: The Component's Memory Bank</h2>
+            <p>State is like a component's personal diary - it remembers things that happen and can update its memories. Unlike props (which are like birth certificates - given once and unchangeable), state is like your daily journal that you constantly update.</p>
+
+            <canvas id="stateCanvas" width="600" height="350"></canvas>
+            <script>
+                const stateCanvas = document.getElementById('stateCanvas');
+                const stateCtx = stateCanvas.getContext('2d');
+                
+                // Animation variables
+                let counter = 0;
+                let increasing = true;
+                
+                function drawStateAnimation() {
+                    // Clear canvas
+                    stateCtx.clearRect(0, 0, 600, 350);
+                    
+                    // Title
+                    stateCtx.font = 'bold 18px Arial';
+                    stateCtx.fillStyle = '#333';
+                    stateCtx.textAlign = 'center';
+                    stateCtx.fillText('State Changes Over Time', 300, 30);
+                    
+                    // Draw memory bank
+                    stateCtx.fillStyle = '#f0f0f0';
+                    stateCtx.strokeStyle = '#333';
+                    stateCtx.lineWidth = 2;
+                    stateCtx.fillRect(200, 70, 200, 200);
+                    stateCtx.strokeRect(200, 70, 200, 200);
+                    
+                    // Memory bank label
+                    stateCtx.fillStyle = '#333';
+                    stateCtx.font = 'bold 14px Arial';
+                    stateCtx.fillText('Component State', 300, 95);
+                    
+                    // Draw state values
+                    stateCtx.font = '16px Arial';
+                    stateCtx.textAlign = 'left';
+                    stateCtx.fillStyle = '#2c3e50';
+                    stateCtx.fillText('count: ' + counter, 220, 130);
+                    stateCtx.fillText('isActive: ' + (counter > 5), 220, 160);
+                    stateCtx.fillText('progress: ' + Math.round((counter/10)*100) + '%', 220, 190);
+                    
+                    // Draw progress bar
+                    stateCtx.fillStyle = '#e0e0e0';
+                    stateCtx.fillRect(220, 210, 160, 30);
+                    stateCtx.fillStyle = counter > 5 ? '#2ecc71' : '#3498db';
+                    stateCtx.fillRect(220, 210, (counter/10)*160, 30);
+                    
+                    // Update counter
+                    if (increasing) {
+                        counter += 0.1;
+                        if (counter >= 10) increasing = false;
+                    } else {
+                        counter -= 0.1;
+                        if (counter <= 0) increasing = true;
+                    }
+                    
+                    // Draw time arrow
+                    stateCtx.strokeStyle = '#666';
+                    stateCtx.lineWidth = 2;
+                    stateCtx.beginPath();
+                    stateCtx.moveTo(50, 300);
+                    stateCtx.lineTo(550, 300);
+                    stateCtx.stroke();
+                    
+                    // Arrow head
+                    stateCtx.beginPath();
+                    stateCtx.moveTo(540, 295);
+                    stateCtx.lineTo(550, 300);
+                    stateCtx.lineTo(540, 305);
+                    stateCtx.closePath();
+                    stateCtx.fillStyle = '#666';
+                    stateCtx.fill();
+                    
+                    // Time label
+                    stateCtx.font = '14px Arial';
+                    stateCtx.textAlign = 'center';
+                    stateCtx.fillText('Time', 300, 330);
+                    
+                    requestAnimationFrame(drawStateAnimation);
+                }
+                
+                drawStateAnimation();
+            </script>
+        </section>
+
+        <section>
+            <h2>Hooks: Your Swiss Army Knife</h2>
+            <p>Hooks are like a Swiss Army knife for React components. Each tool (hook) has a specific purpose: useState is your notepad, useEffect is your scheduler, useContext is your walkie-talkie, and useMemo is your calculator with memory.</p>
+
+            <div class="mermaid">
+            mindmap
+                root((React Hooks))
+                    useState
+                        Manages local state
+                        Counter example
+                        Form inputs
+                    useEffect
+                        Side effects
+                        API calls
+                        Timers
+                        Subscriptions
+                    useContext
+                        Global state
+                        Theme switching
+                        User authentication
+                    useMemo
+                        Performance optimization
+                        Expensive calculations
+                        Cached values
+                    useCallback
+                        Function memoization
+                        Event handlers
+                        Prevent re-renders
+                    useRef
+                        DOM references
+                        Previous values
+                        Mutable values
+            </div>
+
+            <h3>The useState Hook: Your Component's Notebook</h3>
+            <p>Imagine useState as a magical notebook. Every time you write something new (setState), the entire page refreshes with your new note, but React is so fast you don't even notice the page turning!</p>
+
+            <canvas id="useStateDemo" width="600" height="300"></canvas>
+            <script>
+                const useStateCanvas = document.getElementById('useStateDemo');
+                const useStateCtx = useStateCanvas.getContext('2d');
+                
+                let clickCount = 0;
+                
+                function drawUseStateDemo() {
+                    useStateCtx.clearRect(0, 0, 600, 300);
+                    
+                    // Title
+                    useStateCtx.font = 'bold 16px Arial';
+                    useStateCtx.fillStyle = '#333';
+                    useStateCtx.textAlign = 'center';
+                    useStateCtx.fillText('useState in Action - Click the Button!', 300, 30);
+                    
+                    // Code example
+                    useStateCtx.fillStyle = '#f8f8f8';
+                    useStateCtx.fillRect(50, 50, 500, 120);
+                    useStateCtx.strokeStyle = '#ddd';
+                    useStateCtx.strokeRect(50, 50, 500, 120);
+                    
+                    useStateCtx.font = '14px Courier';
+                    useStateCtx.textAlign = 'left';
+                    useStateCtx.fillStyle = '#2c3e50';
+                    useStateCtx.fillText('const [count, setCount] = useState(0);', 60, 80);
+                    useStateCtx.fillText('', 60, 100);
+                    useStateCtx.fillText('// Current value: count = ' + clickCount, 60, 120);
+                    useStateCtx.fillText('// Update: setCount(' + (clickCount + 1) + ')', 60, 140);
+                    
+                    // Interactive button
+                    useStateCtx.fillStyle = clickCount > 0 ? '#2ecc71' : '#3498db';
+                    useStateCtx.fillRect(225, 200, 150, 50);
+                    useStateCtx.fillStyle = 'white';
+                    useStateCtx.font = 'bold 16px Arial';
+                    useStateCtx.textAlign = 'center';
+                    useStateCtx.fillText('Clicks: ' + clickCount, 300, 230);
+                    
+                    // Note
+                    useStateCtx.fillStyle = '#666';
+                    useStateCtx.font = '12px Arial';
+                    useStateCtx.fillText('(Imagine clicking this button - count increases each time!)', 300, 280);
+                }
+                
+                // Simulate clicks
+                setInterval(() => {
+                    clickCount = (clickCount + 1) % 10;
+                    drawUseStateDemo();
+                }, 1500);
+                
+                drawUseStateDemo();
+            </script>
+        </section>
+
+        <section>
+            <h2>The useEffect Hook: Your Component's Butler</h2>
+            <p>useEffect is like having a butler who watches for specific events and takes action. "When the doorbell rings (dependency changes), please get the door (run the effect)." The butler can also clean up when guests leave (cleanup function).</p>
+
+            <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+                <!-- Butler watching -->
+                <rect x="50" y="50" width="500" height="300" fill="#f9f9f9" stroke="#333" stroke-width="2"/>
+                
+                <!-- Title -->
+                <text x="300" y="80" text-anchor="middle" fill="#333" font-size="18" font-weight="bold">useEffect Lifecycle</text>
+                
+                <!-- Mount phase -->
+                <circle cx="150" cy="150" r="40" fill="#3498db"/>
+                <text x="150" y="155" text-anchor="middle" fill="white" font-size="14">Mount</text>
+                <text x="150" y="210" text-anchor="middle" fill="#666" font-size="12">Component</text>
+                <text x="150" y="225" text-anchor="middle" fill="#666" font-size="12">Born</text>
+                
+                <!-- Update phase -->
+                <circle cx="300" cy="150" r="40" fill="#f39c12"/>
+                <text x="300" y="155" text-anchor="middle" fill="white" font-size="14">Update</text>
+                <text x="300" y="210" text-anchor="middle" fill="#666" font-size="12">Dependencies</text>
+                <text x="300" y="225" text-anchor="middle" fill="#666" font-size="12">Change</text>
+                
+                <!-- Unmount phase -->
+                <circle cx="450" cy="150" r="40" fill="#e74c3c"/>
+                <text x="450" y="155" text-anchor="middle" fill="white" font-size="14">Unmount</text>
+                <text x="450" y="210" text-anchor="middle" fill="#666" font-size="12">Component</text>
+                <text x="450" y="225" text-anchor="middle" fill="#666" font-size="12">Dies</text>
+                
+                <!-- Arrows -->
+                <path d="M 190 150 L 260 150" stroke="#666" stroke-width="2" marker-end="url(#arrowEffect)"/>
+                <path d="M 340 150 L 410 150" stroke="#666" stroke-width="2" marker-end="url(#arrowEffect)"/>
+                
+                <!-- Effect boxes -->
+                <rect x="120" y="260" width="60" height="30" fill="#2ecc71"/>
+                <text x="150" y="280" text-anchor="middle" fill="white" font-size="11">Setup</text>
+                
+                <rect x="270" y="260" width="60" height="30" fill="#2ecc71"/>
+                <text x="300" y="280" text-anchor="middle" fill="white" font-size="11">Re-run</text>
+                
+                <rect x="420" y="260" width="60" height="30" fill="#c0392b"/>
+                <text x="450" y="280" text-anchor="middle" fill="white" font-size="11">Cleanup</text>
+                
+                <defs>
+                    <marker id="arrowEffect" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+                    </marker>
+                </defs>
+            </svg>
+
+            <h3>Real-World Example: Chat Application</h3>
+            <p>In WhatsApp Web, useEffect connects to the message server when you open a chat (mount), listens for new messages (dependencies), and disconnects when you close the chat (cleanup). It's like having a dedicated assistant managing your conversation connections!</p>
+        </section>
+
+        <section>
+            <h2>Component Composition: Building with LEGO Masters</h2>
+            <p>Component composition is like being a LEGO master builder. You don't build everything from individual bricks; you create sub-assemblies (smaller components) and combine them into larger structures (parent components).</p>
+
+            <div class="mermaid">
+            graph TB
+                A[App Component] --> B[Header]
+                A --> C[Main Content]
+                A --> D[Footer]
+                
+                B --> E[Logo]
+                B --> F[Navigation]
+                B --> G[User Menu]
+                
+                C --> H[Sidebar]
+                C --> I[Article List]
+                C --> J[Advertisement]
+                
+                I --> K[Article Card]
+                I --> L[Article Card]
+                I --> M[Article Card]
+                
+                K --> N[Title]
+                K --> O[Author]
+                K --> P[Preview]
+                K --> Q[Read More Button]
+                
+                style A fill:#3498db,stroke:#333,stroke-width:3px,color:#fff
+                style B fill:#e74c3c,stroke:#333,stroke-width:2px,color:#fff
+                style C fill:#2ecc71,stroke:#333,stroke-width:2px,color:#fff
+                style D fill:#f39c12,stroke:#333,stroke-width:2px,color:#fff
+            </div>
+        </section>
+
+        <section>
+            <h2>Event Handling: The Telephone Game Done Right</h2>
+            <p>React's event handling is like a perfectly organized telephone game. When a child whispers (triggers an event), the message travels up through parents clearly and accurately, unlike the traditional game where messages get garbled!</p>
+
+            <canvas id="eventCanvas" width="600" height="400"></canvas>
+            <script>
+                const eventCanvas = document.getElementById('eventCanvas');
+                const eventCtx = eventCanvas.getContext('2d');
+                
+                let eventAnimation = 0;
+                
+                function drawEventFlow() {
+                    eventCtx.clearRect(0, 0, 600, 400);
+                    
+                    // Title
+                    eventCtx.font = 'bold 18px Arial';
+                    eventCtx.fillStyle = '#333';
+                    eventCtx.textAlign = 'center';
+                    eventCtx.fillText('Event Bubbling in React', 300, 30);
+                    
+                    // Draw component hierarchy
+                    const components = [
+                        {x: 300, y: 80, size: 200, label: 'App', color: '#3498db'},
+                        {x: 300, y: 150, size: 150, label: 'Form', color: '#2ecc71'},
+                        {x: 300, y: 220, size: 100, label: 'Input', color: '#e74c3c'},
+                        {x: 300, y: 290, size: 50, label: 'Button', color: '#f39c12'}
+                    ];
+                    
+                    components.forEach((comp, index) => {
+                        // Draw component box
+                        eventCtx.fillStyle = comp.color;
+                        eventCtx.globalAlpha = 0.3;
+                        eventCtx.fillRect(comp.x - comp.size/2, comp.y - 25, comp.size, 50);
+                        eventCtx.globalAlpha = 1;
+                        
+                        eventCtx.strokeStyle = comp.color;
+                        eventCtx.lineWidth = 2;
+                        eventCtx.strokeRect(comp.x - comp.size/2, comp.y - 25, comp.size, 50);
+                        
+                        // Component label
+                        eventCtx.fillStyle = '#333';
+                        eventCtx.font = 'bold 14px Arial';
+                        eventCtx.fillText(comp.label, comp.x, comp.y + 5);
+                        
+                        // Animate event bubble
+                        if (index === 3 - Math.floor(eventAnimation / 20)) {
+                            eventCtx.strokeStyle = '#ff0000';
+                            eventCtx.lineWidth = 3;
+                            eventCtx.strokeRect(comp.x - comp.size/2 - 5, comp.y - 30, comp.size + 10, 60);
+                            
+                            eventCtx.fillStyle = '#ff0000';
+                            eventCtx.font = '12px Arial';
+                            eventCtx.fillText('onClick!', comp.x + comp.size/2 + 20, comp.y);
+                        }
+                    });
+                    
+                    // Event description
+                    eventCtx.fillStyle = '#666';
+                    eventCtx.font = '14px Arial';
+                    eventCtx.fillText('Click event bubbles up from Button → Input → Form → App', 300, 360);
+                    
+                    eventAnimation = (eventAnimation + 1) % 80;
+                    requestAnimationFrame(drawEventFlow);
+                }
+                
+                drawEventFlow();
+            </script>
+        </section>
+
+        <section>
+            <h2>The useContext Hook: Your App's Intercom System</h2>
+            <p>useContext is like having an intercom system in a large building. Instead of running up and down stairs to deliver messages (prop drilling), you can broadcast information to any room (component) that's listening.</p>
+
+            <div class="mermaid">
+            graph TB
+                subgraph "Without Context - Prop Drilling"
+                    A1[App<br/>theme='dark'] -->|theme| B1[Layout]
+                    B1 -->|theme| C1[Sidebar]
+                    C1 -->|theme| D1[Menu]
+                    D1 -->|theme| E1[MenuItem]
+                end
+                
+                subgraph "With Context - Direct Access"
+                    A2[App<br/>ThemeProvider] -.->|broadcast| B2[Layout]
+                    A2 -.->|broadcast| C2[Sidebar]
+                    A2 -.->|broadcast| D2[Menu]
+                    A2 -.->|broadcast| E2[MenuItem]
+                end
+                
+                style A1 fill:#e74c3c
+                style A2 fill:#2ecc71
+            </div>
+
+            <h3>Real-World Example: Spotify's Theme System</h3>
+            <p>Spotify uses context for its theme system. When you switch to dark mode, every component instantly knows about it through context - from the tiny play button to the main playlist view. No need to pass the theme through dozens of components!</p>
+        </section>
+
+        <section>
+            <h2>Custom Hooks: Your Personal Tool Workshop</h2>
+            <p>Custom hooks are like creating your own specialized tools. Just as a carpenter might create a custom jig for a specific type of cut, you can create custom hooks for repeated patterns in your application.</p>
+
+            <canvas id="customHookCanvas" width="600" height="350"></canvas>
+            <script>
+                const customCanvas = document.getElementById('customHookCanvas');
+                const customCtx = customCanvas.getContext('2d');
+                
+                // Draw custom hook example
+                customCtx.font = 'bold 18px Arial';
+                customCtx.fillStyle = '#333';
+                customCtx.textAlign = 'center';
+                customCtx.fillText('Custom Hook: useWindowSize', 300, 30);
+                
+                // Hook definition box
+                customCtx.fillStyle = '#f0f0f0';
+                customCtx.strokeStyle = '#333';
+                customCtx.lineWidth = 2;
+                customCtx.fillRect(50, 60, 500, 150);
+                customCtx.strokeRect(50, 60, 500, 150);
+                
+                // Code
+                customCtx.font = '13px Courier';
+                customCtx.textAlign = 'left';
+                customCtx.fillStyle = '#2c3e50';
+                customCtx.fillText('function useWindowSize() {', 70, 85);
+                customCtx.fillText('  const [size, setSize] = useState({', 70, 105);
+                customCtx.fillText('    width: window.innerWidth,', 70, 125);
+                customCtx.fillText('    height: window.innerHeight', 70, 145);
+                customCtx.fillText('  });', 70, 165);
+                customCtx.fillText('  // Effect to handle resize...', 70, 185);
+                customCtx.fillText('  return size;', 70, 195);
+                customCtx.fillText('}', 70, 215);
+                
+                // Usage examples
+                customCtx.fillStyle = '#333';
+                customCtx.font = 'bold 14px Arial';
+                customCtx.textAlign = 'center';
+                customCtx.fillText('Used in Multiple Components:', 300, 250);
+                
+                // Component boxes
+                const uses = [
+                    {x: 100, label: 'Header', color: '#3498db'},
+                    {x: 250, label: 'Gallery', color: '#2ecc71'},
+                    {x: 400, label: 'Modal', color: '#e74c3c'}
+                ];
+                
+                uses.forEach(use => {
+                    customCtx.fillStyle = use.color;
+                    customCtx.fillRect(use.x, 270, 100, 40);
+                    customCtx.fillStyle = 'white';
+                    customCtx.font = '12px Arial';
+                    customCtx.fillText(use.label, use.x + 50, 295);
+                });
+                
+                // Arrows from hook to components
+                customCtx.strokeStyle = '#666';
+                customCtx.lineWidth = 1;
+                customCtx.setLineDash([5, 5]);
+                uses.forEach(use => {
+                    customCtx.beginPath();
+                    customCtx.moveTo(300, 210);
+                    customCtx.lineTo(use.x + 50, 270);
+                    customCtx.stroke();
+                });
+                customCtx.setLineDash([]);
+            </script>
+        </section>
+
+        <section>
+            <h2>Performance Optimization: The Formula One Pit Stop</h2>
+            <p>React performance optimization is like a Formula One pit stop. Every millisecond counts, and you need the right tools (useMemo, useCallback, React.memo) to keep your app running at peak performance.</p>
+
+            <div class="mermaid">
+            graph LR
+                A[Render Triggered] --> B{Should Component Update?}
+                B -->|Yes| C[Re-render Component]
+                B -->|No - React.memo| D[Skip Render]
+                C --> E{Expensive Calculation?}
+                E -->|Yes - useMemo| F[Use Cached Value]
+                E -->|No| G[Calculate Fresh]
+                C --> H{Function Props?}
+                H -->|Yes - useCallback| I[Use Memoized Function]
+                H -->|No| J[Create New Function]
+                
+                style D fill:#2ecc71
+                style F fill:#2ecc71
+                style I fill:#2ecc71
+            </div>
+
+            <h3>Real-World Example: Twitter's Timeline</h3>
+            <p>Twitter's timeline uses extensive memoization. When you scroll, only the newly visible tweets render. Previously rendered tweets are memoized, so scrolling back up is instantaneous. Without optimization, scrolling through hundreds of tweets would be sluggish!</p>
+        </section>
+
+        <section>
+            <h2>Component Patterns: The Design Patterns Cookbook</h2>
+            <p>Just like chefs have standard techniques (sauté, braise, roast), React has component patterns that solve common problems elegantly.</p>
+
+            <canvas id="patternsCanvas" width="600" height="400"></canvas>
+            <script>
+                const patternsCanvas = document.getElementById('patternsCanvas');
+                const patternsCtx = patternsCanvas.getContext('2d');
+                
+                // Title
+                patternsCtx.font = 'bold 18px Arial';
+                patternsCtx.fillStyle = '#333';
+                patternsCtx.textAlign = 'center';
+                patternsCtx.fillText('Common React Patterns', 300, 30);
+                
+                // Pattern boxes
+                const patterns = [
+                    {x: 150, y: 100, title: 'Container/Presenter', desc: 'Logic | Display', color: '#3498db'},
+                    {x: 450, y: 100, title: 'Render Props', desc: 'Share Code', color: '#2ecc71'},
+                    {x: 150, y: 250, title: 'Higher-Order', desc: 'Enhance Components', color: '#e74c3c'},
+                    {x: 450, y: 250, title: 'Compound', desc: 'Related Components', color: '#f39c12'}
+                ];
+                
+                patterns.forEach(pattern => {
+                    // Pattern box
+                    patternsCtx.fillStyle = pattern.color;
+                    patternsCtx.globalAlpha = 0.2;
+                    patternsCtx.fillRect(pattern.x - 70, pattern.y - 40, 140, 80);
+                    patternsCtx.globalAlpha = 1;
+                    
+                    patternsCtx.strokeStyle = pattern.color;
+                    patternsCtx.lineWidth = 2;
+                    patternsCtx.strokeRect(pattern.x - 70, pattern.y - 40, 140, 80);
+                    
+                    // Pattern title
+                    patternsCtx.fillStyle = pattern.color;
+                    patternsCtx.font = 'bold 14px Arial';
+                    patternsCtx.textAlign = 'center';
+                    patternsCtx.fillText(pattern.title, pattern.x, pattern.y - 10);
+                    
+                    // Pattern description
+                    patternsCtx.fillStyle = '#666';
+                    patternsCtx.font = '12px Arial';
+                    patternsCtx.fillText(pattern.desc, pattern.x, pattern.y + 10);
+                });
+                
+                // Center connection
+                patternsCtx.strokeStyle = '#999';
+                patternsCtx.lineWidth = 1;
+                patternsCtx.setLineDash([5, 5]);
+                patterns.forEach(pattern => {
+                    patternsCtx.beginPath();
+                    patternsCtx.moveTo(300, 200);
+                    patternsCtx.lineTo(pattern.x, pattern.y);
+                    patternsCtx.stroke();
+                });
+                patternsCtx.setLineDash([]);
+                
+                // Center label
+                patternsCtx.fillStyle = '#666';
+                patternsCtx.font = '12px Arial';
+                patternsCtx.fillText('Your App', 300, 200);
+            </script>
+        </section>
+
+        <section>
+            <h2>Putting It All Together: Building a Real Feature</h2>
+            <p>Let's see how all these concepts work together in a real-world scenario - building a blog comment system like you'd find on Medium or Dev.to.</p>
+
+            <div class="mermaid">
+            sequenceDiagram
+                participant User
+                participant CommentForm
+                participant CommentList
+                participant API
+                participant State
+                
+                User->>CommentForm: Types comment
+                CommentForm->>CommentForm: useState updates
+                User->>CommentForm: Clicks Submit
+                CommentForm->>API: POST comment
+                API->>State: Update comments
+                State->>CommentList: Re-render with new comment
+                CommentList->>User: Display updated list
+                
+                Note over CommentForm: Uses useState for form
+                Note over CommentList: Uses useEffect to fetch
+                Note over State: Could use Context or Redux
+            </div>
+        </section>
+
+        <footer>
+            <p>You've mastered the building blocks of React! Next, we'll dive into connecting React with WordPress through the REST API, where these components will come alive with real content!</p>
+        </footer>
+    </main>
+</body>
+</html>

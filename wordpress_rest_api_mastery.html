@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WordPress REST API: Your Gateway to Content Freedom</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="icon" href="/favicon.png">
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>WordPress REST API: Your Gateway to Content Freedom</h1>
+        <p>Transform WordPress into a powerful content API that speaks the universal language of the web!</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>The Universal Translator: Understanding REST API</h2>
+            <p>Imagine the WordPress REST API as the United Nations translator service. No matter what language you speak (React, Vue, Mobile, IoT), the API translates WordPress content into a universal format (JSON) that everyone understands. It's like having a babel fish from "Hitchhiker's Guide to the Galaxy" for your website!</p>
+
+            <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+                <!-- Central WordPress -->
+                <circle cx="300" cy="200" r="80" fill="#21759b" stroke="#333" stroke-width="3"/>
+                <text x="300" y="190" text-anchor="middle" fill="white" font-size="16" font-weight="bold">WordPress</text>
+                <text x="300" y="210" text-anchor="middle" fill="white" font-size="12">Content Hub</text>
+                
+                <!-- REST API Ring -->
+                <circle cx="300" cy="200" r="120" fill="none" stroke="#f39c12" stroke-width="4" stroke-dasharray="10,5"/>
+                <text x="300" y="90" text-anchor="middle" fill="#f39c12" font-size="14" font-weight="bold">REST API</text>
+                
+                <!-- Different Clients -->
+                <g id="clients">
+                    <!-- React App -->
+                    <rect x="50" y="50" width="80" height="40" fill="#61dafb" rx="5"/>
+                    <text x="90" y="75" text-anchor="middle" fill="#333" font-size="12">React App</text>
+                    
+                    <!-- Mobile App -->
+                    <rect x="470" y="50" width="80" height="40" fill="#2ecc71" rx="5"/>
+                    <text x="510" y="75" text-anchor="middle" fill="white" font-size="12">Mobile App</text>
+                    
+                    <!-- Vue App -->
+                    <rect x="50" y="310" width="80" height="40" fill="#4fc08d" rx="5"/>
+                    <text x="90" y="335" text-anchor="middle" fill="white" font-size="12">Vue App</text>
+                    
+                    <!-- IoT Device -->
+                    <rect x="470" y="310" width="80" height="40" fill="#e74c3c" rx="5"/>
+                    <text x="510" y="335" text-anchor="middle" fill="white" font-size="12">IoT Device</text>
+                </g>
+                
+                <!-- API Calls -->
+                <g id="api-calls">
+                    <line x1="130" y1="90" x2="240" y2="160" stroke="#61dafb" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <text x="180" y="120" fill="#666" font-size="10">GET /posts</text>
+                    
+                    <line x1="470" y1="90" x2="360" y2="160" stroke="#2ecc71" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <text x="420" y="120" fill="#666" font-size="10">POST /comments</text>
+                    
+                    <line x1="130" y1="310" x2="240" y2="240" stroke="#4fc08d" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <text x="180" y="280" fill="#666" font-size="10">GET /pages</text>
+                    
+                    <line x1="470" y1="310" x2="360" y2="240" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <text x="420" y="280" fill="#666" font-size="10">GET /media</text>
+                </g>
+                
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+                    </marker>
+                </defs>
+            </svg>
+        </section>
+
+        <section>
+            <h2>REST: The Restaurant Order System</h2>
+            <p>REST (Representational State Transfer) is like a well-organized restaurant. You have a menu (endpoints), you place orders (requests), and you get exactly what you ordered (responses). The kitchen doesn't care if you're dining in, taking out, or getting delivery - the process is the same!</p>
+
+            <div class="mermaid">
+            graph LR
+                subgraph "HTTP Verbs = Restaurant Actions"
+                    GET[GET<br/>Read the Menu]
+                    POST[POST<br/>Place New Order]
+                    PUT[PUT<br/>Replace Entire Order]
+                    PATCH[PATCH<br/>Modify Order]
+                    DELETE[DELETE<br/>Cancel Order]
+                end
+                
+                subgraph "Resources = Menu Items"
+                    Posts[/wp/v2/posts<br/>Blog Posts]
+                    Pages[/wp/v2/pages<br/>Static Pages]
+                    Media[/wp/v2/media<br/>Images/Videos]
+                    Users[/wp/v2/users<br/>Authors]
+                    Comments[/wp/v2/comments<br/>Discussions]
+                end
+                
+                GET --> Posts
+                POST --> Comments
+                PUT --> Pages
+                DELETE --> Media
+                
+                style GET fill:#2ecc71
+                style POST fill:#3498db
+                style PUT fill:#f39c12
+                style PATCH fill:#9b59b6
+                style DELETE fill:#e74c3c
+            </div>
+        </section>
+
+        <section>
+            <h2>API Endpoints: Your Content Shopping Mall</h2>
+            <p>WordPress REST API endpoints are like stores in a shopping mall. Each store (endpoint) specializes in different products (content types). You know exactly where to go for what you need!</p>
+
+            <canvas id="endpointsCanvas" width="600" height="500"></canvas>
+            <script>
+                const endCanvas = document.getElementById('endpointsCanvas');
+                const endCtx = endCanvas.getContext('2d');
+                
+                // Title
+                endCtx.font = 'bold 18px Arial';
+                endCtx.fillStyle = '#333';
+                endCtx.textAlign = 'center';
+                endCtx.fillText('WordPress REST API Endpoint Mall', 300, 30);
+                
+                // Draw mall floors
+                const endpoints = [
+                    {y: 80, label: 'Posts Store', endpoint: '/wp/v2/posts', color: '#3498db', items: ['Articles', 'Blogs', 'News']},
+                    {y: 160, label: 'Pages Boutique', endpoint: '/wp/v2/pages', color: '#2ecc71', items: ['About', 'Contact', 'Services']},
+                    {y: 240, label: 'Media Gallery', endpoint: '/wp/v2/media', color: '#e74c3c', items: ['Images', 'Videos', 'PDFs']},
+                    {y: 320, label: 'Users Directory', endpoint: '/wp/v2/users', color: '#f39c12', items: ['Authors', 'Editors', 'Admins']},
+                    {y: 400, label: 'Comments Forum', endpoint: '/wp/v2/comments', color: '#9b59b6', items: ['Reviews', 'Feedback', 'Discussions']}
+                ];
+                
+                endpoints.forEach(shop => {
+                    // Store front
+                    endCtx.fillStyle = shop.color;
+                    endCtx.globalAlpha = 0.2;
+                    endCtx.fillRect(50, shop.y, 500, 60);
+                    endCtx.globalAlpha = 1;
+                    
+                    endCtx.strokeStyle = shop.color;
+                    endCtx.lineWidth = 2;
+                    endCtx.strokeRect(50, shop.y, 500, 60);
+                    
+                    // Store name
+                    endCtx.fillStyle = shop.color;
+                    endCtx.font = 'bold 16px Arial';
+                    endCtx.textAlign = 'left';
+                    endCtx.fillText(shop.label, 70, shop.y + 25);
+                    
+                    // Endpoint
+                    endCtx.fillStyle = '#666';
+                    endCtx.font = '12px Courier';
+                    endCtx.fillText(shop.endpoint, 70, shop.y + 45);
+                    
+                    // Items
+                    endCtx.font = '11px Arial';
+                    endCtx.fillStyle = '#888';
+                    endCtx.textAlign = 'right';
+                    endCtx.fillText(shop.items.join(' • '), 530, shop.y + 35);
+                });
+                
+                // Draw example query
+                endCtx.fillStyle = '#f0f0f0';
+                endCtx.strokeStyle = '#333';
+                endCtx.fillRect(100, 460, 400, 30);
+                endCtx.strokeRect(100, 460, 400, 30);
+                
+                endCtx.fillStyle = '#333';
+                endCtx.font = '14px Courier';
+                endCtx.textAlign = 'center';
+                endCtx.fillText('GET https://yoursite.com/wp-json/wp/v2/posts', 300, 480);
+            </script>
+        </section>
+
+        <section>
+            <h2>Authentication: The VIP Pass System</h2>
+            <p>API authentication is like a concert venue's pass system. Anyone can watch from the general area (read public posts), but you need a VIP pass (authentication token) to go backstage (create/edit content).</p>
+
+            <div class="mermaid">
+            graph TD
+                A[API Request] --> B{Authenticated?}
+                B -->|No| C[Public Access]
+                B -->|Yes| D[Full Access]
+                
+                C --> E[Read Posts]
+                C --> F[Read Pages]
+                C --> G[Read Comments]
+                
+                D --> H[Create Posts]
+                D --> I[Edit Content]
+                D --> J[Delete Items]
+                D --> K[Moderate Comments]
+                
+                L[Authentication Methods] --> M[Cookie Auth]
+                L --> N[JWT Tokens]
+                L --> O[OAuth]
+                L --> P[Application Passwords]
+                
+                style C fill:#f39c12
+                style D fill:#2ecc71
+                style B fill:#3498db
+            </div>
+
+            <h3>Real-World Example: Medium's Publishing</h3>
+            <p>When you read articles on Medium, you're using public API access. But when you clap, comment, or publish, Medium checks your authentication token to verify you're a logged-in user with the right permissions.</p>
+        </section>
+
+        <section>
+            <h2>Making Your First API Call: The Pizza Order</h2>
+            <p>Making an API call is like ordering pizza. You specify what you want (endpoint), how you want it (parameters), and the restaurant sends back exactly what you ordered (JSON response).</p>
+
+            <canvas id="apiCallCanvas" width="600" height="450"></canvas>
+            <script>
+                const apiCanvas = document.getElementById('apiCallCanvas');
+                const apiCtx = apiCanvas.getContext('2d');
+                
+                let animStep = 0;
+                
+                function animateApiCall() {
+                    apiCtx.clearRect(0, 0, 600, 450);
+                    
+                    // Title
+                    apiCtx.font = 'bold 18px Arial';
+                    apiCtx.fillStyle = '#333';
+                    apiCtx.textAlign = 'center';
+                    apiCtx.fillText('API Request/Response Cycle', 300, 30);
+                    
+                    // Client side
+                    apiCtx.fillStyle = '#3498db';
+                    apiCtx.fillRect(50, 80, 150, 100);
+                    apiCtx.fillStyle = 'white';
+                    apiCtx.font = 'bold 14px Arial';
+                    apiCtx.fillText('React App', 125, 120);
+                    apiCtx.font = '12px Arial';
+                    apiCtx.fillText('(Customer)', 125, 140);
+                    
+                    // Server side
+                    apiCtx.fillStyle = '#21759b';
+                    apiCtx.fillRect(400, 80, 150, 100);
+                    apiCtx.fillStyle = 'white';
+                    apiCtx.font = 'bold 14px Arial';
+                    apiCtx.fillText('WordPress', 475, 120);
+                    apiCtx.font = '12px Arial';
+                    apiCtx.fillText('(Kitchen)', 475, 140);
+                    
+                    // Animate request
+                    if (animStep < 30) {
+                        const progress = animStep / 30;
+                        const x = 200 + (200 * progress);
+                        
+                        apiCtx.fillStyle = '#2ecc71';
+                        apiCtx.fillRect(x, 120, 40, 20);
+                        apiCtx.fillStyle = 'white';
+                        apiCtx.font = '10px Arial';
+                        apiCtx.fillText('GET', x + 20, 133);
+                    }
+                    
+                    // Show processing
+                    if (animStep >= 30 && animStep < 60) {
+                        apiCtx.strokeStyle = '#f39c12';
+                        apiCtx.lineWidth = 3;
+                        apiCtx.strokeRect(395, 75, 160, 110);
+                        apiCtx.fillStyle = '#f39c12';
+                        apiCtx.font = '12px Arial';
+                        apiCtx.fillText('Processing...', 475, 200);
+                    }
+                    
+                    // Animate response
+                    if (animStep >= 60 && animStep < 90) {
+                        const progress = (animStep - 60) / 30;
+                        const x = 400 - (200 * progress);
+                        
+                        apiCtx.fillStyle = '#e74c3c';
+                        apiCtx.fillRect(x, 120, 40, 20);
+                        apiCtx.fillStyle = 'white';
+                        apiCtx.font = '10px Arial';
+                        apiCtx.fillText('JSON', x + 20, 133);
+                    }
+                    
+                    // Request details
+                    apiCtx.fillStyle = '#f8f8f8';
+                    apiCtx.strokeStyle = '#ddd';
+                    apiCtx.fillRect(50, 220, 500, 80);
+                    apiCtx.strokeRect(50, 220, 500, 80);
+                    
+                    apiCtx.fillStyle = '#333';
+                    apiCtx.font = 'bold 12px Arial';
+                    apiCtx.textAlign = 'left';
+                    apiCtx.fillText('Request:', 60, 240);
+                    apiCtx.font = '11px Courier';
+                    apiCtx.fillStyle = '#666';
+                    apiCtx.fillText('GET /wp-json/wp/v2/posts?per_page=10&orderby=date', 60, 260);
+                    apiCtx.fillText('Headers: { "Accept": "application/json" }', 60, 280);
+                    
+                    // Response details
+                    apiCtx.fillStyle = '#f8f8f8';
+                    apiCtx.fillRect(50, 320, 500, 100);
+                    apiCtx.strokeRect(50, 320, 500, 100);
+                    
+                    apiCtx.fillStyle = '#333';
+                    apiCtx.font = 'bold 12px Arial';
+                    apiCtx.fillText('Response:', 60, 340);
+                    apiCtx.font = '11px Courier';
+                    apiCtx.fillStyle = '#666';
+                    apiCtx.fillText('[', 60, 360);
+                    apiCtx.fillText('  { "id": 1, "title": { "rendered": "Hello World" }, ... },', 60, 375);
+                    apiCtx.fillText('  { "id": 2, "title": { "rendered": "Getting Started" }, ... }', 60, 390);
+                    apiCtx.fillText(']', 60, 405);
+                    
+                    animStep = (animStep + 1) % 120;
+                    requestAnimationFrame(animateApiCall);
+                }
+                
+                animateApiCall();
+            </script>
+        </section>
+
+        <section>
+            <h2>Query Parameters: Customizing Your Order</h2>
+            <p>Query parameters are like customization options at a burger joint. Want extra cheese (more posts)? No pickles (exclude categories)? Sorted by freshness (order by date)? Query parameters let you have it your way!</p>
+
+            <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+                <!-- Base URL -->
+                <rect x="50" y="50" width="500" height="40" fill="#3498db" stroke="#333" stroke-width="2"/>
+                <text x="300" y="75" text-anchor="middle" fill="white" font-size="14" font-weight="bold">
+                    https://site.com/wp-json/wp/v2/posts
+                </text>
+                
+                <!-- Query Parameters -->
+                <text x="300" y="120" text-anchor="middle" fill="#333" font-size="16" font-weight="bold">
+                    Add Your Customizations:
+                </text>
+                
+                <!-- Parameter boxes -->
+                <g id="params">
+                    <rect x="50" y="140" width="120" height="60" fill="#2ecc71" stroke="#333" stroke-width="1" rx="5"/>
+                    <text x="110" y="165" text-anchor="middle" fill="white" font-size="12" font-weight="bold">per_page=5</text>
+                    <text x="110" y="185" text-anchor="middle" fill="white" font-size="10">Show 5 items</text>
+                    
+                    <rect x="180" y="140" width="120" height="60" fill="#e74c3c" stroke="#333" stroke-width="1" rx="5"/>
+                    <text x="240" y="165" text-anchor="middle" fill="white" font-size="12" font-weight="bold">orderby=title</text>
+                    <text x="240" y="185" text-anchor="middle" fill="white" font-size="10">Sort by title</text>
+                    
+                    <rect x="310" y="140" width="120" height="60" fill="#f39c12" stroke="#333" stroke-width="1" rx="5"/>
+                    <text x="370" y="165" text-anchor="middle" fill="white" font-size="12" font-weight="bold">categories=3</text>
+                    <text x="370" y="185" text-anchor="middle" fill="white" font-size="10">Filter category</text>
+                    
+                    <rect x="440" y="140" width="110" height="60" fill="#9b59b6" stroke="#333" stroke-width="1" rx="5"/>
+                    <text x="495" y="165" text-anchor="middle" fill="white" font-size="12" font-weight="bold">_embed</text>
+                    <text x="495" y="185" text-anchor="middle" fill="white" font-size="10">Include media</text>
+                </g>
+                
+                <!-- Assembled URL -->
+                <rect x="50" y="230" width="500" height="60" fill="#f8f8f8" stroke="#333" stroke-width="2"/>
+                <text x="300" y="250" text-anchor="middle" fill="#333" font-size="11" font-family="monospace">
+                    https://site.com/wp-json/wp/v2/posts?
+                </text>
+                <text x="300" y="270" text-anchor="middle" fill="#333" font-size="11" font-family="monospace">
+                    per_page=5&amp;orderby=title&amp;categories=3&amp;_embed
+                </text>
+                
+                <!-- Common parameters list -->
+                <text x="300" y="320" text-anchor="middle" fill="#666" font-size="14" font-weight="bold">
+                    Common Parameters Menu:
+                </text>
+                <text x="150" y="345" text-anchor="middle" fill="#666" font-size="11">
+                    • page (pagination)
+                </text>
+                <text x="150" y="365" text-anchor="middle" fill="#666" font-size="11">
+                    • search (keyword)
+                </text>
+                <text x="300" y="345" text-anchor="middle" fill="#666" font-size="11">
+                    • author (filter)
+                </text>
+                <text x="300" y="365" text-anchor="middle" fill="#666" font-size="11">
+                    • status (draft/publish)
+                </text>
+                <text x="450" y="345" text-anchor="middle" fill="#666" font-size="11">
+                    • before/after (date)
+                </text>
+                <text x="450" y="365" text-anchor="middle" fill="#666" font-size="11">
+                    • exclude (IDs)
+                </text>
+            </svg>
+        </section>
+
+        <section>
+            <h2>Pagination: The Netflix Scroll Strategy</h2>
+            <p>Pagination in the WordPress API works like Netflix's content loading. Instead of loading 10,000 movies at once (which would crash your browser), Netflix loads them in chunks as you scroll. Same principle with API pagination!</p>
+
+            <canvas id="paginationCanvas" width="600" height="400"></canvas>
+            <script>
+                const pageCanvas = document.getElementById('paginationCanvas');
+                const pageCtx = pageCanvas.getContext('2d');
+                
+                let currentPage = 1;
+                let direction = 1;
+                
+                function drawPagination() {
+                    pageCtx.clearRect(0, 0, 600, 400);
+                    
+                    // Title
+                    pageCtx.font = 'bold 18px Arial';
+                    pageCtx.fillStyle = '#333';
+                    pageCtx.textAlign = 'center';
+                    pageCtx.fillText('API Pagination Visualization', 300, 30);
+                    
+                    // Total posts indicator
+                    pageCtx.fillStyle = '#666';
+                    pageCtx.font = '14px Arial';
+                    pageCtx.fillText('Total Posts: 100', 300, 60);
+                    
+                    // Draw pages
+                    for (let i = 1; i <= 5; i++) {
+                        const x = 50 + (i - 1) * 110;
+                        const y = 100;
+                        
+                        // Page container
+                        pageCtx.fillStyle = i === currentPage ? '#3498db' : '#ecf0f1';
+                        pageCtx.fillRect(x, y, 100, 140);
+                        pageCtx.strokeStyle = i === currentPage ? '#2980b9' : '#bdc3c7';
+                        pageCtx.lineWidth = 2;
+                        pageCtx.strokeRect(x, y, 100, 140);
+                        
+                        // Page label
+                        pageCtx.fillStyle = i === currentPage ? 'white' : '#333';
+                        pageCtx.font = 'bold 14px Arial';
+                        pageCtx.fillText(`Page ${i}`, x + 50, y + 20);
+                        
+                        // Posts in page
+                        pageCtx.font = '11px Arial';
+                        const startPost = (i - 1) * 20 + 1;
+                        const endPost = i * 20;
+                        pageCtx.fillText(`Posts ${startPost}-${endPost}`, x + 50, y + 40);
+                        
+                        // Draw post items
+                        for (let j = 0; j < 5; j++) {
+                            pageCtx.fillStyle = i === currentPage ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.1)';
+                            pageCtx.fillRect(x + 10, y + 55 + j * 15, 80, 12);
+                        }
+                    }
+                    
+                    // API call example
+                    pageCtx.fillStyle = '#f8f8f8';
+                    pageCtx.strokeStyle = '#333';
+                    pageCtx.fillRect(50, 270, 500, 40);
+                    pageCtx.strokeRect(50, 270, 500, 40);
+                    
+                    pageCtx.fillStyle = '#333';
+                    pageCtx.font = '12px Courier';
+                    pageCtx.fillText(`GET /wp/v2/posts?per_page=20&page=${currentPage}`, 300, 295);
+                    
+                    // Response headers
+                    pageCtx.fillStyle = '#f8f8f8';
+                    pageCtx.fillRect(50, 320, 500, 60);
+                    pageCtx.strokeRect(50, 320, 500, 60);
+                    
+                    pageCtx.font = '11px Arial';
+                    pageCtx.textAlign = 'left';
+                    pageCtx.fillStyle = '#666';
+                    pageCtx.fillText('Response Headers:', 60, 340);
+                    pageCtx.font = '10px Courier';
+                    pageCtx.fillText(`X-WP-Total: 100  |  X-WP-TotalPages: 5  |  Current: ${currentPage}`, 60, 360);
+                    
+                    // Update current page for animation
+                    currentPage += direction;
+                    if (currentPage > 5) {
+                        currentPage = 5;
+                        direction = -1;
+                    } else if (currentPage < 1) {
+                        currentPage = 1;
+                        direction = 1;
+                    }
+                    
+                    setTimeout(() => requestAnimationFrame(drawPagination), 1000);
+                }
+                
+                drawPagination();
+            </script>
+        </section>
+
+        <section>
+            <h2>Custom Post Types & Fields: The Specialty Store</h2>
+            <p>Custom post types are like specialty stores in your mall. While the default WordPress gives you a general department store (posts and pages), custom post types let you open specialized shops - a bookstore (books post type), a cinema (movies post type), or a restaurant directory (restaurants post type).</p>
+
+            <div class="mermaid">
+            graph TD
+                subgraph "Default WordPress Mall"
+                    Posts[Posts Department]
+                    Pages[Pages Department]
+                end
+                
+                subgraph "Custom Post Types - Specialty Stores"
+                    Products[Products Store<br/>/wp/v2/products]
+                    Events[Events Calendar<br/>/wp/v2/events]
+                    Recipes[Recipe Book<br/>/wp/v2/recipes]
+                    Portfolio[Portfolio Gallery<br/>/wp/v2/portfolio]
+                end
+                
+                subgraph "Custom Fields - Product Details"
+                    Price[price: $29.99]
+                    SKU[sku: PROD-001]
+                    Stock[inventory: 50]
+                    Rating[rating: 4.5 stars]
+                end
+                
+                Products --> Price
+                Products --> SKU
+                Products --> Stock
+                Products --> Rating
+                
+                style Products fill:#3498db
+                style Events fill:#2ecc71
+                style Recipes fill:#e74c3c
+                style Portfolio fill:#f39c12
+            </div>
+
+            <h3>Real-World Example: Airbnb's Listings</h3>
+            <p>Airbnb doesn't use regular "posts" for properties. They have a custom "listings" post type with fields like bedrooms, amenities, price_per_night, and availability. Each listing is fetched through their API with all these custom fields included!</p>
+        </section>
+
+        <section>
+            <h2>Error Handling: The GPS Recalculating</h2>
+            <p>API errors are like your GPS saying "recalculating." Something went wrong, but you get clear information about what happened and how to fix it. Understanding error codes is like knowing traffic signs!</p>
+
+            <canvas id="errorCanvas" width="600" height="450"></canvas>
+            <script>
+                const errorCanvas = document.getElementById('errorCanvas');
+                const errorCtx = errorCanvas.getContext('2d');
+                
+                // Title
+                errorCtx.font = 'bold 18px Arial';
+                errorCtx.fillStyle = '#333';
+                errorCtx.textAlign = 'center';
+                errorCtx.fillText('HTTP Status Codes - Traffic Signals', 300, 30);
+                
+                // Status code categories
+                const statusCodes = [
+                    {code: '2xx', label: 'Success', color: '#2ecc71', y: 80, examples: ['200 OK', '201 Created', '204 No Content']},
+                    {code: '3xx', label: 'Redirection', color: '#f39c12', y: 160, examples: ['301 Moved', '302 Found', '304 Not Modified']},
+                    {code: '4xx', label: 'Client Error', color: '#e74c3c', y: 240, examples: ['400 Bad Request', '401 Unauthorized', '404 Not Found']},
+                    {code: '5xx', label: 'Server Error', color: '#c0392b', y: 320, examples: ['500 Server Error', '502 Bad Gateway', '503 Unavailable']}
+                ];
+                
+                statusCodes.forEach(status => {
+                    // Traffic light style
+                    errorCtx.fillStyle = '#333';
+                    errorCtx.fillRect(80, status.y, 60, 80);
+                    
+                    // Light
+                    errorCtx.fillStyle = status.color;
+                    errorCtx.beginPath();
+                    errorCtx.arc(110, status.y + 30, 20, 0, Math.PI * 2);
+                    errorCtx.fill();
+                    
+                    // Code
+                    errorCtx.fillStyle = 'white';
+                    errorCtx.font = 'bold 14px Arial';
+                    errorCtx.fillText(status.code, 110, status.y + 35);
+                    
+                    // Label
+                    errorCtx.fillStyle = status.color;
+                    errorCtx.font = 'bold 16px Arial';
+                    errorCtx.textAlign = 'left';
+                    errorCtx.fillText(status.label, 160, status.y + 35);
+                    
+                    // Examples
+                    errorCtx.fillStyle = '#666';
+                    errorCtx.font = '12px Arial';
+                    status.examples.forEach((ex, i) => {
+                        errorCtx.fillText('• ' + ex, 280, status.y + 20 + i * 20);
+                    });
+                });
+                
+                // Error handling example
+                errorCtx.fillStyle = '#f8f8f8';
+                errorCtx.strokeStyle = '#333';
+                errorCtx.fillRect(50, 410, 500, 30);
+                errorCtx.strokeRect(50, 410, 500, 30);
+                
+                errorCtx.fillStyle = '#e74c3c';
+                errorCtx.font = '12px Courier';
+                errorCtx.textAlign = 'center';
+                errorCtx.fillText('if (response.status === 404) { showMessage("Post not found") }', 300, 430);
+            </script>
+        </section>
+
+        <section>
+            <h2>Caching: The Smart Fridge Strategy</h2>
+            <p>API caching is like having a smart fridge. Instead of going to the grocery store (server) every time you want milk (data), you check your fridge first. If the milk is fresh (cache valid), use it. If it's expired (cache stale), then go shopping!</p>
+
+            <div class="mermaid">
+            sequenceDiagram
+                participant App as React App
+                participant Cache as Browser Cache
+                participant API as WordPress API
+                participant DB as Database
+                
+                App->>Cache: Need posts data
+                alt Cache Hit (Fresh)
+                    Cache-->>App: Return cached data
+                    Note over App: Instant response!
+                else Cache Miss or Stale
+                    Cache-->>App: No valid cache
+                    App->>API: GET /posts
+                    API->>DB: Query database
+                    DB-->>API: Return results
+                    API-->>App: JSON response
+                    App->>Cache: Store for next time
+                end
+                
+                Note over Cache: Cache-Control: max-age=300
+                Note over Cache: Expires in 5 minutes
+            </div>
+        </section>
+
+        <section>
+            <h2>Extending the API: Building Your Own Aisles</h2>
+            <p>You can extend the WordPress REST API like adding new aisles to your supermarket. Need a special "featured products" aisle? Create a custom endpoint! Want to combine data from multiple sources? Build a custom route!</p>
+
+            <canvas id="customApiCanvas" width="600" height="400"></canvas>
+            <script>
+                const customCanvas = document.getElementById('customApiCanvas');
+                const customCtx = customCanvas.getContext('2d');
+                
+                // Title
+                customCtx.font = 'bold 18px Arial';
+                customCtx.fillStyle = '#333';
+                customCtx.textAlign = 'center';
+                customCtx.fillText('Custom API Endpoints', 300, 30);
+                
+                // Standard endpoints
+                customCtx.fillStyle = '#ecf0f1';
+                customCtx.fillRect(50, 60, 500, 120);
+                customCtx.strokeStyle = '#95a5a6';
+                customCtx.strokeRect(50, 60, 500, 120);
+                
+                customCtx.fillStyle = '#7f8c8d';
+                customCtx.font = 'bold 14px Arial';
+                customCtx.fillText('Standard WordPress Endpoints', 300, 85);
+                
+                // Standard endpoint items
+                const standardEndpoints = [
+                    '/wp/v2/posts', '/wp/v2/pages', '/wp/v2/media', '/wp/v2/users'
+                ];
+                
+                customCtx.font = '12px Courier';
+                standardEndpoints.forEach((endpoint, i) => {
+                    customCtx.fillText(endpoint, 70 + (i % 2) * 250, 110 + Math.floor(i / 2) * 25);
+                });
+                
+                // Custom endpoints
+                customCtx.fillStyle = '#e8f8f5';
+                customCtx.fillRect(50, 200, 500, 180);
+                customCtx.strokeStyle = '#16a085';
+                customCtx.lineWidth = 2;
+                customCtx.strokeRect(50, 200, 500, 180);
+                
+                customCtx.fillStyle = '#16a085';
+                customCtx.font = 'bold 14px Arial';
+                customCtx.fillText('Your Custom Endpoints', 300, 225);
+                
+                // Custom endpoint examples
+                const customEndpoints = [
+                    {path: '/myapi/v1/featured', desc: 'Featured content'},
+                    {path: '/myapi/v1/statistics', desc: 'Site statistics'},
+                    {path: '/myapi/v1/recommendations', desc: 'AI recommendations'},
+                    {path: '/myapi/v1/search', desc: 'Advanced search'}
+                ];
+                
+                customEndpoints.forEach((endpoint, i) => {
+                    // Endpoint box
+                    customCtx.fillStyle = '#1abc9c';
+                    customCtx.fillRect(70 + (i % 2) * 250, 250 + Math.floor(i / 2) * 60, 220, 40);
+                    
+                    // Endpoint text
+                    customCtx.fillStyle = 'white';
+                    customCtx.font = '11px Courier';
+                    customCtx.fillText(endpoint.path, 75 + (i % 2) * 250, 270 + Math.floor(i / 2) * 60);
+                    
+                    customCtx.font = '10px Arial';
+                    customCtx.fillText(endpoint.desc, 75 + (i % 2) * 250, 285 + Math.floor(i / 2) * 60);
+                });
+            </script>
+        </section>
+
+        <section>
+            <h2>Securing Your API: The Bank Vault Approach</h2>
+            <p>Securing your WordPress API is like protecting a bank vault. You have multiple layers: the front door (rate limiting), security cameras (logging), ID checks (authentication), and the vault itself (permissions).</p>
+
+            <div class="mermaid">
+            graph TB
+                subgraph "Security Layers"
+                    A[Rate Limiting<br/>100 requests/hour] --> B[CORS Policy<br/>Allowed origins]
+                    B --> C[Authentication<br/>JWT/OAuth/Nonce]
+                    C --> D[Authorization<br/>User capabilities]
+                    D --> E[Validation<br/>Input sanitization]
+                    E --> F[Protected Resource]
+                end
+                
+                G[Hacker] -->|Blocked| A
+                H[Unauthorized User] -->|Denied| C
+                I[Authorized User] -->|Success| F
+                
+                style A fill:#e74c3c
+                style C fill:#f39c12
+                style F fill:#2ecc71
+                style G fill:#c0392b
+                style I fill:#27ae60
+            </div>
+        </section>
+
+        <section>
+            <h2>Real-Time Updates: The Stock Market Ticker</h2>
+            <p>While REST API is request-response (like checking stock prices), you can implement real-time updates using webhooks or WebSockets - like having a live stock ticker that updates automatically!</p>
+
+            <canvas id="realtimeCanvas" width="600" height="300"></canvas>
+            <script>
+                const rtCanvas = document.getElementById('realtimeCanvas');
+                const rtCtx = rtCanvas.getContext('2d');
+                
+                let offset = 0;
+                
+                function drawRealtime() {
+                    rtCtx.clearRect(0, 0, 600, 300);
+                    
+                    // Title
+                    rtCtx.font = 'bold 18px Arial';
+                    rtCtx.fillStyle = '#333';
+                    rtCtx.textAlign = 'center';
+                    rtCtx.fillText('REST vs Real-Time Updates', 300, 30);
+                    
+                    // REST API (Polling)
+                    rtCtx.fillStyle = '#3498db';
+                    rtCtx.fillRect(50, 60, 230, 100);
+                    rtCtx.fillStyle = 'white';
+                    rtCtx.font = 'bold 14px Arial';
+                    rtCtx.fillText('REST API Polling', 165, 90);
+                    rtCtx.font = '12px Arial';
+                    rtCtx.fillText('Check every 30 seconds', 165, 110);
+                    rtCtx.fillText('Request → Response', 165, 130);
+                    rtCtx.fillText('Higher server load', 165, 145);
+                    
+                    // WebSocket/Webhook
+                    rtCtx.fillStyle = '#2ecc71';
+                    rtCtx.fillRect(320, 60, 230, 100);
+                    rtCtx.fillStyle = 'white';
+                    rtCtx.font = 'bold 14px Arial';
+                    rtCtx.fillText('WebSocket/Webhook', 435, 90);
+                    rtCtx.font = '12px Arial';
+                    rtCtx.fillText('Instant updates', 435, 110);
+                    rtCtx.fillText('Push notifications', 435, 130);
+                    rtCtx.fillText('Lower server load', 435, 145);
+                    
+                    // Animated data stream
+                    rtCtx.strokeStyle = '#e74c3c';
+                    rtCtx.lineWidth = 2;
+                    rtCtx.beginPath();
+                    rtCtx.moveTo(50, 220);
+                    
+                    for (let x = 50; x < 550; x += 5) {
+                        const y = 220 + Math.sin((x + offset) * 0.05) * 30;
+                        rtCtx.lineTo(x, y);
+                    }
+                    rtCtx.stroke();
+                    
+                    rtCtx.fillStyle = '#666';
+                    rtCtx.font = '12px Arial';
+                    rtCtx.fillText('Live Data Stream', 300, 270);
+                    
+                    offset += 5;
+                    requestAnimationFrame(drawRealtime);
+                }
+                
+                drawRealtime();
+            </script>
+        </section>
+
+        <section>
+            <h2>Practical Implementation: Building a Blog Feed</h2>
+            <p>Let's put it all together! Building a blog feed with the WordPress REST API is like assembling a news broadcast - you gather stories (fetch posts), format them nicely (process JSON), and present them to viewers (render in React).</p>
+
+            <div class="mermaid">
+            stateDiagram-v2
+                [*] --> Loading: Component Mounts
+                Loading --> Fetching: useEffect Triggers
+                Fetching --> Processing: API Returns Data
+                Processing --> Displaying: setState Updates
+                Displaying --> Interactive: User Can Interact
+                Interactive --> Fetching: Load More clicked
+                Interactive --> [*]: Component Unmounts
+                
+                note right of Fetching
+                    fetch('/wp-json/wp/v2/posts')
+                    Check response.ok
+                    Parse JSON
+                end note
+                
+                note right of Processing
+                    Extract needed fields
+                    Format dates
+                    Prepare for display
+                end note
+                
+                note right of Displaying
+                    Map through posts
+                    Render components
+                    Show pagination
+                end note
+            </div>
+        </section>
+
+        <footer>
+            <p>You've mastered the WordPress REST API! Next, we'll combine everything and build a complete React application that connects to WordPress, creating a blazing-fast, modern web experience!</p>
+        </footer>
+    </main>
+</body>
+</html>
