@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Management Deep Dive: Mastering Data Flow in React + WordPress</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="icon" href="/favicon.png">
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+        .comparison-table th {
+            background: #3498db;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+        .comparison-table td {
+            padding: 1rem;
+            border: 1px solid #ddd;
+        }
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .code-example {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        .pattern-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .pro-tip {
+            background: #f0fff4;
+            border-left: 4px solid #48bb78;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box {
+            background: #fff5f5;
+            border-left: 4px solid #fc8181;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎯 State Management Deep Dive</h1>
+        <p>Master the art of managing data flow in modern React + WordPress applications</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>The State Management Landscape: Choosing Your Weapon</h2>
+            <p>State management in React is like choosing transportation for a journey. Walking (local state) works for short distances, a bike (Context API) for medium trips, a car (Zustand) for flexibility, or a train (Redux) for long, complex journeys with many passengers (data).</p>
+
+            <canvas id="stateSpectrumCanvas" width="600" height="400"></canvas>
+            <script>
+                const specCanvas = document.getElementById('stateSpectrumCanvas');
+                const specCtx = specCanvas.getContext('2d');
+                
+                // Title
+                specCtx.font = 'bold 18px Arial';
+                specCtx.fillStyle = '#333';
+                specCtx.textAlign = 'center';
+                specCtx.fillText('State Management Spectrum', 300, 30);
+                
+                // Draw spectrum line
+                specCtx.strokeStyle = '#ddd';
+                specCtx.lineWidth = 4;
+                specCtx.beginPath();
+                specCtx.moveTo(50, 200);
+                specCtx.lineTo(550, 200);
+                specCtx.stroke();
+                
+                // Solutions on spectrum
+                const solutions = [
+                    {x: 100, name: 'useState', complexity: 'Simple', color: '#2ecc71', y: 200},
+                    {x: 200, name: 'Context API', complexity: 'Moderate', color: '#3498db', y: 200},
+                    {x: 300, name: 'Zustand', complexity: 'Balanced', color: '#9b59b6', y: 200},
+                    {x: 400, name: 'React Query', complexity: 'Server State', color: '#f39c12', y: 200},
+                    {x: 500, name: 'Redux', complexity: 'Complex', color: '#e74c3c', y: 200}
+                ];
+                
+                solutions.forEach(sol => {
+                    // Circle
+                    specCtx.fillStyle = sol.color;
+                    specCtx.beginPath();
+                    specCtx.arc(sol.x, sol.y, 25, 0, Math.PI * 2);
+                    specCtx.fill();
+                    
+                    // Label
+                    specCtx.fillStyle = '#333';
+                    specCtx.font = 'bold 12px Arial';
+                    specCtx.textAlign = 'center';
+                    specCtx.fillText(sol.name, sol.x, sol.y - 40);
+                    
+                    // Complexity
+                    specCtx.fillStyle = '#666';
+                    specCtx.font = '10px Arial';
+                    specCtx.fillText(sol.complexity, sol.x, sol.y + 50);
+                });
+                
+                // Scale labels
+                specCtx.fillStyle = '#333';
+                specCtx.font = '14px Arial';
+                specCtx.fillText('Simple Apps', 100, 280);
+                specCtx.fillText('Enterprise Apps', 500, 280);
+                
+                // Use case boxes
+                const useCases = [
+                    {x: 50, y: 320, w: 100, text: 'Todo List', color: '#2ecc71'},
+                    {x: 160, y: 320, w: 120, text: 'Theme Toggle', color: '#3498db'},
+                    {x: 290, y: 320, w: 100, text: 'Shopping Cart', color: '#9b59b6'},
+                    {x: 400, y: 320, w: 140, text: 'Blog with Cache', color: '#f39c12'}
+                ];
+                
+                useCases.forEach(useCase => {
+                    specCtx.fillStyle = useCase.color;
+                    specCtx.globalAlpha = 0.2;
+                    specCtx.fillRect(useCase.x, useCase.y, useCase.w, 30);
+                    specCtx.globalAlpha = 1;
+                    
+                    specCtx.fillStyle = '#333';
+                    specCtx.font = '11px Arial';
+                    specCtx.fillText(useCase.text, useCase.x + useCase.w/2, useCase.y + 20);
+                });
+            </script>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Solution</th>
+                        <th>Best For</th>
+                        <th>Learning Curve</th>
+                        <th>Bundle Size</th>
+                        <th>DevTools</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>useState</strong></td>
+                        <td>Component-level state</td>
+                        <td>⭐ Easy</td>
+                        <td>0KB (built-in)</td>
+                        <td>React DevTools</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Context API</strong></td>
+                        <td>Theme, Auth, Settings</td>
+                        <td>⭐⭐ Moderate</td>
+                        <td>0KB (built-in)</td>
+                        <td>React DevTools</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Zustand</strong></td>
+                        <td>App-wide state</td>
+                        <td>⭐⭐ Moderate</td>
+                        <td>~8KB</td>
+                        <td>Zustand DevTools</td>
+                    </tr>
+                    <tr>
+                        <td><strong>React Query</strong></td>
+                        <td>Server state, API cache</td>
+                        <td>⭐⭐⭐ Advanced</td>
+                        <td>~40KB</td>
+                        <td>React Query DevTools</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Redux Toolkit</strong></td>
+                        <td>Complex apps, time-travel</td>
+                        <td>⭐⭐⭐⭐ Complex</td>
+                        <td>~45KB</td>
+                        <td>Redux DevTools</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Context API: The Broadcasting Tower</h2>
+            <p>Context is like a radio broadcasting tower. Any component can tune in (useContext) to receive the signal (state), avoiding the telephone game of passing props through every component.</p>
+
+            <div class="mermaid">
+            graph TD
+                subgraph "Context Provider Tower"
+                    Provider[ThemeProvider<br/>UserProvider<br/>CartProvider]
+                end
+                
+                subgraph "Component Tree"
+                    App[App]
+                    Header[Header]
+                    Main[Main]
+                    Footer[Footer]
+                    Nav[Navigation]
+                    Profile[Profile]
+                    Cart[CartIcon]
+                    Products[ProductList]
+                    Settings[Settings]
+                end
+                
+                Provider -.->|broadcasts| Header
+                Provider -.->|broadcasts| Profile
+                Provider -.->|broadcasts| Cart
+                Provider -.->|broadcasts| Settings
+                Provider -.->|broadcasts| Products
+                
+                App --> Header
+                App --> Main
+                App --> Footer
+                Header --> Nav
+                Nav --> Profile
+                Nav --> Cart
+                Main --> Products
+                Footer --> Settings
+                
+                style Provider fill:#3498db,stroke:#333,stroke-width:3px
+                style Profile fill:#2ecc71
+                style Cart fill:#2ecc71
+                style Settings fill:#2ecc71
+                style Products fill:#2ecc71
+            </div>
+
+            <h3>Pattern 1: Multi-Provider Pattern</h3>
+            <div class="pattern-card">
+                <h4>Organizing Multiple Contexts</h4>
+                <div class="code-example">
+<pre>// providers/AppProviders.js
+import { ThemeProvider } from './ThemeContext';
+import { AuthProvider } from './AuthContext';
+import { WordPressProvider } from './WordPressContext';
+
+export const AppProviders = ({ children }) => {
+  return (
+    &lt;ThemeProvider&gt;
+      &lt;AuthProvider&gt;
+        &lt;WordPressProvider&gt;
+          {children}
+        &lt;/WordPressProvider&gt;
+      &lt;/AuthProvider&gt;
+    &lt;/ThemeProvider&gt;
+  );
+};
+
+// App.js
+import { AppProviders } from './providers/AppProviders';
+
+function App() {
+  return (
+    &lt;AppProviders&gt;
+      &lt;Router&gt;
+        &lt;YourAppContent /&gt;
+      &lt;/Router&gt;
+    &lt;/AppProviders&gt;
+  );
+}</pre>
+                </div>
+            </div>
+
+            <h3>Pattern 2: WordPress Data Context</h3>
+            <div class="pattern-card">
+                <h4>Managing WordPress Content with Context</h4>
+                <div class="code-example">
+<pre>// contexts/WordPressContext.js
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { WordPressAPI } from '../services/api';
+
+const WordPressContext = createContext();
+
+// Action types
+const ACTIONS = {
+  FETCH_POSTS_START: 'FETCH_POSTS_START',
+  FETCH_POSTS_SUCCESS: 'FETCH_POSTS_SUCCESS',
+  FETCH_POSTS_ERROR: 'FETCH_POSTS_ERROR',
+  SET_CURRENT_POST: 'SET_CURRENT_POST',
+  UPDATE_CACHE: 'UPDATE_CACHE'
+};
+
+// Reducer
+const wordpressReducer = (state, action) => {
+  switch (action.type) {
+    case ACTIONS.FETCH_POSTS_START:
+      return { ...state, loading: true, error: null };
+    
+    case ACTIONS.FETCH_POSTS_SUCCESS:
+      return {
+        ...state,
+        posts: action.payload,
+        loading: false,
+        lastFetch: Date.now()
+      };
+    
+    case ACTIONS.FETCH_POSTS_ERROR:
+      return { ...state, loading: false, error: action.payload };
+    
+    case ACTIONS.SET_CURRENT_POST:
+      return { ...state, currentPost: action.payload };
+    
+    default:
+      return state;
+  }
+};
+
+// Provider component
+export const WordPressProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(wordpressReducer, {
+    posts: [],
+    currentPost: null,
+    loading: false,
+    error: null,
+    lastFetch: null
+  });
+
+  // Fetch posts with caching
+  const fetchPosts = async (force = false) => {
+    // Check cache validity (5 minutes)
+    const cacheValid = state.lastFetch && 
+      (Date.now() - state.lastFetch) < 5 * 60 * 1000;
+    
+    if (!force && cacheValid) return;
+
+    dispatch({ type: ACTIONS.FETCH_POSTS_START });
+    
+    try {
+      const posts = await WordPressAPI.getPosts();
+      dispatch({ type: ACTIONS.FETCH_POSTS_SUCCESS, payload: posts });
+    } catch (error) {
+      dispatch({ type: ACTIONS.FETCH_POSTS_ERROR, payload: error.message });
+    }
+  };
+
+  const value = {
+    ...state,
+    fetchPosts,
+    setCurrentPost: (post) => 
+      dispatch({ type: ACTIONS.SET_CURRENT_POST, payload: post })
+  };
+
+  return (
+    &lt;WordPressContext.Provider value={value}&gt;
+      {children}
+    &lt;/WordPressContext.Provider&gt;
+  );
+};
+
+// Custom hook
+export const useWordPress = () => {
+  const context = useContext(WordPressContext);
+  if (!context) {
+    throw new Error('useWordPress must be used within WordPressProvider');
+  }
+  return context;
+};</pre>
+                </div>
+            </div>
+
+            <div class="pro-tip">
+                <strong>💡 Pro Tip:</strong> Split contexts by update frequency. High-frequency updates (like form inputs) should be in separate contexts from low-frequency updates (like user authentication) to prevent unnecessary re-renders.
+            </div>
+        </section>
+
+        <section>
+            <h2>Redux with WordPress: The Command Center</h2>
+            <p>Redux is like NASA's mission control - every action is logged, every state change is tracked, and you can literally time-travel through your application's history. Perfect for complex WordPress applications with multiple data sources.</p>
+
+            <canvas id="reduxFlowCanvas" width="600" height="400"></canvas>
+            <script>
+                const reduxCanvas = document.getElementById('reduxFlowCanvas');
+                const reduxCtx = reduxCanvas.getContext('2d');
+                
+                let reduxAnimation = 0;
+                
+                function drawReduxFlow() {
+                    reduxCtx.clearRect(0, 0, 600, 400);
+                    
+                    // Title
+                    reduxCtx.font = 'bold 18px Arial';
+                    reduxCtx.fillStyle = '#333';
+                    reduxCtx.textAlign = 'center';
+                    reduxCtx.fillText('Redux Data Flow with WordPress', 300, 30);
+                    
+                    // Components
+                    const elements = [
+                        {x: 100, y: 100, w: 100, h: 60, label: 'Component', color: '#3498db'},
+                        {x: 300, y: 100, w: 100, h: 60, label: 'Action', color: '#f39c12'},
+                        {x: 500, y: 100, w: 100, h: 60, label: 'Reducer', color: '#e74c3c'},
+                        {x: 300, y: 250, w: 150, h: 60, label: 'Redux Store', color: '#9b59b6'},
+                        {x: 100, y: 250, w: 100, h: 60, label: 'WordPress API', color: '#2ecc71'}
+                    ];
+                    
+                    elements.forEach(el => {
+                        reduxCtx.fillStyle = el.color;
+                        reduxCtx.globalAlpha = 0.8;
+                        reduxCtx.fillRect(el.x - el.w/2, el.y - el.h/2, el.w, el.h);
+                        reduxCtx.globalAlpha = 1;
+                        
+                        reduxCtx.strokeStyle = el.color;
+                        reduxCtx.lineWidth = 2;
+                        reduxCtx.strokeRect(el.x - el.w/2, el.y - el.h/2, el.w, el.h);
+                        
+                        reduxCtx.fillStyle = 'white';
+                        reduxCtx.font = 'bold 12px Arial';
+                        reduxCtx.textAlign = 'center';
+                        reduxCtx.fillText(el.label, el.x, el.y);
+                    });
+                    
+                    // Animated flow
+                    const step = Math.floor(reduxAnimation / 20) % 4;
+                    reduxCtx.strokeStyle = '#ff0000';
+                    reduxCtx.lineWidth = 3;
+                    
+                    if (step === 0) {
+                        // Component dispatches action
+                        drawArrow(reduxCtx, 150, 100, 250, 100);
+                    } else if (step === 1) {
+                        // Action to reducer
+                        drawArrow(reduxCtx, 350, 100, 450, 100);
+                    } else if (step === 2) {
+                        // Reducer updates store
+                        drawArrow(reduxCtx, 500, 130, 375, 220);
+                    } else if (step === 3) {
+                        // Store updates component
+                        drawArrow(reduxCtx, 225, 250, 100, 130);
+                    }
+                    
+                    // API interaction
+                    reduxCtx.strokeStyle = '#2ecc71';
+                    reduxCtx.lineWidth = 2;
+                    reduxCtx.setLineDash([5, 5]);
+                    drawArrow(reduxCtx, 100, 220, 225, 250);
+                    reduxCtx.setLineDash([]);
+                    
+                    reduxAnimation++;
+                    requestAnimationFrame(drawReduxFlow);
+                }
+                
+                function drawArrow(ctx, fromX, fromY, toX, toY) {
+                    ctx.beginPath();
+                    ctx.moveTo(fromX, fromY);
+                    ctx.lineTo(toX, toY);
+                    ctx.stroke();
+                    
+                    // Arrowhead
+                    const angle = Math.atan2(toY - fromY, toX - fromX);
+                    ctx.beginPath();
+                    ctx.moveTo(toX, toY);
+                    ctx.lineTo(toX - 10 * Math.cos(angle - Math.PI/6), toY - 10 * Math.sin(angle - Math.PI/6));
+                    ctx.moveTo(toX, toY);
+                    ctx.lineTo(toX - 10 * Math.cos(angle + Math.PI/6), toY - 10 * Math.sin(angle + Math.PI/6));
+                    ctx.stroke();
+                }
+                
+                drawReduxFlow();
+            </script>
+
+            <h3>Redux Toolkit with WordPress</h3>
+            <div class="pattern-card">
+                <h4>Modern Redux Setup for WordPress</h4>
+                <div class="code-example">
+<pre>// store/slices/wordpressSlice.js
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { WordPressAPI } from '../../services/api';
+
+// Async thunks for WordPress API
+export const fetchPosts = createAsyncThunk(
+  'wordpress/fetchPosts',
+  async ({ page = 1, perPage = 10 }, { rejectWithValue }) => {
+    try {
+      const response = await WordPressAPI.getPosts({ page, perPage });
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchPostById = createAsyncThunk(
+  'wordpress/fetchPostById',
+  async (id) => {
+    const response = await WordPressAPI.getPost(id);
+    return response;
+  }
+);
+
+export const createComment = createAsyncThunk(
+  'wordpress/createComment',
+  async ({ postId, content, authorName, authorEmail }) => {
+    const response = await WordPressAPI.createComment({
+      post: postId,
+      content,
+      author_name: authorName,
+      author_email: authorEmail
+    });
+    return response;
+  }
+);
+
+// Slice
+const wordpressSlice = createSlice({
+  name: 'wordpress',
+  initialState: {
+    posts: {
+      items: [],
+      currentPage: 1,
+      totalPages: 0,
+      total: 0,
+      loading: false,
+      error: null
+    },
+    currentPost: {
+      data: null,
+      comments: [],
+      loading: false,
+      error: null
+    },
+    categories: [],
+    tags: []
+  },
+  reducers: {
+    clearCurrentPost: (state) => {
+      state.currentPost = { data: null, comments: [], loading: false, error: null };
+    },
+    updatePostInCache: (state, action) => {
+      const index = state.posts.items.findIndex(p => p.id === action.payload.id);
+      if (index !== -1) {
+        state.posts.items[index] = action.payload;
+      }
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      // Fetch posts
+      .addCase(fetchPosts.pending, (state) => {
+        state.posts.loading = true;
+        state.posts.error = null;
+      })
+      .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.posts.loading = false;
+        state.posts.items = action.payload.posts;
+        state.posts.totalPages = action.payload.totalPages;
+        state.posts.total = action.payload.total;
+      })
+      .addCase(fetchPosts.rejected, (state, action) => {
+        state.posts.loading = false;
+        state.posts.error = action.payload;
+      })
+      
+      // Fetch single post
+      .addCase(fetchPostById.pending, (state) => {
+        state.currentPost.loading = true;
+      })
+      .addCase(fetchPostById.fulfilled, (state, action) => {
+        state.currentPost.loading = false;
+        state.currentPost.data = action.payload;
+      })
+      
+      // Create comment
+      .addCase(createComment.fulfilled, (state, action) => {
+        state.currentPost.comments.push(action.payload);
+      });
+  }
+});
+
+export const { clearCurrentPost, updatePostInCache } = wordpressSlice.actions;
+export default wordpressSlice.reducer;
+
+// Selectors
+export const selectAllPosts = (state) => state.wordpress.posts.items;
+export const selectCurrentPost = (state) => state.wordpress.currentPost.data;
+export const selectPostsLoading = (state) => state.wordpress.posts.loading;</pre>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Warning:</strong> Redux can be overkill for simple WordPress blogs. Use it when you need features like undo/redo, complex state synchronization, or time-travel debugging.
+            </div>
+        </section>
+
+        <section>
+            <h2>Zustand: The Lightweight Champion</h2>
+            <p>Zustand is like a smart filing cabinet - simple to use but surprisingly powerful. It combines the simplicity of useState with the power of global state management, perfect for WordPress apps that need more than Context but less than Redux.</p>
+
+            <div class="mermaid">
+            graph LR
+                subgraph "Zustand Store"
+                    Store[Single Store<br/>posts, user, theme]
+                end
+                
+                subgraph "Components"
+                    A[BlogList]
+                    B[UserProfile]
+                    C[ThemeToggle]
+                    D[Comments]
+                end
+                
+                Store -.->|subscribe| A
+                Store -.->|subscribe| B
+                Store -.->|subscribe| C
+                Store -.->|subscribe| D
+                
+                A -->|update| Store
+                B -->|update| Store
+                C -->|update| Store
+                D -->|update| Store
+                
+                style Store fill:#9b59b6,stroke:#333,stroke-width:3px
+            </div>
+
+            <h3>Zustand WordPress Store</h3>
+            <div class="pattern-card">
+                <h4>Complete Zustand Setup for WordPress</h4>
+                <div class="code-example">
+<pre>// stores/useWordPressStore.js
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
+import { WordPressAPI } from '../services/api';
+
+const useWordPressStore = create(
+  devtools(
+    persist(
+      (set, get) => ({
+        // State
+        posts: [],
+        currentPost: null,
+        categories: [],
+        searchResults: [],
+        filters: {
+          category: null,
+          tag: null,
+          search: ''
+        },
+        ui: {
+          loading: false,
+          error: null,
+          theme: 'light'
+        },
+        
+        // Actions
+        fetchPosts: async (options = {}) => {
+          set({ ui: { ...get().ui, loading: true, error: null } });
+          
+          try {
+            const posts = await WordPressAPI.getPosts(options);
+            set({ 
+              posts,
+              ui: { ...get().ui, loading: false }
+            });
+            return posts;
+          } catch (error) {
+            set({ 
+              ui: { ...get().ui, loading: false, error: error.message }
+            });
+            throw error;
+          }
+        },
+        
+        fetchPostBySlug: async (slug) => {
+          // Check if already in cache
+          const cached = get().posts.find(p => p.slug === slug);
+          if (cached && !isStale(cached)) {
+            set({ currentPost: cached });
+            return cached;
+          }
+          
+          set({ ui: { ...get().ui, loading: true } });
+          
+          try {
+            const post = await WordPressAPI.getPostBySlug(slug);
+            set({ 
+              currentPost: post,
+              ui: { ...get().ui, loading: false }
+            });
+            
+            // Update cache
+            const posts = get().posts;
+            const index = posts.findIndex(p => p.id === post.id);
+            if (index !== -1) {
+              posts[index] = post;
+              set({ posts: [...posts] });
+            }
+            
+            return post;
+          } catch (error) {
+            set({ 
+              ui: { ...get().ui, loading: false, error: error.message }
+            });
+            throw error;
+          }
+        },
+        
+        searchPosts: async (query) => {
+          set({ 
+            filters: { ...get().filters, search: query },
+            ui: { ...get().ui, loading: true }
+          });
+          
+          try {
+            const results = await WordPressAPI.searchPosts(query);
+            set({ 
+              searchResults: results,
+              ui: { ...get().ui, loading: false }
+            });
+            return results;
+          } catch (error) {
+            set({ 
+              ui: { ...get().ui, loading: false, error: error.message }
+            });
+            throw error;
+          }
+        },
+        
+        toggleTheme: () => {
+          const newTheme = get().ui.theme === 'light' ? 'dark' : 'light';
+          set({ ui: { ...get().ui, theme: newTheme } });
+          document.documentElement.classList.toggle('dark');
+        },
+        
+        clearError: () => {
+          set({ ui: { ...get().ui, error: null } });
+        },
+        
+        // Computed values
+        get filteredPosts() {
+          const { posts, filters } = get();
+          let filtered = posts;
+          
+          if (filters.category) {
+            filtered = filtered.filter(p => 
+              p.categories.includes(filters.category)
+            );
+          }
+          
+          if (filters.tag) {
+            filtered = filtered.filter(p => 
+              p.tags.includes(filters.tag)
+            );
+          }
+          
+          if (filters.search) {
+            const query = filters.search.toLowerCase();
+            filtered = filtered.filter(p => 
+              p.title.rendered.toLowerCase().includes(query) ||
+              p.excerpt.rendered.toLowerCase().includes(query)
+            );
+          }
+          
+          return filtered;
+        }
+      }),
+      {
+        name: 'wordpress-storage',
+        partialize: (state) => ({ 
+          posts: state.posts,
+          categories: state.categories,
+          ui: { theme: state.ui.theme }
+        })
+      }
+    )
+  )
+);
+
+// Utility function
+function isStale(post, maxAge = 5 * 60 * 1000) {
+  return Date.now() - new Date(post.fetchedAt).getTime() > maxAge;
+}
+
+// Usage in components
+export default useWordPressStore;
+
+// Component example
+function BlogList() {
+  const { posts, fetchPosts, ui } = useWordPressStore();
+  
+  useEffect(() => {
+    if (posts.length === 0) {
+      fetchPosts();
+    }
+  }, []);
+  
+  if (ui.loading) return <Spinner />;
+  if (ui.error) return <Error message={ui.error} />;
+  
+  return (
+    &lt;div&gt;
+      {posts.map(post => (
+        &lt;PostCard key={post.id} post={post} /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}</pre>
+                </div>
+            </div>
+
+            <div class="pro-tip">
+                <strong>💡 Pro Tip:</strong> Zustand's persist middleware automatically saves state to localStorage, perfect for offline-first WordPress apps!
+            </div>
+        </section>
+
+        <section>
+            <h2>React Query: The Server State Specialist</h2>
+            <p>React Query (TanStack Query) is like having a smart assistant who manages all your server communications. It knows when to fetch, when to use cache, when to refetch, and handles all the loading states automatically.</p>
+
+            <canvas id="reactQueryCanvas" width="600" height="450"></canvas>
+            <script>
+                const rqCanvas = document.getElementById('reactQueryCanvas');
+                const rqCtx = rqCanvas.getContext('2d');
+                
+                // Title
+                rqCtx.font = 'bold 18px Arial';
+                rqCtx.fillStyle = '#333';
+                rqCtx.textAlign = 'center';
+                rqCtx.fillText('React Query Cache Strategy', 300, 30);
+                
+                // Cache layers
+                const layers = [
+                    {y: 80, label: 'Fresh', color: '#2ecc71', desc: 'Instant from cache'},
+                    {y: 160, label: 'Stale', color: '#f39c12', desc: 'Show cached + refetch'},
+                    {y: 240, label: 'Inactive', color: '#95a5a6', desc: 'In memory, not used'},
+                    {y: 320, label: 'Garbage', color: '#e74c3c', desc: 'Ready for cleanup'}
+                ];
+                
+                layers.forEach((layer, index) => {
+                    // Layer box
+                    rqCtx.fillStyle = layer.color;
+                    rqCtx.globalAlpha = 0.3;
+                    rqCtx.fillRect(100, layer.y, 400, 60);
+                    rqCtx.globalAlpha = 1;
+                    
+                    rqCtx.strokeStyle = layer.color;
+                    rqCtx.lineWidth = 2;
+                    rqCtx.strokeRect(100, layer.y, 400, 60);
+                    
+                    // Label
+                    rqCtx.fillStyle = layer.color;
+                    rqCtx.font = 'bold 14px Arial';
+                    rqCtx.textAlign = 'left';
+                    rqCtx.fillText(layer.label, 120, layer.y + 30);
+                    
+                    // Description
+                    rqCtx.fillStyle = '#666';
+                    rqCtx.font = '12px Arial';
+                    rqCtx.fillText(layer.desc, 220, layer.y + 30);
+                    
+                    // Timer
+                    rqCtx.fillStyle = '#333';
+                    rqCtx.font = '11px Arial';
+                    rqCtx.textAlign = 'right';
+                    if (index === 0) rqCtx.fillText('0-5 min', 480, layer.y + 30);
+                    if (index === 1) rqCtx.fillText('5-10 min', 480, layer.y + 30);
+                    if (index === 2) rqCtx.fillText('10-15 min', 480, layer.y + 30);
+                    if (index === 3) rqCtx.fillText('> 15 min', 480, layer.y + 30);
+                });
+                
+                // Flow arrows
+                rqCtx.strokeStyle = '#666';
+                rqCtx.lineWidth = 2;
+                rqCtx.setLineDash([5, 5]);
+                for (let i = 0; i < 3; i++) {
+                    const fromY = 140 + i * 80;
+                    const toY = fromY + 80;
+                    
+                    rqCtx.beginPath();
+                    rqCtx.moveTo(300, fromY);
+                    rqCtx.lineTo(300, toY);
+                    rqCtx.stroke();
+                    
+                    // Arrow head
+                    rqCtx.beginPath();
+                    rqCtx.moveTo(295, toY - 5);
+                    rqCtx.lineTo(300, toY);
+                    rqCtx.lineTo(305, toY - 5);
+                    rqCtx.stroke();
+                }
+                rqCtx.setLineDash([]);
+                
+                // Cache lifecycle
+                rqCtx.fillStyle = '#666';
+                rqCtx.font = '12px Arial';
+                rqCtx.textAlign = 'center';
+                rqCtx.fillText('Data flows through cache states based on staleTime and cacheTime', 300, 400);
+            </script>
+
+            <h3>React Query with WordPress</h3>
+            <div class="pattern-card">
+                <h4>Advanced React Query Setup</h4>
+                <div class="code-example">
+<pre>// hooks/useWordPressQuery.js
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { WordPressAPI } from '../services/api';
+
+// Query keys factory
+const queryKeys = {
+  all: ['wordpress'],
+  posts: () => [...queryKeys.all, 'posts'],
+  post: (id) => [...queryKeys.posts(), id],
+  postBySlug: (slug) => [...queryKeys.posts(), 'slug', slug],
+  comments: (postId) => [...queryKeys.all, 'comments', postId],
+  categories: () => [...queryKeys.all, 'categories'],
+  search: (query) => [...queryKeys.all, 'search', query]
+};
+
+// Hooks
+export function usePosts(options = {}) {
+  return useQuery({
+    queryKey: queryKeys.posts(),
+    queryFn: () => WordPressAPI.getPosts(options),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 10 * 60 * 1000, // 10 minutes
+    refetchOnWindowFocus: false,
+    refetchOnMount: 'always'
+  });
+}
+
+export function usePost(slug) {
+  return useQuery({
+    queryKey: queryKeys.postBySlug(slug),
+    queryFn: () => WordPressAPI.getPostBySlug(slug),
+    staleTime: 10 * 60 * 1000,
+    enabled: !!slug // Only run if slug exists
+  });
+}
+
+export function useInfinitePosts() {
+  return useInfiniteQuery({
+    queryKey: queryKeys.posts(),
+    queryFn: ({ pageParam = 1 }) => 
+      WordPressAPI.getPosts({ page: pageParam, perPage: 10 }),
+    getNextPageParam: (lastPage, pages) => {
+      return lastPage.hasMore ? pages.length + 1 : undefined;
+    },
+    staleTime: 5 * 60 * 1000
+  });
+}
+
+export function useCreateComment() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (commentData) => WordPressAPI.createComment(commentData),
+    onSuccess: (newComment, variables) => {
+      // Update cache optimistically
+      queryClient.setQueryData(
+        queryKeys.comments(variables.postId),
+        (old) => [...(old || []), newComment]
+      );
+      
+      // Invalidate post to refetch with new comment count
+      queryClient.invalidateQueries(queryKeys.post(variables.postId));
+    },
+    onError: (error, variables, context) => {
+      // Rollback optimistic update on error
+      if (context?.previousComments) {
+        queryClient.setQueryData(
+          queryKeys.comments(variables.postId),
+          context.previousComments
+        );
+      }
+    }
+  });
+}
+
+// Prefetching for better UX
+export function usePrefetchPost() {
+  const queryClient = useQueryClient();
+  
+  return (slug) => {
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.postBySlug(slug),
+      queryFn: () => WordPressAPI.getPostBySlug(slug),
+      staleTime: 10 * 60 * 1000
+    });
+  };
+}
+
+// Component usage example
+function BlogPost({ slug }) {
+  const { data: post, isLoading, error } = usePost(slug);
+  const { mutate: createComment } = useCreateComment();
+  
+  if (isLoading) return <PostSkeleton />;
+  if (error) return <ErrorMessage error={error} />;
+  
+  return (
+    &lt;article&gt;
+      &lt;h1&gt;{post.title.rendered}&lt;/h1&gt;
+      &lt;div dangerouslySetInnerHTML={{ __html: post.content.rendered }} /&gt;
+      &lt;CommentForm 
+        onSubmit={(data) => createComment({ ...data, postId: post.id })}
+      /&gt;
+    &lt;/article&gt;
+  );
+}
+
+// App.js setup
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 2,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000
+    }
+  }
+});
+
+function App() {
+  return (
+    &lt;QueryClientProvider client={queryClient}&gt;
+      &lt;YourApp /&gt;
+      &lt;ReactQueryDevtools initialIsOpen={false} /&gt;
+    &lt;/QueryClientProvider&gt;
+  );
+}</pre>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>State Persistence Strategies</h2>
+            <p>State persistence is like having a photographic memory for your app. Even when users close the browser, come back tomorrow, or lose internet connection, your app remembers exactly where they left off.</p>
+
+            <div class="mermaid">
+            graph TD
+                subgraph "Persistence Layers"
+                    Memory[Memory<br/>Fastest, Temporary]
+                    SessionStorage[Session Storage<br/>Tab lifetime]
+                    LocalStorage[Local Storage<br/>Permanent]
+                    IndexedDB[IndexedDB<br/>Large data]
+                    Server[Server/Cloud<br/>Cross-device]
+                end
+                
+                Memory --> SessionStorage
+                SessionStorage --> LocalStorage
+                LocalStorage --> IndexedDB
+                IndexedDB --> Server
+                
+                style Memory fill:#2ecc71
+                style SessionStorage fill:#3498db
+                style LocalStorage fill:#9b59b6
+                style IndexedDB fill:#f39c12
+                style Server fill:#e74c3c
+            </div>
+
+            <h3>Comprehensive Persistence Solution</h3>
+            <div class="pattern-card">
+                <h4>Multi-Layer Persistence Strategy</h4>
+                <div class="code-example">
+<pre>// utils/persistence.js
+class PersistenceManager {
+  constructor() {
+    this.storage = this.detectStorage();
+    this.prefix = 'wp_app_';
+  }
+  
+  detectStorage() {
+    // Check available storage options
+    if (typeof window !== 'undefined') {
+      if ('indexedDB' in window) {
+        return new IndexedDBAdapter();
+      }
+      if ('localStorage' in window) {
+        return new LocalStorageAdapter();
+      }
+    }
+    return new MemoryAdapter();
+  }
+  
+  async save(key, data, options = {}) {
+    const fullKey = this.prefix + key;
+    const dataToSave = {
+      data,
+      timestamp: Date.now(),
+      version: options.version || 1,
+      ttl: options.ttl || null
+    };
+    
+    try {
+      if (options.encrypt) {
+        dataToSave.data = await this.encrypt(data);
+      }
+      
+      await this.storage.setItem(fullKey, JSON.stringify(dataToSave));
+      
+      // Sync to server if enabled
+      if (options.sync) {
+        this.syncToServer(key, data);
+      }
+    } catch (error) {
+      console.error('Persistence error:', error);
+      // Fallback to memory
+      this.fallbackMemory[fullKey] = dataToSave;
+    }
+  }
+  
+  async load(key, options = {}) {
+    const fullKey = this.prefix + key;
+    
+    try {
+      const stored = await this.storage.getItem(fullKey);
+      if (!stored) return null;
+      
+      const parsed = JSON.parse(stored);
+      
+      // Check TTL
+      if (parsed.ttl && Date.now() - parsed.timestamp > parsed.ttl) {
+        await this.storage.removeItem(fullKey);
+        return null;
+      }
+      
+      // Check version
+      if (options.version && parsed.version !== options.version) {
+        await this.migrate(key, parsed, options.version);
+      }
+      
+      if (options.decrypt && parsed.encrypted) {
+        parsed.data = await this.decrypt(parsed.data);
+      }
+      
+      return parsed.data;
+    } catch (error) {
+      console.error('Load error:', error);
+      return this.fallbackMemory[fullKey]?.data || null;
+    }
+  }
+  
+  async clear(pattern) {
+    const keys = await this.storage.keys();
+    const toDelete = keys.filter(key => 
+      key.startsWith(this.prefix) && 
+      (!pattern || key.includes(pattern))
+    );
+    
+    await Promise.all(toDelete.map(key => 
+      this.storage.removeItem(key)
+    ));
+  }
+  
+  // IndexedDB Adapter for large data
+  class IndexedDBAdapter {
+    constructor() {
+      this.dbName = 'WordPressAppDB';
+      this.storeName = 'state';
+      this.db = null;
+    }
+    
+    async init() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(this.dbName, 1);
+        
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+          this.db = request.result;
+          resolve();
+        };
+        
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains(this.storeName)) {
+            db.createObjectStore(this.storeName);
+          }
+        };
+      });
+    }
+    
+    async setItem(key, value) {
+      if (!this.db) await this.init();
+      
+      return new Promise((resolve, reject) => {
+        const transaction = this.db.transaction([this.storeName], 'readwrite');
+        const store = transaction.objectStore(this.storeName);
+        const request = store.put(value, key);
+        
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+      });
+    }
+    
+    async getItem(key) {
+      if (!this.db) await this.init();
+      
+      return new Promise((resolve, reject) => {
+        const transaction = this.db.transaction([this.storeName], 'readonly');
+        const store = transaction.objectStore(this.storeName);
+        const request = store.get(key);
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+  }
+}
+
+// Custom hook for persisted state
+export function usePersistedState(key, initialValue, options = {}) {
+  const [state, setState] = useState(initialValue);
+  const [isLoading, setIsLoading] = useState(true);
+  const persistence = useRef(new PersistenceManager());
+  
+  // Load persisted state
+  useEffect(() => {
+    persistence.current.load(key, options).then(saved => {
+      if (saved !== null) {
+        setState(saved);
+      }
+      setIsLoading(false);
+    });
+  }, [key]);
+  
+  // Save state changes
+  const setPersistedState = useCallback((value) => {
+    setState(value);
+    persistence.current.save(key, value, options);
+  }, [key, options]);
+  
+  return [state, setPersistedState, isLoading];
+}
+
+// Usage example
+function BlogReader() {
+  const [readPosts, setReadPosts] = usePersistedState('read_posts', [], {
+    ttl: 30 * 24 * 60 * 60 * 1000, // 30 days
+    sync: true
+  });
+  
+  const [preferences, setPreferences] = usePersistedState('user_prefs', {
+    theme: 'light',
+    fontSize: 16,
+    notifications: true
+  }, {
+    encrypt: true,
+    version: 2
+  });
+  
+  // Component logic...
+}</pre>
+                </div>
+            </div>
+
+            <div class="pro-tip">
+                <strong>💡 Pro Tip:</strong> Use different storage strategies for different data types:
+                <ul style="margin-top: 0.5rem;">
+                    <li>Session Storage: Form drafts, temporary UI state</li>
+                    <li>Local Storage: User preferences, read articles</li>
+                    <li>IndexedDB: Offline cache, large datasets</li>
+                    <li>Server: Cross-device sync, backups</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Choosing the Right Solution</h2>
+            <p>Selecting the right state management solution is like choosing the right vehicle for a journey. Here's your decision matrix:</p>
+
+            <canvas id="decisionCanvas" width="600" height="400"></canvas>
+            <script>
+                const decCanvas = document.getElementById('decisionCanvas');
+                const decCtx = decCanvas.getContext('2d');
+                
+                // Title
+                decCtx.font = 'bold 18px Arial';
+                decCtx.fillStyle = '#333';
+                decCtx.textAlign = 'center';
+                decCtx.fillText('State Management Decision Tree', 300, 30);
+                
+                // Decision tree
+                function drawNode(x, y, text, color, size = 80) {
+                    decCtx.fillStyle = color;
+                    decCtx.globalAlpha = 0.8;
+                    decCtx.fillRect(x - size/2, y - 25, size, 50);
+                    decCtx.globalAlpha = 1;
+                    
+                    decCtx.strokeStyle = color;
+                    decCtx.lineWidth = 2;
+                    decCtx.strokeRect(x - size/2, y - 25, size, 50);
+                    
+                    decCtx.fillStyle = 'white';
+                    decCtx.font = '11px Arial';
+                    decCtx.textAlign = 'center';
+                    
+                    // Word wrap for longer text
+                    const words = text.split(' ');
+                    let line = '';
+                    let lines = [];
+                    
+                    words.forEach(word => {
+                        const testLine = line + word + ' ';
+                        if (testLine.length > 10) {
+                            lines.push(line);
+                            line = word + ' ';
+                        } else {
+                            line = testLine;
+                        }
+                    });
+                    lines.push(line);
+                    
+                    lines.forEach((l, i) => {
+                        decCtx.fillText(l.trim(), x, y - 5 + i * 15);
+                    });
+                }
+                
+                function drawConnection(x1, y1, x2, y2, label) {
+                    decCtx.strokeStyle = '#666';
+                    decCtx.lineWidth = 1;
+                    decCtx.beginPath();
+                    decCtx.moveTo(x1, y1);
+                    decCtx.lineTo(x2, y2);
+                    decCtx.stroke();
+                    
+                    if (label) {
+                        const midX = (x1 + x2) / 2;
+                        const midY = (y1 + y2) / 2;
+                        decCtx.fillStyle = '#666';
+                        decCtx.font = '10px Arial';
+                        decCtx.fillText(label, midX, midY);
+                    }
+                }
+                
+                // Root
+                drawNode(300, 80, 'Need State?', '#3498db', 100);
+                
+                // Level 1
+                drawNode(200, 160, 'Component Only?', '#2ecc71');
+                drawNode(400, 160, 'Multiple Components?', '#2ecc71');
+                
+                // Level 2
+                drawNode(150, 240, 'useState', '#f39c12', 70);
+                drawNode(250, 240, 'useReducer', '#f39c12', 70);
+                drawNode(350, 240, 'Context', '#f39c12', 70);
+                drawNode(450, 240, 'Global?', '#f39c12', 70);
+                
+                // Level 3
+                drawNode(320, 320, 'Server State?', '#e74c3c');
+                drawNode(480, 320, 'Complex?', '#e74c3c');
+                
+                // Level 4
+                drawNode(280, 380, 'React Query', '#9b59b6', 90);
+                drawNode(420, 380, 'Zustand', '#9b59b6', 70);
+                drawNode(520, 380, 'Redux', '#9b59b6', 60);
+                
+                // Connections
+                drawConnection(300, 105, 200, 135, 'Yes');
+                drawConnection(300, 105, 400, 135, 'No');
+                drawConnection(200, 185, 150, 215, 'Simple');
+                drawConnection(200, 185, 250, 215, 'Complex');
+                drawConnection(400, 185, 350, 215, 'Few');
+                drawConnection(400, 185, 450, 215, 'Many');
+                drawConnection(450, 265, 320, 295);
+                drawConnection(450, 265, 480, 295);
+                drawConnection(320, 345, 280, 355, 'Yes');
+                drawConnection(480, 345, 420, 355, 'No');
+                drawConnection(480, 345, 520, 355, 'Yes');
+            </script>
+
+            <div class="highlight-box">
+                <h3 style="color: white;">Quick Decision Guide</h3>
+                <ul style="color: white;">
+                    <li><strong>useState:</strong> Form inputs, toggles, simple counters</li>
+                    <li><strong>Context API:</strong> Theme, authentication, user preferences</li>
+                    <li><strong>Zustand:</strong> Shopping cart, user sessions, app-wide UI state</li>
+                    <li><strong>React Query:</strong> Blog posts, comments, any WordPress data</li>
+                    <li><strong>Redux:</strong> Complex e-commerce, real-time collaboration, undo/redo</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Real-World Example: Complete Blog State Architecture</h2>
+            <p>Let's combine everything into a production-ready WordPress blog application using the best of each solution:</p>
+
+            <div class="pattern-card">
+                <h4>Hybrid State Management Architecture</h4>
+                <div class="code-example">
+<pre>// Complete state architecture for a WordPress blog
+
+// 1. React Query for server state (posts, comments)
+// hooks/queries.js
+export const useBlogPosts = () => useQuery({
+  queryKey: ['posts'],
+  queryFn: WordPressAPI.getPosts
+});
+
+// 2. Zustand for client state (UI, preferences)
+// stores/uiStore.js
+export const useUIStore = create(persist(
+  (set) => ({
+    theme: 'light',
+    sidebarOpen: false,
+    toggleTheme: () => set(state => ({ 
+      theme: state.theme === 'light' ? 'dark' : 'light' 
+    })),
+    toggleSidebar: () => set(state => ({ 
+      sidebarOpen: !state.sidebarOpen 
+    }))
+  }),
+  { name: 'ui-preferences' }
+));
+
+// 3. Context for authentication
+// contexts/AuthContext.js
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  
+  const login = async (credentials) => {
+    const user = await WordPressAPI.login(credentials);
+    setUser(user);
+    localStorage.setItem('wp_token', user.token);
+  };
+  
+  return (
+    &lt;AuthContext.Provider value={{ user, login }}&gt;
+      {children}
+    &lt;/AuthContext.Provider&gt;
+  );
+};
+
+// 4. Local state for forms
+// components/CommentForm.js
+function CommentForm({ postId }) {
+  const [comment, setComment] = useState('');
+  const mutation = useCreateComment();
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    mutation.mutate({ postId, content: comment });
+    setComment('');
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;textarea 
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+      /&gt;
+      &lt;button type="submit"&gt;Post Comment&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+
+// 5. Main App with all providers
+function App() {
+  return (
+    &lt;QueryClientProvider client={queryClient}&gt;
+      &lt;AuthProvider&gt;
+        &lt;BlogApp /&gt;
+      &lt;/AuthProvider&gt;
+    &lt;/QueryClientProvider&gt;
+  );
+}</pre>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="highlight-box">
+                <h2 style="color: white; margin-bottom: 1rem;">🎯 State Management Mastery Achieved!</h2>
+                <p style="color: white; margin-bottom: 1rem;">You now have a complete toolkit for managing state in React + WordPress applications:</p>
+                <ul style="color: white; margin-bottom: 1rem;">
+                    <li>✅ Context API for lightweight global state</li>
+                    <li>✅ Redux for complex state logic</li>
+                    <li>✅ Zustand for simple yet powerful state</li>
+                    <li>✅ React Query for server state excellence</li>
+                    <li>✅ Persistence strategies for offline support</li>
+                </ul>
+                <p style="color: white; font-weight: bold;">Next up: Dive into advanced performance optimization and real-time features to make your WordPress + React apps blazing fast!</p>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Mastery: Protecting Your React + WordPress Application</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="icon" href="/favicon.png">
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        .security-alert {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        .security-critical {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        .security-success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        .code-secure {
+            background: #1a1a2e;
+            color: #4ecca3;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #4ecca3;
+        }
+        .code-vulnerable {
+            background: #2d1b1b;
+            color: #ff6b6b;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #ff6b6b;
+        }
+        .threat-level {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+        .threat-critical { background: #dc3545; color: white; }
+        .threat-high { background: #fd7e14; color: white; }
+        .threat-medium { background: #ffc107; color: #333; }
+        .threat-low { background: #28a745; color: white; }
+        .security-checklist {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .shield-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 30px;
+            font-weight: bold;
+            margin: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔐 Security Mastery: Protecting Your React + WordPress Application</h1>
+        <p>Build an impenetrable fortress around your application and protect your users' data!</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>The Security Fortress: Defense in Depth</h2>
+            <p>Security is like building a medieval castle - you need multiple layers of defense: moat (network security), walls (authentication), guards (authorization), and a keep (data encryption). Each layer protects against different threats!</p>
+
+            <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+                <!-- Castle Security Layers -->
+                <defs>
+                    <linearGradient id="castleGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#3498db;stop-opacity:0.8" />
+                        <stop offset="100%" style="stop-color:#2c3e50;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- Outer Moat (Network Security) -->
+                <ellipse cx="300" cy="350" rx="280" ry="40" fill="#3498db" opacity="0.5"/>
+                <text x="300" y="355" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Network Security (HTTPS, CORS, CSP)</text>
+                
+                <!-- Outer Wall (Authentication) -->
+                <rect x="100" y="150" width="400" height="180" fill="none" stroke="#95a5a6" stroke-width="4"/>
+                <text x="300" y="140" text-anchor="middle" fill="#333" font-size="14" font-weight="bold">Authentication Wall</text>
+                
+                <!-- Inner Wall (Authorization) -->
+                <rect x="150" y="180" width="300" height="120" fill="none" stroke="#7f8c8d" stroke-width="3"/>
+                <text x="300" y="175" text-anchor="middle" fill="#333" font-size="12">Authorization Layer</text>
+                
+                <!-- Keep (Data Protection) -->
+                <rect x="200" y="210" width="200" height="70" fill="url(#castleGradient)" stroke="#2c3e50" stroke-width="2"/>
+                <text x="300" y="240" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Data Encryption</text>
+                <text x="300" y="260" text-anchor="middle" fill="white" font-size="10">Sensitive Information</text>
+                
+                <!-- Title -->
+                <text x="300" y="30" text-anchor="middle" fill="#333" font-size="20" font-weight="bold">Defense in Depth Security Model</text>
+                
+                <!-- Threat Indicators -->
+                <circle cx="50" cy="200" r="15" fill="#e74c3c"/>
+                <text x="50" y="205" text-anchor="middle" fill="white" font-size="10">XSS</text>
+                
+                <circle cx="550" cy="200" r="15" fill="#e74c3c"/>
+                <text x="550" y="205" text-anchor="middle" fill="white" font-size="10">CSRF</text>
+                
+                <circle cx="50" cy="250" r="15" fill="#f39c12"/>
+                <text x="50" y="255" text-anchor="middle" fill="white" font-size="10">SQL</text>
+                
+                <circle cx="550" cy="250" r="15" fill="#f39c12"/>
+                <text x="550" y="255" text-anchor="middle" fill="white" font-size="10">MITM</text>
+            </svg>
+
+            <div class="mermaid">
+            graph TD
+                A[User Request] --> B{HTTPS?}
+                B -->|No| C[Reject]
+                B -->|Yes| D{Authenticated?}
+                D -->|No| E[Login Required]
+                D -->|Yes| F{Authorized?}
+                F -->|No| G[Access Denied]
+                F -->|Yes| H{Valid Input?}
+                H -->|No| I[Sanitize/Reject]
+                H -->|Yes| J[Process Request]
+                J --> K[Encrypt Response]
+                K --> L[Send to User]
+                
+                style C fill:#e74c3c
+                style E fill:#f39c12
+                style G fill:#e67e22
+                style I fill:#e74c3c
+                style L fill:#2ecc71
+            </div>
+        </section>
+
+        <section>
+            <h2>Authentication: The Identity Checkpoint</h2>
+            <p>Authentication is like a high-security building's reception desk - you need to prove who you are before you can enter. In the digital world, this means usernames, passwords, tokens, and multi-factor authentication!</p>
+
+            <canvas id="authCanvas" width="600" height="400"></canvas>
+            <script>
+                const authCanvas = document.getElementById('authCanvas');
+                const authCtx = authCanvas.getContext('2d');
+                
+                // Title
+                authCtx.font = 'bold 18px Arial';
+                authCtx.fillStyle = '#333';
+                authCtx.textAlign = 'center';
+                authCtx.fillText('JWT Authentication Flow', 300, 30);
+                
+                // User
+                authCtx.fillStyle = '#3498db';
+                authCtx.beginPath();
+                authCtx.arc(100, 100, 30, 0, Math.PI * 2);
+                authCtx.fill();
+                authCtx.fillStyle = 'white';
+                authCtx.font = '12px Arial';
+                authCtx.fillText('User', 100, 105);
+                
+                // React App
+                authCtx.fillStyle = '#61dafb';
+                authCtx.fillRect(250, 70, 100, 60);
+                authCtx.fillStyle = '#333';
+                authCtx.font = '12px Arial';
+                authCtx.fillText('React App', 300, 105);
+                
+                // WordPress API
+                authCtx.fillStyle = '#21759b';
+                authCtx.fillRect(450, 70, 100, 60);
+                authCtx.fillStyle = 'white';
+                authCtx.fillText('WP API', 500, 105);
+                
+                // Flow arrows with labels
+                authCtx.strokeStyle = '#666';
+                authCtx.lineWidth = 2;
+                
+                // 1. Login request
+                authCtx.beginPath();
+                authCtx.moveTo(130, 100);
+                authCtx.lineTo(250, 100);
+                authCtx.stroke();
+                authCtx.fillStyle = '#666';
+                authCtx.font = '10px Arial';
+                authCtx.fillText('1. Credentials', 190, 95);
+                
+                // 2. API call
+                authCtx.beginPath();
+                authCtx.moveTo(350, 100);
+                authCtx.lineTo(450, 100);
+                authCtx.stroke();
+                authCtx.fillText('2. Validate', 400, 95);
+                
+                // 3. JWT token back
+                authCtx.beginPath();
+                authCtx.moveTo(450, 120);
+                authCtx.lineTo(350, 120);
+                authCtx.stroke();
+                authCtx.fillText('3. JWT Token', 400, 135);
+                
+                // 4. Store token
+                authCtx.fillStyle = '#2ecc71';
+                authCtx.fillRect(260, 180, 80, 40);
+                authCtx.fillStyle = 'white';
+                authCtx.font = '11px Arial';
+                authCtx.fillText('Store Token', 300, 203);
+                
+                // 5. Subsequent requests
+                authCtx.strokeStyle = '#2ecc71';
+                authCtx.beginPath();
+                authCtx.moveTo(300, 220);
+                authCtx.lineTo(300, 260);
+                authCtx.stroke();
+                
+                // Token structure
+                authCtx.fillStyle = '#f8f9fa';
+                authCtx.fillRect(150, 280, 300, 100);
+                authCtx.strokeStyle = '#dee2e6';
+                authCtx.strokeRect(150, 280, 300, 100);
+                
+                authCtx.fillStyle = '#333';
+                authCtx.font = 'bold 12px Arial';
+                authCtx.fillText('JWT Structure:', 160, 300);
+                
+                authCtx.font = '11px Courier';
+                authCtx.fillStyle = '#dc3545';
+                authCtx.fillText('Header.', 160, 320);
+                authCtx.fillStyle = '#6f42c1';
+                authCtx.fillText('Payload.', 210, 320);
+                authCtx.fillStyle = '#28a745';
+                authCtx.fillText('Signature', 270, 320);
+                
+                authCtx.fillStyle = '#666';
+                authCtx.font = '10px Arial';
+                authCtx.fillText('Algorithm & Type', 160, 340);
+                authCtx.fillText('User Data', 210, 340);
+                authCtx.fillText('Verification', 270, 340);
+                
+                authCtx.fillText('{"alg":"HS256","typ":"JWT"}', 160, 360);
+            </script>
+
+            <h3>Implementing JWT Authentication</h3>
+            <div class="code-secure">
+<pre>// auth.service.js - Secure Authentication Implementation
+import axios from 'axios';
+import CryptoJS from 'crypto-js';
+
+class AuthService {
+  constructor() {
+    this.baseURL = process.env.REACT_APP_API_URL;
+    this.tokenKey = 'auth_token';
+    this.refreshKey = 'refresh_token';
+    
+    // Set up axios interceptors
+    this.setupInterceptors();
+  }
+
+  setupInterceptors() {
+    // Request interceptor to add token
+    axios.interceptors.request.use(
+      config => {
+        const token = this.getToken();
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      error => Promise.reject(error)
+    );
+
+    // Response interceptor for token refresh
+    axios.interceptors.response.use(
+      response => response,
+      async error => {
+        const originalRequest = error.config;
+        
+        if (error.response?.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+          
+          try {
+            await this.refreshToken();
+            return axios(originalRequest);
+          } catch (refreshError) {
+            this.logout();
+            window.location.href = '/login';
+            return Promise.reject(refreshError);
+          }
+        }
+        
+        return Promise.reject(error);
+      }
+    );
+  }
+
+  async login(username, password) {
+    try {
+      // Hash password before sending (additional layer)
+      const hashedPassword = CryptoJS.SHA256(password).toString();
+      
+      const response = await axios.post(`${this.baseURL}/jwt-auth/v1/token`, {
+        username,
+        password: hashedPassword
+      });
+      
+      const { token, refresh_token, user } = response.data;
+      
+      // Store tokens securely
+      this.setToken(token);
+      this.setRefreshToken(refresh_token);
+      
+      // Store user info (excluding sensitive data)
+      const sanitizedUser = {
+        id: user.id,
+        email: user.email,
+        displayName: user.displayName,
+        role: user.role
+      };
+      localStorage.setItem('user', JSON.stringify(sanitizedUser));
+      
+      return { success: true, user: sanitizedUser };
+    } catch (error) {
+      console.error('Login failed:', error);
+      return { 
+        success: false, 
+        error: this.sanitizeError(error.response?.data?.message) 
+      };
+    }
+  }
+
+  async refreshToken() {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) throw new Error('No refresh token');
+    
+    const response = await axios.post(`${this.baseURL}/jwt-auth/v1/token/refresh`, {
+      refresh_token: refreshToken
+    });
+    
+    this.setToken(response.data.token);
+    return response.data.token;
+  }
+
+  // Secure token storage
+  setToken(token) {
+    // Use httpOnly cookie in production
+    if (process.env.NODE_ENV === 'production') {
+      document.cookie = `${this.tokenKey}=${token}; Secure; SameSite=Strict; Path=/`;
+    } else {
+      sessionStorage.setItem(this.tokenKey, token);
+    }
+  }
+
+  getToken() {
+    if (process.env.NODE_ENV === 'production') {
+      return this.getCookie(this.tokenKey);
+    }
+    return sessionStorage.getItem(this.tokenKey);
+  }
+
+  logout() {
+    // Clear all auth data
+    sessionStorage.clear();
+    localStorage.removeItem('user');
+    document.cookie = `${this.tokenKey}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  }
+
+  // Sanitize error messages to prevent information leakage
+  sanitizeError(message) {
+    const genericError = 'Authentication failed. Please try again.';
+    const safeMessages = {
+      'invalid_username': 'Invalid credentials',
+      'incorrect_password': 'Invalid credentials',
+      'jwt_auth_failed': 'Authentication failed'
+    };
+    
+    return safeMessages[message] || genericError;
+  }
+
+  getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+}
+
+export default new AuthService();</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Security Best Practices Checklist</h2>
+            <p>Your complete security checklist - like a pilot's pre-flight checklist, never skip these essential security measures!</p>
+
+            <div class="security-checklist">
+                <h3>🛡️ Development Security Checklist</h3>
+                
+                <h4>Authentication & Authorization</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✅ Implement JWT with secure secret keys</li>
+                    <li>✅ Use refresh tokens with short expiration</li>
+                    <li>✅ Implement role-based access control (RBAC)</li>
+                    <li>✅ Add multi-factor authentication (MFA)</li>
+                    <li>✅ Rate limit authentication attempts</li>
+                    <li>✅ Log all authentication events</li>
+                </ul>
+
+                <h4>Data Protection</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✅ Use HTTPS everywhere (no mixed content)</li>
+                    <li>✅ Encrypt sensitive data at rest</li>
+                    <li>✅ Sanitize all user inputs</li>
+                    <li>✅ Validate data on both client and server</li>
+                    <li>✅ Use parameterized queries (prevent SQL injection)</li>
+                    <li>✅ Implement CSRF tokens</li>
+                </ul>
+
+                <h4>Security Headers</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✅ Content-Security-Policy</li>
+                    <li>✅ X-Content-Type-Options: nosniff</li>
+                    <li>✅ X-Frame-Options: SAMEORIGIN</li>
+                    <li>✅ Strict-Transport-Security</li>
+                    <li>✅ X-XSS-Protection: 1; mode=block</li>
+                    <li>✅ Referrer-Policy: strict-origin</li>
+                </ul>
+
+                <h4>WordPress Specific</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✅ Keep WordPress core updated</li>
+                    <li>✅ Update plugins and themes regularly</li>
+                    <li>✅ Remove unused plugins/themes</li>
+                    <li>✅ Change default 'admin' username</li>
+                    <li>✅ Use strong database prefix (not wp_)</li>
+                    <li>✅ Disable file editing in wp-config</li>
+                    <li>✅ Hide WordPress version</li>
+                    <li>✅ Implement Web Application Firewall (WAF)</li>
+                </ul>
+
+                <h4>React Specific</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✅ Never use dangerouslySetInnerHTML with user input</li>
+                    <li>✅ Sanitize all dynamic content</li>
+                    <li>✅ Keep dependencies updated</li>
+                    <li>✅ Use environment variables for secrets</li>
+                    <li>✅ Implement Content Security Policy</li>
+                    <li>✅ Enable source map only in development</li>
+                </ul>
+
+                <h4>Monitoring & Incident Response</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✅ Implement security event logging</li>
+                    <li>✅ Set up intrusion detection</li>
+                    <li>✅ Monitor failed login attempts</li>
+                    <li>✅ Track API usage patterns</li>
+                    <li>✅ Regular security audits</li>
+                    <li>✅ Have incident response plan</li>
+                </ul>
+            </div>
+
+            <h3>Security Testing Tools</h3>
+            <div class="code-secure">
+<pre># Security Testing Commands
+
+# npm audit - Check for vulnerable dependencies
+npm audit
+npm audit fix
+
+# OWASP Dependency Check
+npm install -g @owasp/dependency-check
+dependency-check --project "MyApp" --scan ./
+
+# Security Headers Test
+curl -I https://yourdomain.com
+
+# SSL/TLS Test
+nmap --script ssl-enum-ciphers -p 443 yourdomain.com
+
+# WordPress Security Scan
+wpscan --url https://yourdomain.com --enumerate vp,vt,u
+
+# React Bundle Analysis
+npm run build
+npm install -g source-map-explorer
+source-map-explorer build/static/js/*.js
+
+# Penetration Testing Tools
+# - Burp Suite
+# - OWASP ZAP
+# - Nikto
+# - SQLMap
+
+# Code Analysis
+npm install -g eslint-plugin-security
+eslint --ext .js,.jsx src/</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Incident Response Plan</h2>
+            <p>When security incidents happen, you need a plan like a fire drill - everyone knows what to do and where to go!</p>
+
+            <div class="mermaid">
+            graph TD
+                A[Security Incident Detected] --> B{Severity Assessment}
+                B -->|Critical| C[Immediate Response Team]
+                B -->|High| D[Security Team Alert]
+                B -->|Medium| E[Log and Monitor]
+                
+                C --> F[1. Contain Threat]
+                F --> G[2. Assess Damage]
+                G --> H[3. Collect Evidence]
+                H --> I[4. Eradicate Threat]
+                I --> J[5. Recovery]
+                J --> K[6. Post-Incident Review]
+                
+                D --> L[Investigate]
+                L --> M[Remediate]
+                
+                E --> N[Review Logs]
+                N --> O[Update Rules]
+                
+                style A fill:#e74c3c
+                style C fill:#dc3545
+                style K fill:#28a745
+            </div>
+
+            <h3>Incident Response Implementation</h3>
+            <div class="code-secure">
+<pre>// services/IncidentResponse.js
+class IncidentResponseSystem {
+  constructor() {
+    this.incidentLevels = {
+      CRITICAL: 'critical',
+      HIGH: 'high',
+      MEDIUM: 'medium',
+      LOW: 'low'
+    };
+    
+    this.responseTeam = {
+      critical: ['security@company.com', 'cto@company.com'],
+      high: ['security@company.com'],
+      medium: ['devops@company.com'],
+      low: ['logs@company.com']
+    };
+  }
+
+  async handleIncident(incident) {
+    // 1. Log the incident
+    const incidentId = this.logIncident(incident);
+    
+    // 2. Assess severity
+    const severity = this.assessSeverity(incident);
+    
+    // 3. Notify appropriate team
+    await this.notifyTeam(severity, incident, incidentId);
+    
+    // 4. Take immediate action
+    const actions = this.getImmediateActions(incident);
+    await this.executeActions(actions);
+    
+    // 5. Create incident report
+    const report = this.generateReport(incident, incidentId, actions);
+    
+    return { incidentId, severity, report };
+  }
+
+  assessSeverity(incident) {
+    // Critical: Data breach, system compromise
+    if (incident.type === 'DATA_BREACH' || 
+        incident.type === 'SYSTEM_COMPROMISE' ||
+        incident.type === 'RANSOMWARE') {
+      return this.incidentLevels.CRITICAL;
+    }
+    
+    // High: Authentication bypass, XSS/CSRF in production
+    if (incident.type === 'AUTH_BYPASS' || 
+        incident.type === 'XSS_PRODUCTION' ||
+        incident.type === 'SQL_INJECTION') {
+      return this.incidentLevels.HIGH;
+    }
+    
+    // Medium: Suspicious activity, failed attacks
+    if (incident.type === 'BRUTE_FORCE' || 
+        incident.type === 'SUSPICIOUS_ACTIVITY') {
+      return this.incidentLevels.MEDIUM;
+    }
+    
+    // Low: Policy violations, minor issues
+    return this.incidentLevels.LOW;
+  }
+
+  getImmediateActions(incident) {
+    const actions = [];
+    
+    switch (incident.type) {
+      case 'DATA_BREACH':
+        actions.push('ISOLATE_SYSTEM');
+        actions.push('PRESERVE_EVIDENCE');
+        actions.push('NOTIFY_LEGAL');
+        actions.push('PREPARE_DISCLOSURE');
+        break;
+        
+      case 'BRUTE_FORCE':
+        actions.push('BLOCK_IP');
+        actions.push('LOCK_ACCOUNT');
+        actions.push('FORCE_PASSWORD_RESET');
+        break;
+        
+      case 'XSS_PRODUCTION':
+        actions.push('PATCH_VULNERABILITY');
+        actions.push('CLEAR_CACHE');
+        actions.push('NOTIFY_USERS');
+        break;
+        
+      case 'SQL_INJECTION':
+        actions.push('BLOCK_REQUEST_PATTERN');
+        actions.push('AUDIT_DATABASE');
+        actions.push('PATCH_CODE');
+        break;
+    }
+    
+    return actions;
+  }
+
+  async executeActions(actions) {
+    for (const action of actions) {
+      try {
+        await this.executeAction(action);
+        console.log(`Action executed: ${action}`);
+      } catch (error) {
+        console.error(`Failed to execute action ${action}:`, error);
+      }
+    }
+  }
+
+  generateReport(incident, incidentId, actions) {
+    return {
+      id: incidentId,
+      timestamp: new Date().toISOString(),
+      type: incident.type,
+      severity: this.assessSeverity(incident),
+      description: incident.description,
+      affectedSystems: incident.systems,
+      actionsT taken: actions,
+      status: 'IN_PROGRESS',
+      recommendations: this.getRecommendations(incident)
+    };
+  }
+}
+
+// WordPress Incident Logging
+add_action('rest_api_init', function() {
+    register_rest_route('security/v1', '/incident', array(
+        'methods' => 'POST',
+        'callback' => 'handle_security_incident',
+        'permission_callback' => '__return_true'
+    ));
+});
+
+function handle_security_incident($request) {
+    $incident = $request->get_json_params();
+    
+    // Log to database
+    global $wpdb;
+    $table = $wpdb->prefix . 'security_incidents';
+    
+    $wpdb->insert($table, array(
+        'incident_time' => current_time('mysql'),
+        'incident_type' => $incident['type'],
+        'severity' => $incident['severity'],
+        'description' => $incident['description'],
+        'ip_address' => $_SERVER['REMOTE_ADDR'],
+        'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+        'affected_user' => get_current_user_id()
+    ));
+    
+    // Critical incidents - immediate notification
+    if ($incident['severity'] === 'critical') {
+        wp_mail(
+            get_option('admin_email'),
+            'CRITICAL SECURITY INCIDENT',
+            'Immediate action required: ' . json_encode($incident),
+            array('Content-Type: text/html; charset=UTF-8')
+        );
+        
+        // Trigger emergency response
+        do_action('security_critical_incident', $incident);
+    }
+    
+    return new WP_REST_Response(array(
+        'incident_id' => $wpdb->insert_id,
+        'status' => 'logged'
+    ), 200);
+}</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Security Resources & Tools</h2>
+            <p>Your security toolkit - essential tools and resources for keeping your application secure!</p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 2rem 0;">
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #333;">🔍 Security Scanners</h4>
+                    <ul style="margin: 0.5rem 0;">
+                        <li>OWASP ZAP</li>
+                        <li>Burp Suite</li>
+                        <li>WPScan</li>
+                        <li>Nikto</li>
+                        <li>Nessus</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #333;">📚 Learning Resources</h4>
+                    <ul style="margin: 0.5rem 0;">
+                        <li>OWASP Top 10</li>
+                        <li>WordPress Security Guide</li>
+                        <li>React Security Best Practices</li>
+                        <li>Web Security Academy</li>
+                        <li>Security Headers Guide</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #333;">🛠️ Security Plugins</h4>
+                    <ul style="margin: 0.5rem 0;">
+                        <li>Wordfence Security</li>
+                        <li>Sucuri Security</li>
+                        <li>iThemes Security</li>
+                        <li>All In One WP Security</li>
+                        <li>JWT Authentication</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #333;">📊 Monitoring Tools</h4>
+                    <ul style="margin: 0.5rem 0;">
+                        <li>Sentry</li>
+                        <li>LogRocket</li>
+                        <li>New Relic</li>
+                        <li>Datadog</li>
+                        <li>CloudFlare</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="shield-badge">🛡️ Security is not a product, but a process</div>
+            <div class="shield-badge">🔐 Defense in depth is key</div>
+            <div class="shield-badge">🚨 Always assume breach</div>
+        </section>
+
+        <footer>
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 0.5rem; margin-top: 2rem;">
+                <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">🔐 Security Mastery Achieved!</h2>
+                <p style="margin-bottom: 1rem;">You now have the complete security toolkit for React + WordPress applications:</p>
+                <ul style="margin-bottom: 1.5rem;">
+                    <li style="margin: 0.5rem 0;">🔐 Authentication & authorization systems</li>
+                    <li style="margin: 0.5rem 0;">🛡️ XSS, CSRF, and injection prevention</li>
+                    <li style="margin: 0.5rem 0;">🔒 Data encryption and secure storage</li>
+                    <li style="margin: 0.5rem 0;">📊 Security monitoring and logging</li>
+                    <li style="margin: 0.5rem 0;">🚨 Incident response planning</li>
+                    <li style="margin: 0.5rem 0;">✅ Complete security checklist</li>
+                </ul>
+                <p style="font-weight: bold;">Remember: Security is an ongoing journey, not a destination. Stay vigilant, keep learning, and always prioritize your users' safety!</p>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>

@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced WordPress Customization: Headless Architecture Mastery</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="icon" href="/favicon.png">
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .feature-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        .architecture-box {
+            background: #f7fafc;
+            border: 2px dashed #cbd5e0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        .pro-tip {
+            background: #f0fff4;
+            border-left: 4px solid #48bb78;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box {
+            background: #fff5f5;
+            border-left: 4px solid #fc8181;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+        .comparison-table th {
+            background: #4a5568;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+        .comparison-table td {
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+        .comparison-table tr:nth-child(even) {
+            background: #f7fafc;
+        }
+        .code-comment { color: #6a9955; }
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        .code-tag { color: #4ec9b0; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚀 Advanced WordPress Customization</h1>
+        <p>Master headless architecture, custom blocks, GraphQL, and WooCommerce integration</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>The Headless Revolution: WordPress as a Supercharged API</h2>
+            <p>Modern WordPress is like transforming a Swiss Army knife into a precision surgical instrument. We're taking WordPress's powerful content management and exposing it through multiple API endpoints, custom blocks, and advanced integrations.</p>
+
+            <canvas id="architectureCanvas" width="600" height="500"></canvas>
+            <script>
+                const archCanvas = document.getElementById('architectureCanvas');
+                const archCtx = archCanvas.getContext('2d');
+                
+                // Title
+                archCtx.font = 'bold 18px Arial';
+                archCtx.fillStyle = '#333';
+                archCtx.textAlign = 'center';
+                archCtx.fillText('Advanced Headless WordPress Architecture', 300, 30);
+                
+                // WordPress Core
+                archCtx.fillStyle = '#21759b';
+                archCtx.fillRect(200, 200, 200, 100);
+                archCtx.fillStyle = 'white';
+                archCtx.font = 'bold 14px Arial';
+                archCtx.fillText('WordPress Core', 300, 240);
+                archCtx.font = '11px Arial';
+                archCtx.fillText('Content • Users • Media', 300, 260);
+                archCtx.fillText('Plugins • Database', 300, 280);
+                
+                // API Layers
+                const apis = [
+                    {x: 100, y: 100, label: 'REST API', color: '#e74c3c'},
+                    {x: 300, y: 60, label: 'GraphQL', color: '#e10098'},
+                    {x: 500, y: 100, label: 'Custom Endpoints', color: '#f39c12'}
+                ];
+                
+                apis.forEach(api => {
+                    archCtx.fillStyle = api.color;
+                    archCtx.fillRect(api.x - 60, api.y - 20, 120, 40);
+                    archCtx.fillStyle = 'white';
+                    archCtx.font = 'bold 12px Arial';
+                    archCtx.fillText(api.label, api.x, api.y + 5);
+                    
+                    // Connect to WordPress
+                    archCtx.strokeStyle = api.color;
+                    archCtx.lineWidth = 2;
+                    archCtx.beginPath();
+                    archCtx.moveTo(api.x, api.y + 20);
+                    archCtx.lineTo(300, 200);
+                    archCtx.stroke();
+                });
+                
+                // Frontend Consumers
+                const consumers = [
+                    {x: 100, y: 380, label: 'React App', color: '#61dafb'},
+                    {x: 200, y: 430, label: 'Mobile App', color: '#2ecc71'},
+                    {x: 300, y: 380, label: 'Vue App', color: '#4fc08d'},
+                    {x: 400, y: 430, label: 'Next.js', color: '#000'},
+                    {x: 500, y: 380, label: 'Gatsby', color: '#663399'}
+                ];
+                
+                consumers.forEach(consumer => {
+                    archCtx.fillStyle = consumer.color;
+                    archCtx.beginPath();
+                    archCtx.arc(consumer.x, consumer.y, 35, 0, Math.PI * 2);
+                    archCtx.fill();
+                    
+                    archCtx.fillStyle = 'white';
+                    archCtx.font = '10px Arial';
+                    archCtx.fillText(consumer.label, consumer.x, consumer.y + 3);
+                    
+                    // Connect from WordPress
+                    archCtx.strokeStyle = '#ccc';
+                    archCtx.lineWidth = 1;
+                    archCtx.setLineDash([5, 5]);
+                    archCtx.beginPath();
+                    archCtx.moveTo(300, 300);
+                    archCtx.lineTo(consumer.x, consumer.y - 35);
+                    archCtx.stroke();
+                });
+                archCtx.setLineDash([]);
+                
+                // Features boxes
+                const features = [
+                    {x: 50, y: 200, label: 'Gutenberg\nBlocks'},
+                    {x: 550, y: 200, label: 'WooCommerce\nHeadless'}
+                ];
+                
+                features.forEach(feature => {
+                    archCtx.fillStyle = '#9b59b6';
+                    archCtx.globalAlpha = 0.8;
+                    archCtx.fillRect(feature.x - 40, feature.y - 30, 80, 60);
+                    archCtx.globalAlpha = 1;
+                    
+                    archCtx.fillStyle = 'white';
+                    archCtx.font = '10px Arial';
+                    archCtx.textAlign = 'center';
+                    const lines = feature.label.split('\n');
+                    lines.forEach((line, i) => {
+                        archCtx.fillText(line, feature.x, feature.y - 5 + i * 15);
+                    });
+                });
+            </script>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3 style="color: #21759b;">🎯 Custom Gutenberg Blocks</h3>
+                    <p>Build blocks that output structured data for your headless frontend</p>
+                </div>
+                <div class="feature-card">
+                    <h3 style="color: #e10098;">⚡ GraphQL Integration</h3>
+                    <p>Query exactly what you need with WPGraphQL</p>
+                </div>
+                <div class="feature-card">
+                    <h3 style="color: #663399;">🛍️ WooCommerce Headless</h3>
+                    <p>Build blazing-fast e-commerce experiences</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Custom Gutenberg Blocks for Headless WordPress</h2>
+            <p>Creating Gutenberg blocks for headless WordPress is like building LEGO pieces that work both in the WordPress editor AND output clean data for your React frontend. It's the best of both worlds!</p>
+
+            <div class="mermaid">
+            graph TB
+                subgraph "Block Development Flow"
+                    A[Block Registration] --> B[Editor Interface]
+                    B --> C[Save Function]
+                    C --> D[REST API Output]
+                    D --> E[React Frontend]
+                    
+                    B --> F[Block Attributes]
+                    F --> G[InnerBlocks]
+                    F --> H[Dynamic Data]
+                    
+                    style A fill:#3498db
+                    style D fill:#e74c3c
+                    style E fill:#61dafb
+                end
+            </div>
+
+            <h3>Creating a Hero Block for Headless</h3>
+            <div class="code-block">
+<pre><span class="code-comment">// blocks/hero-block/index.js - Custom Gutenberg Block</span>
+<span class="code-keyword">import</span> { registerBlockType } <span class="code-keyword">from</span> <span class="code-string">'@wordpress/blocks'</span>;
+<span class="code-keyword">import</span> { 
+    RichText, 
+    InspectorControls, 
+    MediaUpload,
+    MediaUploadCheck,
+    InnerBlocks 
+} <span class="code-keyword">from</span> <span class="code-string">'@wordpress/block-editor'</span>;
+<span class="code-keyword">import</span> { 
+    PanelBody, 
+    TextControl, 
+    SelectControl,
+    ToggleControl,
+    Button 
+} <span class="code-keyword">from</span> <span class="code-string">'@wordpress/components'</span>;
+
+<span class="code-function">registerBlockType</span>(<span class="code-string">'custom/hero-block'</span>, {
+    title: <span class="code-string">'Hero Section'</span>,
+    icon: <span class="code-string">'cover-image'</span>,
+    category: <span class="code-string">'design'</span>,
+    attributes: {
+        title: {
+            type: <span class="code-string">'string'</span>,
+            source: <span class="code-string">'html'</span>,
+            selector: <span class="code-string">'.hero-title'</span>
+        },
+        subtitle: {
+            type: <span class="code-string">'string'</span>,
+            source: <span class="code-string">'html'</span>,
+            selector: <span class="code-string">'.hero-subtitle'</span>
+        },
+        backgroundImage: {
+            type: <span class="code-string">'object'</span>,
+            default: {}
+        },
+        ctaText: {
+            type: <span class="code-string">'string'</span>,
+            default: <span class="code-string">'Learn More'</span>
+        },
+        ctaLink: {
+            type: <span class="code-string">'string'</span>,
+            default: <span class="code-string">''</span>
+        },
+        alignment: {
+            type: <span class="code-string">'string'</span>,
+            default: <span class="code-string">'center'</span>
+        },
+        overlay: {
+            type: <span class="code-string">'boolean'</span>,
+            default: <span class="code-keyword">true</span>
+        },
+        overlayColor: {
+            type: <span class="code-string">'string'</span>,
+            default: <span class="code-string">'rgba(0,0,0,0.5)'</span>
+        }
+    },
+    
+    <span class="code-function">edit</span>: ({ attributes, setAttributes }) => {
+        <span class="code-keyword">const</span> { 
+            title, 
+            subtitle, 
+            backgroundImage, 
+            ctaText, 
+            ctaLink,
+            alignment,
+            overlay,
+            overlayColor 
+        } = attributes;
+        
+        <span class="code-keyword">return</span> (
+            &lt;&gt;
+                &lt;InspectorControls&gt;
+                    &lt;PanelBody title=<span class="code-string">"Hero Settings"</span>&gt;
+                        &lt;SelectControl
+                            label=<span class="code-string">"Alignment"</span>
+                            value={alignment}
+                            options={[
+                                { label: <span class="code-string">'Left'</span>, value: <span class="code-string">'left'</span> },
+                                { label: <span class="code-string">'Center'</span>, value: <span class="code-string">'center'</span> },
+                                { label: <span class="code-string">'Right'</span>, value: <span class="code-string">'right'</span> }
+                            ]}
+                            onChange={(alignment) => setAttributes({ alignment })}
+                        /&gt;
+                        &lt;ToggleControl
+                            label=<span class="code-string">"Show Overlay"</span>
+                            checked={overlay}
+                            onChange={(overlay) => setAttributes({ overlay })}
+                        /&gt;
+                        &lt;TextControl
+                            label=<span class="code-string">"CTA Link"</span>
+                            value={ctaLink}
+                            onChange={(ctaLink) => setAttributes({ ctaLink })}
+                        /&gt;
+                    &lt;/PanelBody&gt;
+                &lt;/InspectorControls&gt;
+                
+                &lt;div className={`hero-block align-${alignment}`}&gt;
+                    &lt;MediaUploadCheck&gt;
+                        &lt;MediaUpload
+                            onSelect={(media) => setAttributes({ 
+                                backgroundImage: {
+                                    id: media.id,
+                                    url: media.url,
+                                    alt: media.alt
+                                }
+                            })}
+                            allowedTypes={[<span class="code-string">'image'</span>]}
+                            value={backgroundImage.id}
+                            render={({ open }) => (
+                                &lt;Button onClick={open}&gt;
+                                    {backgroundImage.url ? 
+                                        &lt;img src={backgroundImage.url} alt=<span class="code-string">"Background"</span> /&gt; : 
+                                        <span class="code-string">'Select Background Image'</span>
+                                    }
+                                &lt;/Button&gt;
+                            )}
+                        /&gt;
+                    &lt;/MediaUploadCheck&gt;
+                    
+                    &lt;RichText
+                        tagName=<span class="code-string">"h1"</span>
+                        className=<span class="code-string">"hero-title"</span>
+                        value={title}
+                        onChange={(title) => setAttributes({ title })}
+                        placeholder=<span class="code-string">"Enter title..."</span>
+                    /&gt;
+                    
+                    &lt;RichText
+                        tagName=<span class="code-string">"p"</span>
+                        className=<span class="code-string">"hero-subtitle"</span>
+                        value={subtitle}
+                        onChange={(subtitle) => setAttributes({ subtitle })}
+                        placeholder=<span class="code-string">"Enter subtitle..."</span>
+                    /&gt;
+                    
+                    &lt;InnerBlocks
+                        allowedBlocks={[<span class="code-string">'core/button'</span>, <span class="code-string">'core/buttons'</span>]}
+                        template={[
+                            [<span class="code-string">'core/buttons'</span>, {}, [
+                                [<span class="code-string">'core/button'</span>, { text: ctaText, url: ctaLink }]
+                            ]]
+                        ]}
+                    /&gt;
+                &lt;/div&gt;
+            &lt;/&gt;
+        );
+    },
+    
+    <span class="code-function">save</span>: ({ attributes }) => {
+        <span class="code-keyword">const</span> { title, subtitle, backgroundImage, alignment, overlay, overlayColor } = attributes;
+        
+        <span class="code-keyword">return</span> (
+            &lt;div 
+                className={`hero-block align-${alignment}`}
+                data-background={backgroundImage.url}
+                data-overlay={overlay}
+                data-overlay-color={overlayColor}
+            &gt;
+                &lt;RichText.Content
+                    tagName=<span class="code-string">"h1"</span>
+                    className=<span class="code-string">"hero-title"</span>
+                    value={title}
+                /&gt;
+                &lt;RichText.Content
+                    tagName=<span class="code-string">"p"</span>
+                    className=<span class="code-string">"hero-subtitle"</span>
+                    value={subtitle}
+                /&gt;
+                &lt;InnerBlocks.Content /&gt;
+            &lt;/div&gt;
+        );
+    }
+});
+
+<span class="code-comment">// PHP: Register block and expose to REST API</span>
+<span class="code-comment">// blocks/hero-block/index.php</span>
+<span class="code-keyword">function</span> <span class="code-function">register_hero_block</span>() {
+    <span class="code-function">register_block_type</span>(<span class="code-string">'custom/hero-block'</span>, [
+        <span class="code-string">'editor_script'</span> => <span class="code-string">'hero-block-editor'</span>,
+        <span class="code-string">'editor_style'</span> => <span class="code-string">'hero-block-editor'</span>,
+        <span class="code-string">'render_callback'</span> => <span class="code-string">'render_hero_block'</span>,
+        <span class="code-string">'attributes'</span> => [
+            <span class="code-string">'title'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'string'</span>],
+            <span class="code-string">'subtitle'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'string'</span>],
+            <span class="code-string">'backgroundImage'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'object'</span>],
+            <span class="code-string">'ctaText'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'string'</span>],
+            <span class="code-string">'ctaLink'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'string'</span>],
+            <span class="code-string">'alignment'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'string'</span>]
+        ]
+    ]);
+}
+<span class="code-function">add_action</span>(<span class="code-string">'init'</span>, <span class="code-string">'register_hero_block'</span>);
+
+<span class="code-comment">// Add block data to REST API</span>
+<span class="code-keyword">function</span> <span class="code-function">add_blocks_to_rest_api</span>() {
+    <span class="code-function">register_rest_field</span>([<span class="code-string">'post'</span>, <span class="code-string">'page'</span>], <span class="code-string">'blocks_data'</span>, [
+        <span class="code-string">'get_callback'</span> => <span class="code-keyword">function</span>($post) {
+            $blocks = <span class="code-function">parse_blocks</span>($post[<span class="code-string">'content'</span>][<span class="code-string">'raw'</span>]);
+            <span class="code-keyword">return</span> <span class="code-function">array_map</span>(<span class="code-keyword">function</span>($block) {
+                <span class="code-keyword">if</span> (loading) <span class="code-keyword">return</span> &lt;ProductSkeleton /&gt;;
+    
+    <span class="code-keyword">return</span> (
+        &lt;div className=<span class="code-string">"products-grid"</span>&gt;
+            {products.map(product => (
+                &lt;div key={product.id} className=<span class="code-string">"product-card"</span>&gt;
+                    &lt;div className=<span class="code-string">"product-image"</span>&gt;
+                        &lt;img src={product.images[0]?.src} alt={product.name} /&gt;
+                        {product.on_sale && (
+                            &lt;span className=<span class="code-string">"sale-badge"</span>&gt;Sale&lt;/span&gt;
+                        )}
+                    &lt;/div&gt;
+                    &lt;div className=<span class="code-string">"product-info"</span>&gt;
+                        &lt;h3&gt;{product.name}&lt;/h3&gt;
+                        &lt;div className=<span class="code-string">"price"</span>&gt;
+                            {product.sale_price && (
+                                &lt;span className=<span class="code-string">"original-price"</span>&gt;
+                                    ${product.regular_price}
+                                &lt;/span&gt;
+                            )}
+                            &lt;span className=<span class="code-string">"current-price"</span>&gt;
+                                ${product.price}
+                            &lt;/span&gt;
+                        &lt;/div&gt;
+                        &lt;button 
+                            onClick={() => handleAddToCart(product)}
+                            className=<span class="code-string">"add-to-cart-btn"</span>
+                        &gt;
+                            Add to Cart
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            ))}
+        &lt;/div&gt;
+    );
+};
+
+<span class="code-comment">// Checkout Component</span>
+<span class="code-keyword">const</span> <span class="code-function">Checkout</span> = () => {
+    <span class="code-keyword">const</span> { cart } = <span class="code-function">useCart</span>();
+    <span class="code-keyword">const</span> [processing, setProcessing] = <span class="code-function">useState</span>(<span class="code-keyword">false</span>);
+    <span class="code-keyword">const</span> [formData, setFormData] = <span class="code-function">useState</span>({
+        billing_first_name: <span class="code-string">''</span>,
+        billing_last_name: <span class="code-string">''</span>,
+        billing_email: <span class="code-string">''</span>,
+        billing_phone: <span class="code-string">''</span>,
+        billing_address_1: <span class="code-string">''</span>,
+        billing_city: <span class="code-string">''</span>,
+        billing_state: <span class="code-string">''</span>,
+        billing_postcode: <span class="code-string">''</span>,
+        billing_country: <span class="code-string">'US'</span>,
+        payment_method: <span class="code-string">'stripe'</span>
+    });
+    
+    <span class="code-keyword">const</span> <span class="code-function">handleSubmit</span> = <span class="code-keyword">async</span> (e) => {
+        e.<span class="code-function">preventDefault</span>();
+        <span class="code-function">setProcessing</span>(<span class="code-keyword">true</span>);
+        
+        <span class="code-keyword">try</span> {
+            <span class="code-comment">// Process payment with Stripe</span>
+            <span class="code-keyword">if</span> (formData.payment_method === <span class="code-string">'stripe'</span>) {
+                <span class="code-keyword">const</span> { paymentMethod } = <span class="code-keyword">await</span> stripe.<span class="code-function">createPaymentMethod</span>({
+                    type: <span class="code-string">'card'</span>,
+                    card: elements.<span class="code-function">getElement</span>(CardElement),
+                    billing_details: {
+                        name: `${formData.billing_first_name} ${formData.billing_last_name}`,
+                        email: formData.billing_email
+                    }
+                });
+                
+                formData.stripe_payment_method = paymentMethod.id;
+            }
+            
+            <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> axios.<span class="code-function">post</span>(
+                <span class="code-string">'/wp-json/wc-headless/v1/checkout'</span>,
+                formData
+            );
+            
+            <span class="code-keyword">if</span> (response.data.success) {
+                <span class="code-comment">// Redirect to success page</span>
+                window.location.href = `/order-complete/${response.data.order_id}`;
+            }
+        } <span class="code-keyword">catch</span> (error) {
+            console.<span class="code-function">error</span>(<span class="code-string">'Checkout error:'</span>, error);
+            toast.error(<span class="code-string">'Payment failed. Please try again.'</span>);
+        } <span class="code-keyword">finally</span> {
+            <span class="code-function">setProcessing</span>(<span class="code-keyword">false</span>);
+        }
+    };
+    
+    <span class="code-keyword">return</span> (
+        &lt;div className=<span class="code-string">"checkout-container"</span>&gt;
+            &lt;div className=<span class="code-string">"checkout-form"</span>&gt;
+                &lt;h2&gt;Billing Details&lt;/h2&gt;
+                &lt;form onSubmit={handleSubmit}&gt;
+                    &lt;div className=<span class="code-string">"form-row"</span>&gt;
+                        &lt;input
+                            type=<span class="code-string">"text"</span>
+                            placeholder=<span class="code-string">"First Name"</span>
+                            value={formData.billing_first_name}
+                            onChange={(e) => setFormData({
+                                ...formData,
+                                billing_first_name: e.target.value
+                            })}
+                            required
+                        /&gt;
+                        &lt;input
+                            type=<span class="code-string">"text"</span>
+                            placeholder=<span class="code-string">"Last Name"</span>
+                            value={formData.billing_last_name}
+                            onChange={(e) => setFormData({
+                                ...formData,
+                                billing_last_name: e.target.value
+                            })}
+                            required
+                        /&gt;
+                    &lt;/div&gt;
+                    
+                    <span class="code-comment">{/* More form fields... */}</span>
+                    
+                    &lt;div className=<span class="code-string">"payment-section"</span>&gt;
+                        &lt;h3&gt;Payment Method&lt;/h3&gt;
+                        &lt;CardElement /&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;button 
+                        type=<span class="code-string">"submit"</span> 
+                        disabled={processing}
+                        className=<span class="code-string">"place-order-btn"</span>
+                    &gt;
+                        {processing ? <span class="code-string">'Processing...'</span> : <span class="code-string">'Place Order'</span>}
+                    &lt;/button&gt;
+                &lt;/form&gt;
+            &lt;/div&gt;
+            
+            &lt;div className=<span class="code-string">"order-summary"</span>&gt;
+                &lt;h3&gt;Order Summary&lt;/h3&gt;
+                {cart.items.map(item => (
+                    &lt;div key={item.key} className=<span class="code-string">"summary-item"</span>&gt;
+                        &lt;span&gt;{item.name} × {item.quantity}&lt;/span&gt;
+                        &lt;span&gt;${item.subtotal}&lt;/span&gt;
+                    &lt;/div&gt;
+                ))}
+                &lt;div className=<span class="code-string">"summary-totals"</span>&gt;
+                    &lt;div&gt;Subtotal: ${cart.total}&lt;/div&gt;
+                    &lt;div&gt;Shipping: ${cart.shipping}&lt;/div&gt;
+                    &lt;div&gt;Tax: ${cart.tax}&lt;/div&gt;
+                    &lt;div className=<span class="code-string">"grand-total"</span>&gt;
+                        Total: ${cart.grand_total}
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    );
+};</pre>
+            </div>
+
+            <div class="pro-tip">
+                <strong>💡 Pro Tip:</strong> Use WooCommerce webhooks to sync inventory in real-time and implement server-side cart sessions for better cart persistence across devices!
+            </div>
+        </section>
+
+        <section>
+            <h2>Performance & Optimization Strategies</h2>
+            <p>Advanced WordPress customization isn't complete without optimizing for blazing-fast performance. Here are enterprise-level strategies:</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🚀 Object Caching</h3>
+                    <div class="code-block">
+<pre><span class="code-comment">// Redis object caching</span>
+<span class="code-keyword">function</span> <span class="code-function">get_cached_data</span>($key, $callback, $expiration = 3600) {
+    $cached = <span class="code-function">wp_cache_get</span>($key, <span class="code-string">'my_cache_group'</span>);
+    
+    <span class="code-keyword">if</span> ($cached === <span class="code-keyword">false</span>) {
+        $data = <span class="code-function">$callback</span>();
+        <span class="code-function">wp_cache_set</span>($key, $data, <span class="code-string">'my_cache_group'</span>, $expiration);
+        <span class="code-keyword">return</span> $data;
+    }
+    
+    <span class="code-keyword">return</span> $cached;
+}</pre>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>⚡ GraphQL Persisted Queries</h3>
+                    <div class="code-block">
+<pre><span class="code-comment">// Persisted queries for GraphQL</span>
+<span class="code-keyword">const</span> persistedQueries = {
+    <span class="code-string">'getProducts'</span>: <span class="code-string">'query_hash_123'</span>,
+    <span class="code-string">'getCart'</span>: <span class="code-string">'query_hash_456'</span>
+};
+
+<span class="code-comment">// Use hash instead of full query</span>
+<span class="code-keyword">const</span> response = <span class="code-keyword">await</span> <span class="code-function">fetch</span>(<span class="code-string">'/graphql'</span>, {
+    method: <span class="code-string">'POST'</span>,
+    body: JSON.<span class="code-function">stringify</span>({
+        persistedQuery: {
+            sha256Hash: persistedQueries.getProducts
+        }
+    })
+});</pre>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📦 Edge Caching</h3>
+                    <div class="code-block">
+<pre><span class="code-comment">// Cloudflare Workers edge caching</span>
+addEventListener(<span class="code-string">'fetch'</span>, event => {
+    event.<span class="code-function">respondWith</span>(<span class="code-function">handleRequest</span>(event.request))
+});
+
+<span class="code-keyword">async function</span> <span class="code-function">handleRequest</span>(request) {
+    <span class="code-keyword">const</span> cache = caches.default;
+    <span class="code-keyword">let</span> response = <span class="code-keyword">await</span> cache.<span class="code-function">match</span>(request);
+    
+    <span class="code-keyword">if</span> (!response) {
+        response = <span class="code-keyword">await</span> <span class="code-function">fetch</span>(request);
+        event.<span class="code-function">waitUntil</span>(cache.<span class="code-function">put</span>(request, response.<span class="code-function">clone</span>()));
+    }
+    
+    <span class="code-keyword">return</span> response;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Security Best Practices</h2>
+            <p>When exposing WordPress through APIs, security becomes paramount. Here's your fortress strategy:</p>
+
+            <div class="architecture-box">
+                <h3>🔐 Security Layers</h3>
+                <div class="code-block">
+<pre><span class="code-comment">// JWT Authentication for headless WordPress</span>
+<span class="code-keyword">class</span> <span class="code-function">JWT_Auth</span> {
+    <span class="code-keyword">public function</span> <span class="code-function">__construct</span>() {
+        <span class="code-function">add_filter</span>(<span class="code-string">'rest_authentication_errors'</span>, [$this, <span class="code-string">'jwt_auth_handler'</span>], 20);
+        <span class="code-function">add_action</span>(<span class="code-string">'rest_api_init'</span>, [$this, <span class="code-string">'register_auth_endpoints'</span>]);
+    }
+    
+    <span class="code-keyword">public function</span> <span class="code-function">jwt_auth_handler</span>($error) {
+        <span class="code-keyword">if</span> (!<span class="code-keyword">empty</span>($error)) {
+            <span class="code-keyword">return</span> $error;
+        }
+        
+        <span class="code-keyword">if</span> (!<span class="code-function">is_user_logged_in</span>()) {
+            $token = $this-><span class="code-function">get_bearer_token</span>();
+            
+            <span class="code-keyword">if</span> ($token) {
+                <span class="code-keyword">try</span> {
+                    $decoded = JWT::<span class="code-function">decode</span>(
+                        $token,
+                        <span class="code-function">get_option</span>(<span class="code-string">'jwt_secret_key'</span>),
+                        [<span class="code-string">'HS256'</span>]
+                    );
+                    
+                    <span class="code-function">wp_set_current_user</span>($decoded->data->user->id);
+                } <span class="code-keyword">catch</span> (Exception $e) {
+                    <span class="code-keyword">return new</span> <span class="code-function">WP_Error</span>(
+                        <span class="code-string">'jwt_auth_invalid_token'</span>,
+                        <span class="code-string">'Invalid authentication token'</span>,
+                        [<span class="code-string">'status'</span> => 401]
+                    );
+                }
+            }
+        }
+        
+        <span class="code-keyword">return</span> $error;
+    }
+    
+    <span class="code-keyword">private function</span> <span class="code-function">get_bearer_token</span>() {
+        $headers = <span class="code-function">getallheaders</span>();
+        
+        <span class="code-keyword">if</span> (<span class="code-keyword">isset</span>($headers[<span class="code-string">'Authorization'</span>])) {
+            <span class="code-keyword">if</span> (<span class="code-function">preg_match</span>(<span class="code-string">'/Bearer\s(\S+)/'</span>, $headers[<span class="code-string">'Authorization'</span>], $matches)) {
+                <span class="code-keyword">return</span> $matches[1];
+            }
+        }
+        
+        <span class="code-keyword">return null</span>;
+    }
+}
+
+<span class="code-comment">// Rate limiting</span>
+<span class="code-keyword">class</span> <span class="code-function">API_Rate_Limiter</span> {
+    <span class="code-keyword">private</span> $requests_per_minute = 60;
+    
+    <span class="code-keyword">public function</span> <span class="code-function">check_rate_limit</span>() {
+        $user_ip = $_SERVER[<span class="code-string">'REMOTE_ADDR'</span>];
+        $key = <span class="code-string">'rate_limit_'</span> . $user_ip;
+        $requests = <span class="code-function">get_transient</span>($key) ?: 0;
+        
+        <span class="code-keyword">if</span> ($requests >= $this->requests_per_minute) {
+            <span class="code-keyword">return new</span> <span class="code-function">WP_Error</span>(
+                <span class="code-string">'rate_limit_exceeded'</span>,
+                <span class="code-string">'Too many requests'</span>,
+                [<span class="code-string">'status'</span> => 429]
+            );
+        }
+        
+        <span class="code-function">set_transient</span>($key, $requests + 1, 60);
+        <span class="code-keyword">return true</span>;
+    }
+}</pre>
+                </div>
+                
+                <div class="warning-box">
+                    <strong>⚠️ Security Checklist:</strong>
+                    <ul style="margin-top: 0.5rem;">
+                        <li>✓ Implement JWT or OAuth2 authentication</li>
+                        <li>✓ Use HTTPS everywhere</li>
+                        <li>✓ Implement rate limiting</li>
+                        <li>✓ Sanitize all inputs</li>
+                        <li>✓ Use nonces for state-changing operations</li>
+                        <li>✓ Implement CORS properly</li>
+                        <li>✓ Regular security audits</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Deployment & DevOps</h2>
+            <p>Deploy your headless WordPress like a pro with modern CI/CD pipelines:</p>
+
+            <div class="code-block">
+<pre><span class="code-comment"># .github/workflows/deploy.yml</span>
+name: Deploy Headless WordPress
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-wordpress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Deploy WordPress to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_KEY }}
+          script: |
+            cd /var/www/wordpress
+            git pull origin main
+            composer install --no-dev
+            wp core update
+            wp plugin update --all
+            wp cache flush
+            
+  deploy-react:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Build React App
+        run: |
+          npm ci
+          npm run build
+          
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-args: '--prod'
+          vercel-org-id: ${{ secrets.ORG_ID }}
+          vercel-project-id: ${{ secrets.PROJECT_ID }}</pre>
+            </div>
+        </section>
+
+        <footer>
+            <div class="highlight-box">
+                <h2 style="color: white; margin-bottom: 1rem;">🚀 Advanced WordPress Mastery Complete!</h2>
+                <p style="color: white; margin-bottom: 1rem;">You've unlocked the full potential of headless WordPress:</p>
+                <ul style="color: white; margin-bottom: 1rem;">
+                    <li>✅ Custom Gutenberg blocks for structured content</li>
+                    <li>✅ GraphQL integration with WPGraphQL</li>
+                    <li>✅ Advanced custom REST endpoints</li>
+                    <li>✅ WordPress Multisite for enterprise solutions</li>
+                    <li>✅ WooCommerce headless e-commerce</li>
+                    <li>✅ Performance optimization strategies</li>
+                    <li>✅ Security best practices</li>
+                </ul>
+                <p style="color: white; font-weight: bold;">You're now equipped to build enterprise-grade headless WordPress applications that scale to millions of users!</p>
+            </div>
+            
+            <div style="margin-top: 2rem; padding: 1.5rem; background: #f7fafc; border-radius: 8px;">
+                <h3>🎓 Next Steps</h3>
+                <ul>
+                    <li>Implement server-side rendering with Next.js for SEO</li>
+                    <li>Add real-time features with WebSockets</li>
+                    <li>Integrate AI/ML for content recommendations</li>
+                    <li>Build a Progressive Web App (PWA)</li>
+                    <li>Implement advanced caching strategies</li>
+                </ul>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>$block[<span class="code-string">'blockName'</span>] === <span class="code-string">'custom/hero-block'</span>) {
+                    <span class="code-comment">// Add media URLs to response</span>
+                    <span class="code-keyword">if</span> (!<span class="code-keyword">empty</span>($block[<span class="code-string">'attrs'</span>][<span class="code-string">'backgroundImage'</span>][<span class="code-string">'id'</span>])) {
+                        $image = <span class="code-function">wp_get_attachment_image_src</span>(
+                            $block[<span class="code-string">'attrs'</span>][<span class="code-string">'backgroundImage'</span>][<span class="code-string">'id'</span>],
+                            <span class="code-string">'full'</span>
+                        );
+                        $block[<span class="code-string">'attrs'</span>][<span class="code-string">'backgroundImage'</span>][<span class="code-string">'sizes'</span>] = [
+                            <span class="code-string">'full'</span> => $image[0],
+                            <span class="code-string">'medium'</span> => <span class="code-function">wp_get_attachment_image_url</span>(
+                                $block[<span class="code-string">'attrs'</span>][<span class="code-string">'backgroundImage'</span>][<span class="code-string">'id'</span>],
+                                <span class="code-string">'medium'</span>
+                            ),
+                            <span class="code-string">'thumbnail'</span> => <span class="code-function">wp_get_attachment_image_url</span>(
+                                $block[<span class="code-string">'attrs'</span>][<span class="code-string">'backgroundImage'</span>][<span class="code-string">'id'</span>],
+                                <span class="code-string">'thumbnail'</span>
+                            )
+                        ];
+                    }
+                }
+                <span class="code-keyword">return</span> $block;
+            }, $blocks);
+        },
+        <span class="code-string">'schema'</span> => [
+            <span class="code-string">'type'</span> => <span class="code-string">'array'</span>,
+            <span class="code-string">'items'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'object'</span>]
+        ]
+    ]);
+}
+<span class="code-function">add_action</span>(<span class="code-string">'rest_api_init'</span>, <span class="code-string">'add_blocks_to_rest_api'</span>);</pre>
+            </div>
+
+            <h3>Consuming Blocks in React</h3>
+            <div class="code-block">
+<pre><span class="code-comment">// components/BlockRenderer.js - React Component</span>
+<span class="code-keyword">import</span> React <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+<span class="code-keyword">import</span> HeroBlock <span class="code-keyword">from</span> <span class="code-string">'./blocks/HeroBlock'</span>;
+<span class="code-keyword">import</span> ContentBlock <span class="code-keyword">from</span> <span class="code-string">'./blocks/ContentBlock'</span>;
+
+<span class="code-keyword">const</span> <span class="code-function">BlockRenderer</span> = ({ blocks }) => {
+    <span class="code-keyword">const</span> <span class="code-function">renderBlock</span> = (block, index) => {
+        <span class="code-keyword">switch</span> (block.blockName) {
+            <span class="code-keyword">case</span> <span class="code-string">'custom/hero-block'</span>:
+                <span class="code-keyword">return</span> &lt;HeroBlock key={index} {...block.attrs} /&gt;;
+            
+            <span class="code-keyword">case</span> <span class="code-string">'core/paragraph'</span>:
+                <span class="code-keyword">return</span> (
+                    &lt;p 
+                        key={index}
+                        dangerouslySetInnerHTML={{ __html: block.innerHTML }}
+                    /&gt;
+                );
+            
+            <span class="code-keyword">case</span> <span class="code-string">'core/heading'</span>:
+                <span class="code-keyword">const</span> Tag = `h${block.attrs.level || 2}`;
+                <span class="code-keyword">return</span> (
+                    &lt;Tag 
+                        key={index}
+                        dangerouslySetInnerHTML={{ __html: block.innerHTML }}
+                    /&gt;
+                );
+            
+            <span class="code-keyword">case</span> <span class="code-string">'core/image'</span>:
+                <span class="code-keyword">return</span> (
+                    &lt;figure key={index} className=<span class="code-string">"wp-block-image"</span>&gt;
+                        &lt;img 
+                            src={block.attrs.url}
+                            alt={block.attrs.alt}
+                            width={block.attrs.width}
+                            height={block.attrs.height}
+                        /&gt;
+                        {block.attrs.caption && (
+                            &lt;figcaption&gt;{block.attrs.caption}&lt;/figcaption&gt;
+                        )}
+                    &lt;/figure&gt;
+                );
+            
+            <span class="code-keyword">default</span>:
+                <span class="code-keyword">return</span> <span class="code-keyword">null</span>;
+        }
+    };
+    
+    <span class="code-keyword">return</span> (
+        &lt;div className=<span class="code-string">"blocks-container"</span>&gt;
+            {blocks.map(renderBlock)}
+        &lt;/div&gt;
+    );
+};
+
+<span class="code-comment">// components/blocks/HeroBlock.js</span>
+<span class="code-keyword">const</span> <span class="code-function">HeroBlock</span> = ({ 
+    title, 
+    subtitle, 
+    backgroundImage, 
+    ctaText, 
+    ctaLink, 
+    alignment,
+    overlay,
+    overlayColor 
+}) => {
+    <span class="code-keyword">return</span> (
+        &lt;section 
+            className={`hero-section hero-align-${alignment}`}
+            style={{
+                backgroundImage: `url(${backgroundImage?.sizes?.full || backgroundImage?.url})`,
+                position: <span class="code-string">'relative'</span>
+            }}
+        &gt;
+            {overlay && (
+                &lt;div 
+                    className=<span class="code-string">"hero-overlay"</span>
+                    style={{
+                        backgroundColor: overlayColor,
+                        position: <span class="code-string">'absolute'</span>,
+                        inset: 0
+                    }}
+                /&gt;
+            )}
+            &lt;div className=<span class="code-string">"hero-content"</span>&gt;
+                &lt;h1 dangerouslySetInnerHTML={{ __html: title }} /&gt;
+                &lt;p dangerouslySetInnerHTML={{ __html: subtitle }} /&gt;
+                {ctaText && ctaLink && (
+                    &lt;a href={ctaLink} className=<span class="code-string">"btn btn-primary"</span>&gt;
+                        {ctaText}
+                    &lt;/a&gt;
+                )}
+            &lt;/div&gt;
+        &lt;/section&gt;
+    );
+};</pre>
+            </div>
+
+            <div class="pro-tip">
+                <strong>💡 Pro Tip:</strong> Create a block library that works seamlessly between WordPress admin and your headless frontend. This gives content editors familiar tools while developers get clean, structured data.
+            </div>
+        </section>
+
+        <section>
+            <h2>GraphQL with WPGraphQL: Query Exactly What You Need</h2>
+            <p>GraphQL is like ordering à la carte instead of a fixed menu. With REST, you get the entire meal whether you want it or not. With GraphQL, you pick exactly what you need - no more, no less!</p>
+
+            <canvas id="graphqlCanvas" width="600" height="400"></canvas>
+            <script>
+                const gqlCanvas = document.getElementById('graphqlCanvas');
+                const gqlCtx = gqlCanvas.getContext('2d');
+                
+                // Title
+                gqlCtx.font = 'bold 18px Arial';
+                gqlCtx.fillStyle = '#333';
+                gqlCtx.textAlign = 'center';
+                gqlCtx.fillText('REST vs GraphQL Data Fetching', 300, 30);
+                
+                // REST Side
+                gqlCtx.fillStyle = '#e74c3c';
+                gqlCtx.fillRect(50, 80, 230, 280);
+                gqlCtx.fillStyle = 'white';
+                gqlCtx.font = 'bold 14px Arial';
+                gqlCtx.fillText('REST API', 165, 105);
+                
+                // REST requests
+                const restEndpoints = [
+                    '/posts/1',
+                    '/users/5',
+                    '/comments?post=1',
+                    '/categories/3'
+                ];
+                
+                gqlCtx.font = '11px Courier';
+                restEndpoints.forEach((endpoint, i) => {
+                    gqlCtx.fillStyle = '#ffebee';
+                    gqlCtx.fillRect(60, 120 + i * 35, 210, 25);
+                    gqlCtx.fillStyle = '#c62828';
+                    gqlCtx.fillText('GET ' + endpoint, 65, 137 + i * 35);
+                });
+                
+                gqlCtx.fillStyle = 'white';
+                gqlCtx.font = '12px Arial';
+                gqlCtx.fillText('4 Requests = 4 Round Trips', 165, 290);
+                gqlCtx.fillText('~2.5KB transferred', 165, 310);
+                gqlCtx.fillText('Overfetching data', 165, 330);
+                
+                // GraphQL Side
+                gqlCtx.fillStyle = '#e10098';
+                gqlCtx.fillRect(320, 80, 230, 280);
+                gqlCtx.fillStyle = 'white';
+                gqlCtx.font = 'bold 14px Arial';
+                gqlCtx.fillText('GraphQL', 435, 105);
+                
+                // GraphQL query
+                gqlCtx.fillStyle = '#fce4ec';
+                gqlCtx.fillRect(330, 120, 210, 140);
+                gqlCtx.fillStyle = '#880e4f';
+                gqlCtx.font = '10px Courier';
+                gqlCtx.textAlign = 'left';
+                const query = [
+                    'query GetPost {',
+                    '  post(id: 1) {',
+                    '    title',
+                    '    author { name }',
+                    '    comments { text }',
+                    '    category { name }',
+                    '  }',
+                    '}'
+                ];
+                query.forEach((line, i) => {
+                    gqlCtx.fillText(line, 335, 135 + i * 18);
+                });
+                
+                gqlCtx.fillStyle = 'white';
+                gqlCtx.font = '12px Arial';
+                gqlCtx.textAlign = 'center';
+                gqlCtx.fillText('1 Request = 1 Round Trip', 435, 290);
+                gqlCtx.fillText('~0.8KB transferred', 435, 310);
+                gqlCtx.fillText('Exact data needed', 435, 330);
+                
+                // Comparison arrow
+                gqlCtx.strokeStyle = '#2ecc71';
+                gqlCtx.lineWidth = 3;
+                gqlCtx.beginPath();
+                gqlCtx.moveTo(280, 200);
+                gqlCtx.lineTo(320, 200);
+                gqlCtx.stroke();
+                
+                // Arrow head
+                gqlCtx.beginPath();
+                gqlCtx.moveTo(315, 195);
+                gqlCtx.lineTo(325, 200);
+                gqlCtx.lineTo(315, 205);
+                gqlCtx.closePath();
+                gqlCtx.fillStyle = '#2ecc71';
+                gqlCtx.fill();
+                
+                gqlCtx.fillStyle = '#2ecc71';
+                gqlCtx.font = 'bold 24px Arial';
+                gqlCtx.fillText('70% Less Data!', 300, 390);
+            </script>
+
+            <h3>Setting Up WPGraphQL</h3>
+            <div class="code-block">
+<pre><span class="code-comment">// Install WPGraphQL plugin first, then extend it</span>
+<span class="code-comment">// functions.php - Custom GraphQL Types and Fields</span>
+
+<span class="code-comment">// Register custom post type with GraphQL support</span>
+<span class="code-keyword">function</span> <span class="code-function">register_project_post_type</span>() {
+    <span class="code-function">register_post_type</span>(<span class="code-string">'project'</span>, [
+        <span class="code-string">'label'</span> => <span class="code-string">'Projects'</span>,
+        <span class="code-string">'public'</span> => <span class="code-keyword">true</span>,
+        <span class="code-string">'show_in_graphql'</span> => <span class="code-keyword">true</span>,
+        <span class="code-string">'graphql_single_name'</span> => <span class="code-string">'project'</span>,
+        <span class="code-string">'graphql_plural_name'</span> => <span class="code-string">'projects'</span>,
+        <span class="code-string">'supports'</span> => [<span class="code-string">'title'</span>, <span class="code-string">'editor'</span>, <span class="code-string">'thumbnail'</span>, <span class="code-string">'custom-fields'</span>]
+    ]);
+}
+<span class="code-function">add_action</span>(<span class="code-string">'init'</span>, <span class="code-string">'register_project_post_type'</span>);
+
+<span class="code-comment">// Add custom fields to GraphQL</span>
+<span class="code-keyword">function</span> <span class="code-function">add_custom_fields_to_graphql</span>() {
+    <span class="code-comment">// Add ACF fields to GraphQL</span>
+    <span class="code-function">register_graphql_field</span>(<span class="code-string">'Project'</span>, <span class="code-string">'projectDetails'</span>, [
+        <span class="code-string">'type'</span> => <span class="code-string">'ProjectDetails'</span>,
+        <span class="code-string">'description'</span> => <span class="code-string">'Custom project details'</span>,
+        <span class="code-string">'resolve'</span> => <span class="code-keyword">function</span>($post) {
+            <span class="code-keyword">return</span> [
+                <span class="code-string">'client'</span> => <span class="code-function">get_field</span>(<span class="code-string">'client'</span>, $post->ID),
+                <span class="code-string">'completionDate'</span> => <span class="code-function">get_field</span>(<span class="code-string">'completion_date'</span>, $post->ID),
+                <span class="code-string">'technologies'</span> => <span class="code-function">get_field</span>(<span class="code-string">'technologies'</span>, $post->ID),
+                <span class="code-string">'githubUrl'</span> => <span class="code-function">get_field</span>(<span class="code-string">'github_url'</span>, $post->ID),
+                <span class="code-string">'liveUrl'</span> => <span class="code-function">get_field</span>(<span class="code-string">'live_url'</span>, $post->ID),
+                <span class="code-string">'featured'</span> => <span class="code-function">get_field</span>(<span class="code-string">'featured'</span>, $post->ID)
+            ];
+        }
+    ]);
+    
+    <span class="code-comment">// Register the ProjectDetails type</span>
+    <span class="code-function">register_graphql_object_type</span>(<span class="code-string">'ProjectDetails'</span>, [
+        <span class="code-string">'description'</span> => <span class="code-string">'Project metadata'</span>,
+        <span class="code-string">'fields'</span> => [
+            <span class="code-string">'client'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'String'</span>],
+            <span class="code-string">'completionDate'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'String'</span>],
+            <span class="code-string">'technologies'</span> => [
+                <span class="code-string">'type'</span> => [<span class="code-string">'list_of'</span> => <span class="code-string">'String'</span>]
+            ],
+            <span class="code-string">'githubUrl'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'String'</span>],
+            <span class="code-string">'liveUrl'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'String'</span>],
+            <span class="code-string">'featured'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'Boolean'</span>]
+        ]
+    ]);
+}
+<span class="code-function">add_action</span>(<span class="code-string">'graphql_register_types'</span>, <span class="code-string">'add_custom_fields_to_graphql'</span>);
+
+<span class="code-comment">// Add custom mutations</span>
+<span class="code-keyword">function</span> <span class="code-function">register_custom_mutations</span>() {
+    <span class="code-function">register_graphql_mutation</span>(<span class="code-string">'createProjectInquiry'</span>, [
+        <span class="code-string">'inputFields'</span> => [
+            <span class="code-string">'projectId'</span> => [
+                <span class="code-string">'type'</span> => <span class="code-string">'ID'</span>,
+                <span class="code-string">'description'</span> => <span class="code-string">'The project to inquire about'</span>
+            ],
+            <span class="code-string">'name'</span> => [
+                <span class="code-string">'type'</span> => <span class="code-string">'String'</span>,
+                <span class="code-string">'description'</span> => <span class="code-string">'Inquirer name'</span>
+            ],
+            <span class="code-string">'email'</span> => [
+                <span class="code-string">'type'</span> => <span class="code-string">'String'</span>,
+                <span class="code-string">'description'</span> => <span class="code-string">'Inquirer email'</span>
+            ],
+            <span class="code-string">'message'</span> => [
+                <span class="code-string">'type'</span> => <span class="code-string">'String'</span>,
+                <span class="code-string">'description'</span> => <span class="code-string">'Inquiry message'</span>
+            ]
+        ],
+        <span class="code-string">'outputFields'</span> => [
+            <span class="code-string">'success'</span> => [
+                <span class="code-string">'type'</span> => <span class="code-string">'Boolean'</span>,
+                <span class="code-string">'description'</span> => <span class="code-string">'Was the inquiry sent successfully'</span>
+            ],
+            <span class="code-string">'message'</span> => [
+                <span class="code-string">'type'</span> => <span class="code-string">'String'</span>,
+                <span class="code-string">'description'</span> => <span class="code-string">'Response message'</span>
+            ]
+        ],
+        <span class="code-string">'mutateAndGetPayload'</span> => <span class="code-keyword">function</span>($input) {
+            <span class="code-comment">// Process the inquiry</span>
+            $inquiry_id = <span class="code-function">wp_insert_post</span>([
+                <span class="code-string">'post_type'</span> => <span class="code-string">'inquiry'</span>,
+                <span class="code-string">'post_title'</span> => <span class="code-string">'Inquiry from '</span> . $input[<span class="code-string">'name'</span>],
+                <span class="code-string">'post_content'</span> => $input[<span class="code-string">'message'</span>],
+                <span class="code-string">'post_status'</span> => <span class="code-string">'private'</span>
+            ]);
+            
+            <span class="code-keyword">if</span> ($inquiry_id) {
+                <span class="code-comment">// Store metadata</span>
+                <span class="code-function">update_post_meta</span>($inquiry_id, <span class="code-string">'project_id'</span>, $input[<span class="code-string">'projectId'</span>]);
+                <span class="code-function">update_post_meta</span>($inquiry_id, <span class="code-string">'inquirer_email'</span>, $input[<span class="code-string">'email'</span>]);
+                
+                <span class="code-comment">// Send notification email</span>
+                <span class="code-function">wp_mail</span>(
+                    <span class="code-function">get_option</span>(<span class="code-string">'admin_email'</span>),
+                    <span class="code-string">'New Project Inquiry'</span>,
+                    $input[<span class="code-string">'message'</span>]
+                );
+                
+                <span class="code-keyword">return</span> [
+                    <span class="code-string">'success'</span> => <span class="code-keyword">true</span>,
+                    <span class="code-string">'message'</span> => <span class="code-string">'Thank you for your inquiry!'</span>
+                ];
+            }
+            
+            <span class="code-keyword">return</span> [
+                <span class="code-string">'success'</span> => <span class="code-keyword">false</span>,
+                <span class="code-string">'message'</span> => <span class="code-string">'Failed to send inquiry.'</span>
+            ];
+        }
+    ]);
+}
+<span class="code-function">add_action</span>(<span class="code-string">'graphql_register_types'</span>, <span class="code-string">'register_custom_mutations'</span>);</pre>
+            </div>
+
+            <h3>Using GraphQL in React with Apollo Client</h3>
+            <div class="code-block">
+<pre><span class="code-comment">// React: Setup Apollo Client</span>
+<span class="code-keyword">import</span> { ApolloClient, InMemoryCache, ApolloProvider, gql, useQuery, useMutation } <span class="code-keyword">from</span> <span class="code-string">'@apollo/client'</span>;
+
+<span class="code-keyword">const</span> client = <span class="code-keyword">new</span> <span class="code-function">ApolloClient</span>({
+    uri: <span class="code-string">'https://yoursite.com/graphql'</span>,
+    cache: <span class="code-keyword">new</span> <span class="code-function">InMemoryCache</span>(),
+    defaultOptions: {
+        watchQuery: {
+            fetchPolicy: <span class="code-string">'cache-and-network'</span>
+        }
+    }
+});
+
+<span class="code-comment">// GraphQL Queries</span>
+<span class="code-keyword">const</span> GET_PROJECTS = gql`
+    query GetProjects($first: Int!, $after: String) {
+        projects(first: $first, after: $after) {
+            pageInfo {
+                hasNextPage
+                endCursor
+            }
+            edges {
+                node {
+                    id
+                    title
+                    excerpt
+                    featuredImage {
+                        node {
+                            sourceUrl
+                            altText
+                        }
+                    }
+                    projectDetails {
+                        client
+                        completionDate
+                        technologies
+                        featured
+                        liveUrl
+                    }
+                }
+            }
+        }
+    }
+`;
+
+<span class="code-keyword">const</span> GET_PROJECT_BY_SLUG = gql`
+    query GetProject($slug: String!) {
+        projectBy(slug: $slug) {
+            id
+            title
+            content
+            featuredImage {
+                node {
+                    sourceUrl(size: LARGE)
+                    altText
+                }
+            }
+            projectDetails {
+                client
+                completionDate
+                technologies
+                githubUrl
+                liveUrl
+            }
+            related: projects(first: 3, where: { exclude: [$id] }) {
+                nodes {
+                    id
+                    title
+                    slug
+                    featuredImage {
+                        node {
+                            sourceUrl(size: MEDIUM)
+                        }
+                    }
+                }
+            }
+        }
+    }
+`;
+
+<span class="code-keyword">const</span> CREATE_INQUIRY = gql`
+    mutation CreateInquiry($input: CreateProjectInquiryInput!) {
+        createProjectInquiry(input: $input) {
+            success
+            message
+        }
+    }
+`;
+
+<span class="code-comment">// React Components using GraphQL</span>
+<span class="code-keyword">function</span> <span class="code-function">ProjectList</span>() {
+    <span class="code-keyword">const</span> { loading, error, data, fetchMore } = <span class="code-function">useQuery</span>(GET_PROJECTS, {
+        variables: { first: 9 }
+    });
+    
+    <span class="code-keyword">if</span> (loading) <span class="code-keyword">return</span> &lt;LoadingSkeleton /&gt;;
+    <span class="code-keyword">if</span> (error) <span class="code-keyword">return</span> &lt;ErrorMessage error={error} /&gt;;
+    
+    <span class="code-keyword">const</span> projects = data.projects.edges.map(edge => edge.node);
+    <span class="code-keyword">const</span> { hasNextPage, endCursor } = data.projects.pageInfo;
+    
+    <span class="code-keyword">const</span> <span class="code-function">loadMore</span> = () => {
+        <span class="code-function">fetchMore</span>({
+            variables: {
+                after: endCursor
+            },
+            updateQuery: (prev, { fetchMoreResult }) => {
+                <span class="code-keyword">if</span> (!fetchMoreResult) <span class="code-keyword">return</span> prev;
+                <span class="code-keyword">return</span> {
+                    projects: {
+                        ...fetchMoreResult.projects,
+                        edges: [
+                            ...prev.projects.edges,
+                            ...fetchMoreResult.projects.edges
+                        ]
+                    }
+                };
+            }
+        });
+    };
+    
+    <span class="code-keyword">return</span> (
+        &lt;div className=<span class="code-string">"projects-grid"</span>&gt;
+            {projects.map(project => (
+                &lt;ProjectCard key={project.id} project={project} /&gt;
+            ))}
+            {hasNextPage && (
+                &lt;button onClick={loadMore}&gt;Load More&lt;/button&gt;
+            )}
+        &lt;/div&gt;
+    );
+}
+
+<span class="code-keyword">function</span> <span class="code-function">ProjectDetail</span>({ slug }) {
+    <span class="code-keyword">const</span> { loading, error, data } = <span class="code-function">useQuery</span>(GET_PROJECT_BY_SLUG, {
+        variables: { slug }
+    });
+    
+    <span class="code-keyword">const</span> [createInquiry] = <span class="code-function">useMutation</span>(CREATE_INQUIRY);
+    
+    <span class="code-keyword">const</span> <span class="code-function">handleInquiry</span> = <span class="code-keyword">async</span> (formData) => {
+        <span class="code-keyword">try</span> {
+            <span class="code-keyword">const</span> { data } = <span class="code-keyword">await</span> <span class="code-function">createInquiry</span>({
+                variables: {
+                    input: {
+                        projectId: data.projectBy.id,
+                        ...formData
+                    }
+                }
+            });
+            
+            <span class="code-keyword">if</span> (data.createProjectInquiry.success) {
+                <span class="code-comment">// Show success message</span>
+                toast.success(data.createProjectInquiry.message);
+            }
+        } <span class="code-keyword">catch</span> (error) {
+            toast.error(<span class="code-string">'Failed to send inquiry'</span>);
+        }
+    };
+    
+    <span class="code-keyword">if</span> (loading) <span class="code-keyword">return</span> &lt;ProjectSkeleton /&gt;;
+    <span class="code-keyword">if</span> (error) <span class="code-keyword">return</span> &lt;ErrorMessage error={error} /&gt;;
+    
+    <span class="code-keyword">const</span> project = data.projectBy;
+    
+    <span class="code-keyword">return</span> (
+        &lt;article&gt;
+            &lt;h1&gt;{project.title}&lt;/h1&gt;
+            &lt;div dangerouslySetInnerHTML={{ __html: project.content }} /&gt;
+            &lt;InquiryForm onSubmit={handleInquiry} /&gt;
+        &lt;/article&gt;
+    );
+}</pre>
+            </div>
+
+            <div class="pro-tip">
+                <strong>💡 Pro Tip:</strong> Use GraphQL Playground during development to test queries and explore your schema. Install the WPGraphQL IDE plugin for an integrated experience in WordPress admin!
+            </div>
+        </section>
+
+        <section>
+            <h2>Custom REST Endpoints: Building Your API Highway</h2>
+            <p>Sometimes you need custom highways for specific data journeys. Custom REST endpoints let you create optimized routes for complex queries, third-party integrations, or specialized functionality.</p>
+
+            <div class="mermaid">
+            graph LR
+                subgraph "Custom Endpoints"
+                    A[/api/v1/search] --> B[Advanced Search]
+                    C[/api/v1/analytics] --> D[Site Analytics]
+                    E[/api/v1/recommendations] --> F[AI Recommendations]
+                    G[/api/v1/export] --> H[Data Export]
+                end
+                
+                subgraph "Features"
+                    B --> I[Elasticsearch Integration]
+                    D --> J[Custom Metrics]
+                    F --> K[Machine Learning]
+                    H --> L[CSV/JSON/XML]
+                end
+                
+                style A fill:#3498db
+                style C fill:#e74c3c
+                style E fill:#2ecc71
+                style G fill:#f39c12
+            </div>
+
+            <h3>Creating Advanced Custom Endpoints</h3>
+            <div class="code-block">
+<pre><span class="code-comment">// inc/custom-endpoints.php - Advanced Custom REST Endpoints</span>
+
+<span class="code-keyword">class</span> <span class="code-function">Advanced_REST_Controller</span> {
+    <span class="code-keyword">private</span> $namespace = <span class="code-string">'custom/v1'</span>;
+    
+    <span class="code-keyword">public function</span> <span class="code-function">__construct</span>() {
+        <span class="code-function">add_action</span>(<span class="code-string">'rest_api_init'</span>, [$this, <span class="code-string">'register_routes'</span>]);
+    }
+    
+    <span class="code-keyword">public function</span> <span class="code-function">register_routes</span>() {
+        <span class="code-comment">// Advanced search endpoint</span>
+        <span class="code-function">register_rest_route</span>($this->namespace, <span class="code-string">'/search'</span>, [
+            <span class="code-string">'methods'</span> => <span class="code-string">'POST'</span>,
+            <span class="code-string">'callback'</span> => [$this, <span class="code-string">'advanced_search'</span>],
+            <span class="code-string">'permission_callback'</span> => <span class="code-string">'__return_true'</span>,
+            <span class="code-string">'args'</span> => [
+                <span class="code-string">'query'</span> => [
+                    <span class="code-string">'required'</span> => <span class="code-keyword">true</span>,
+                    <span class="code-string">'validate_callback'</span> => <span class="code-keyword">function</span>($param) {
+                        <span class="code-keyword">return</span> <span class="code-function">strlen</span>($param) >= 3;
+                    }
+                ],
+                <span class="code-string">'filters'</span> => [
+                    <span class="code-string">'type'</span> => <span class="code-string">'object'</span>,
+                    <span class="code-string">'properties'</span> => [
+                        <span class="code-string">'post_types'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'array'</span>],
+                        <span class="code-string">'categories'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'array'</span>],
+                        <span class="code-string">'date_range'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'object'</span>],
+                        <span class="code-string">'author'</span> => [<span class="code-string">'type'</span> => <span class="code-string">'integer'</span>]
+                    ]
+                ]
+            ]
+        ]);
+        
+        <span class="code-comment">// Analytics endpoint</span>
+        <span class="code-function">register_rest_route</span>($this->namespace, <span class="code-string">'/analytics/(?P&lt;period&gt;[a-z]+)'</span>, [
+            <span class="code-string">'methods'</span> => <span class="code-string">'GET'</span>,
+            <span class="code-string">'callback'</span> => [$this, <span class="code-string">'get_analytics'</span>],
+            <span class="code-string">'permission_callback'</span> => [$this, <span class="code-string">'check_analytics_permission'</span>],
+            <span class="code-string">'args'</span> => [
+                <span class="code-string">'period'</span> => [
+                    <span class="code-string">'validate_callback'</span> => <span class="code-keyword">function</span>($param) {
+                        <span class="code-keyword">return in_array</span>($param, [<span class="code-string">'day'</span>, <span class="code-string">'week'</span>, <span class="code-string">'month'</span>, <span class="code-string">'year'</span>]);
+                    }
+                ]
+            ]
+        ]);
+        
+        <span class="code-comment">// Recommendations endpoint with caching</span>
+        <span class="code-function">register_rest_route</span>($this->namespace, <span class="code-string">'/recommendations'</span>, [
+            <span class="code-string">'methods'</span> => <span class="code-string">'GET'</span>,
+            <span class="code-string">'callback'</span> => [$this, <span class="code-string">'get_recommendations'</span>],
+            <span class="code-string">'permission_callback'</span> => <span class="code-string">'__return_true'</span>,
+            <span class="code-string">'args'</span> => [
+                <span class="code-string">'user_id'</span> => [
+                    <span class="code-string">'type'</span> => <span class="code-string">'integer'</span>,
+                    <span class="code-string">'default'</span> => 0
+                ],
+                <span class="code-string">'post_id'</span> => [
+                    <span class="code-string">'type'</span> => <span class="code-string">'integer'</span>,
+                    <span class="code-string">'default'</span> => 0
+                ]
+            ]
+        ]);
+        
+        <span class="code-comment">// Batch operations endpoint</span>
+        <span class="code-function">register_rest_route</span>($this->namespace, <span class="code-string">'/batch'</span>, [
+            <span class="code-string">'methods'</span> => <span class="code-string">'POST'</span>,
+            <span class="code-string">'callback'</span> => [$this, <span class="code-string">'batch_operations'</span>],
+            <span class="code-string">'permission_callback'</span> => [$this, <span class="code-string">'check_admin_permission'</span>]
+        ]);
+    }
+    
+    <span class="code-keyword">public function</span> <span class="code-function">advanced_search</span>($request) {
+        $query = $request->get_param(<span class="code-string">'query'</span>);
+        $filters = $request->get_param(<span class="code-string">'filters'</span>) ?: [];
+        
+        <span class="code-comment">// Build Elasticsearch query (if using ElasticPress)</span>
+        <span class="code-keyword">if</span> (<span class="code-function">function_exists</span>(<span class="code-string">'ep_search'</span>)) {
+            $es_args = [
+                <span class="code-string">'s'</span> => $query,
+                <span class="code-string">'posts_per_page'</span> => 20,
+                <span class="code-string">'post_type'</span> => $filters[<span class="code-string">'post_types'</span>] ?: <span class="code-string">'any'</span>,
+                <span class="code-string">'ep_integrate'</span> => <span class="code-keyword">true</span>
+            ];
+            
+            <span class="code-keyword">if</span> (!<span class="code-keyword">empty</span>($filters[<span class="code-string">'categories'</span>])) {
+                $es_args[<span class="code-string">'category__in'</span>] = $filters[<span class="code-string">'categories'</span>];
+            }
+            
+            <span class="code-keyword">if</span> (!<span class="code-keyword">empty</span>($filters[<span class="code-string">'date_range'</span>])) {
+                $es_args[<span class="code-string">'date_query'</span>] = [
+                    [
+                        <span class="code-string">'after'</span> => $filters[<span class="code-string">'date_range'</span>][<span class="code-string">'start'</span>],
+                        <span class="code-string">'before'</span> => $filters[<span class="code-string">'date_range'</span>][<span class="code-string">'end'</span>]
+                    ]
+                ];
+            }
+            
+            $results = <span class="code-keyword">new</span> <span class="code-function">WP_Query</span>($es_args);
+        } <span class="code-keyword">else</span> {
+            <span class="code-comment">// Fallback to standard WordPress search</span>
+            $results = <span class="code-keyword">new</span> <span class="code-function">WP_Query</span>([
+                <span class="code-string">'s'</span> => $query,
+                <span class="code-string">'posts_per_page'</span> => 20,
+                <span class="code-string">'post_type'</span> => $filters[<span class="code-string">'post_types'</span>] ?: <span class="code-string">'any'</span>
+            ]);
+        }
+        
+        <span class="code-comment">// Format response with relevance scoring</span>
+        $formatted_results = [];
+        <span class="code-keyword">foreach</span> ($results->posts <span class="code-keyword">as</span> $post) {
+            $formatted_results[] = [
+                <span class="code-string">'id'</span> => $post->ID,
+                <span class="code-string">'title'</span> => $post->post_title,
+                <span class="code-string">'excerpt'</span> => <span class="code-function">wp_trim_words</span>($post->post_content, 30),
+                <span class="code-string">'url'</span> => <span class="code-function">get_permalink</span>($post->ID),
+                <span class="code-string">'type'</span> => $post->post_type,
+                <span class="code-string">'relevance_score'</span> => $this-><span class="code-function">calculate_relevance</span>($post, $query),
+                <span class="code-string">'featured_image'</span> => <span class="code-function">get_the_post_thumbnail_url</span>($post->ID, <span class="code-string">'medium'</span>)
+            ];
+        }
+        
+        <span class="code-keyword">return</span> <span class="code-keyword">new</span> <span class="code-function">WP_REST_Response</span>([
+            <span class="code-string">'success'</span> => <span class="code-keyword">true</span>,
+            <span class="code-string">'total'</span> => $results->found_posts,
+            <span class="code-string">'results'</span> => $formatted_results,
+            <span class="code-string">'query'</span> => $query,
+            <span class="code-string">'filters'</span> => $filters
+        ], 200);
+    }
+    
+    <span class="code-keyword">public function</span> <span class="code-function">get_analytics</span>($request) {
+        $period = $request->get_param(<span class="code-string">'period'</span>);
+        $cache_key = <span class="code-string">'analytics_'</span> . $period . <span class="code-string">'_'</span> . <span class="code-function">date</span>(<span class="code-string">'Ymd'</span>);
+        
+        <span class="code-comment">// Check cache first</span>
+        $cached_data = <span class="code-function">get_transient</span>($cache_key);
+        <span class="code-keyword">if</span> ($cached_data !== <span class="code-keyword">false</span>) {
+            <span class="code-keyword">return</span> <span class="code-keyword">new</span> <span class="code-function">WP_REST_Response</span>($cached_data, 200);
+        }
+        
+        <span class="code-comment">// Calculate analytics</span>
+        $analytics = [
+            <span class="code-string">'views'</span> => $this-><span class="code-function">get_page_views</span>($period),
+            <span class="code-string">'popular_posts'</span> => $this-><span class="code-function">get_popular_posts</span>($period),
+            <span class="code-string">'user_engagement'</span> => $this-><span class="code-function">get_engagement_metrics</span>($period),
+            <span class="code-string">'conversions'</span> => $this-><span class="code-function">get_conversion_data</span>($period),
+            <span class="code-string">'performance'</span> => [
+                <span class="code-string">'avg_load_time'</span> => $this-><span class="code-function">get_avg_load_time</span>(),
+                <span class="code-string">'cache_hit_rate'</span> => $this-><span class="code-function">get_cache_hit_rate</span>(),
+                <span class="code-string">'api_response_time'</span> => $this-><span class="code-function">get_api_response_time</span>()
+            ]
+        ];
+        
+        <span class="code-comment">// Cache for 1 hour</span>
+        <span class="code-function">set_transient</span>($cache_key, $analytics, HOUR_IN_SECONDS);
+        
+        <span class="code-keyword">return</span> <span class="code-keyword">new</span> <span class="code-function">WP_REST_Response</span>($analytics, 200);
+    }
+    
+    <span class="code-keyword">public function</span> <span class="code-function">get_recommendations</span>($request) {
+        $user_id = $request->get_param(<span class="code-string">'user_id'</span>);
+        $post_id = $request->get_param(<span class="code-string">'post_id'</span>);
+        
+        <span class="code-comment">// AI-powered recommendations (simplified example)</span>
+        $recommendations = [];
+        
+        <span class="code-keyword">if</span> ($user_id) {
+            <span class="code-comment">// Get user's reading history</span>
+            $history = $this-><span class="code-function">get_user_history</span>($user_id);
+            $categories = $this-><span class="code-function">extract_preferred_categories</span>($history);
+            
+            $recommendations = <span class="code-function">get_posts</span>([
+                <span class="code-string">'category__in'</span> => $categories,
+                <span class="code-string">'posts_per_page'</span> => 10,
+                <span class="code-string">'post__not_in'</span> => <span class="code-function">array_column</span>($history, <span class="code-string">'ID'</span>),
+                <span class="code-string">'orderby'</span> => <span class="code-string">'comment_count'</span>,
+                <span class="code-string">'order'</span> => <span class="code-string">'DESC'</span>
+            ]);
+        } <span class="code-keyword">elseif</span> ($post_id) {
+            <span class="code-comment">// Get related posts based on content similarity</span>
+            $post = <span class="code-function">get_post</span>($post_id);
+            $tags = <span class="code-function">wp_get_post_tags</span>($post_id, [<span class="code-string">'fields'</span> => <span class="code-string">'ids'</span>]);
+            
+            $recommendations = <span class="code-function">get_posts</span>([
+                <span class="code-string">'tag__in'</span> => $tags,
+                <span class="code-string">'post__not_in'</span> => [$post_id],
+                <span class="code-string">'posts_per_page'</span> => 8,
+                <span class="code-string">'orderby'</span> => <span class="code-string">'rand'</span>
+            ]);
+        }
+        
+        <span class="code-comment">// Format recommendations</span>
+        $formatted = <span class="code-function">array_map</span>(<span class="code-keyword">function</span>($post) {
+            <span class="code-keyword">return</span> [
+                <span class="code-string">'id'</span> => $post->ID,
+                <span class="code-string">'title'</span> => $post->post_title,
+                <span class="code-string">'excerpt'</span> => <span class="code-function">get_the_excerpt</span>($post->ID),
+                <span class="code-string">'url'</span> => <span class="code-function">get_permalink</span>($post->ID),
+                <span class="code-string">'thumbnail'</span> => <span class="code-function">get_the_post_thumbnail_url</span>($post->ID, <span class="code-string">'medium'</span>),
+                <span class="code-string">'reading_time'</span> => $this-><span class="code-function">calculate_reading_time</span>($post->post_content)
+            ];
+        }, $recommendations);
+        
+        <span class="code-keyword">return</span> <span class="code-keyword">new</span> <span class="code-function">WP_REST_Response</span>([
+            <span class="code-string">'recommendations'</span> => $formatted,
+            <span class="code-string">'algorithm'</span> => $user_id ? <span class="code-string">'user_based'</span> : <span class="code-string">'content_based'</span>
+        ], 200);
+    }
+    
+    <span class="code-keyword">public function</span> <span class="code-function">batch_operations</span>($request) {
+        $operations = $request->get_json_params();
+        $results = [];
+        
+        <span class="code-keyword">foreach</span> ($operations <span class="code-keyword">as</span> $operation) {
+            <span class="code-keyword">switch</span> ($operation[<span class="code-string">'action'</span>]) {
+                <span class="code-keyword">case</span> <span class="code-string">'update_post'</span>:
+                    $results[] = $this-><span class="code-function">batch_update_post</span>($operation[<span class="code-string">'data'</span>]);
+                    <span class="code-keyword">break</span>;
+                <span class="code-keyword">case</span> <span class="code-string">'delete_posts'</span>:
+                    $results[] = $this-><span class="code-function">batch_delete_posts</span>($operation[<span class="code-string">'ids'</span>]);
+                    <span class="code-keyword">break</span>;
+                <span class="code-keyword">case</span> <span class="code-string">'publish_scheduled'</span>:
+                    $results[] = $this-><span class="code-function">batch_publish_scheduled</span>($operation[<span class="code-string">'ids'</span>]);
+                    <span class="code-keyword">break</span>;
+            }
+        }
+        
+        <span class="code-keyword">return</span> <span class="code-keyword">new</span> <span class="code-function">WP_REST_Response</span>([
+            <span class="code-string">'success'</span> => <span class="code-keyword">true</span>,
+            <span class="code-string">'results'</span> => $results
+        ], 200);
+    }
+    
+    <span class="code-keyword">private function</span> <span class="code-function">check_admin_permission</span>() {
+        <span class="code-keyword">return</span> <span class="code-function">current_user_can</span>(<span class="code-string">'manage_options'</span>);
+    }
+    
+    <span class="code-keyword">private function</span> <span class="code-function">check_analytics_permission</span>() {
+        <span class="code-keyword">return</span> <span class="code-function">current_user_can</span>(<span class="code-string">'edit_posts'</span>);
+    }
+}
+
+<span class="code-comment">// Initialize the controller</span>
+<span class="code-keyword">new</span> <span class="code-function">Advanced_REST_Controller</span>();</pre>
