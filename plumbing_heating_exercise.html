@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise: Build FlowMaster Plumbing & Heating - Mobile-First with React + WordPress</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="icon" href="/favicon.png">
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        .code-block {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .code-block pre {
+            margin: 0;
+            white-space: pre;
+            word-wrap: normal;
+        }
+        .code-block code {
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            background: none;
+            padding: 0;
+        }
+        .code-comment {
+            color: #6a9955;
+        }
+        .code-keyword {
+            color: #569cd6;
+        }
+        .code-string {
+            color: #ce9178;
+        }
+        .code-function {
+            color: #dcdcaa;
+        }
+        .code-tag {
+            color: #4ec9b0;
+        }
+        .checklist-item {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background: #f0f4f8;
+            border-left: 3px solid #3182ce;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #edf2f7;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+        .badge-red { background: #fed7d7; color: #c53030; }
+        .badge-blue { background: #bee3f8; color: #2c5282; }
+        .badge-green { background: #c6f6d5; color: #276749; }
+        .badge-yellow { background: #fef3c7; color: #92400e; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔧 Practice Project: FlowMaster Plumbing & Heating</h1>
+        <p>Build a real-world mobile-first website using React, WordPress, and Tailwind CSS</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>Project Overview: Your Client's Requirements</h2>
+            <p>FlowMaster Plumbing & Heating is a local business that needs a modern, mobile-first website. They currently lose 65% of potential customers because their old site doesn't work on phones. Your mission: build them a lightning-fast, SEO-optimized solution using React + WordPress + Tailwind CSS.</p>
+
+            <div class="mermaid">
+            graph TD
+                A[Client Requirements] --> B[Mobile-First Design]
+                A --> C[Emergency Call Button]
+                A --> D[Service Listings]
+                A --> E[Online Booking]
+                A --> F[Customer Reviews]
+                
+                B --> G[Phone Users: 75%]
+                B --> H[Tablet Users: 15%]
+                B --> I[Desktop Users: 10%]
+                
+                style A fill:#e74c3c,stroke:#333,stroke-width:3px
+                style B fill:#3498db,stroke:#333,stroke-width:2px
+                style G fill:#2ecc71,stroke:#333,stroke-width:2px
+            </div>
+
+            <h3>Business Goals</h3>
+            <div class="grid-container">
+                <div class="card">
+                    <h4>📱 Mobile Conversions</h4>
+                    <p>Increase emergency calls by 40%</p>
+                </div>
+                <div class="card">
+                    <h4>📅 Online Bookings</h4>
+                    <p>Enable 24/7 appointment scheduling</p>
+                </div>
+                <div class="card">
+                    <h4>⭐ Trust Building</h4>
+                    <p>Showcase reviews and certifications</p>
+                </div>
+                <div class="card">
+                    <h4>🔍 Local SEO</h4>
+                    <p>Rank #1 for "plumber near me"</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Exercise Requirements</h2>
+            
+            <canvas id="requirementsCanvas" width="600" height="400"></canvas>
+            <script>
+                const reqCanvas = document.getElementById('requirementsCanvas');
+                const reqCtx = reqCanvas.getContext('2d');
+                
+                // Title
+                reqCtx.font = 'bold 18px Arial';
+                reqCtx.fillStyle = '#333';
+                reqCtx.textAlign = 'center';
+                reqCtx.fillText('Mobile-First Component Hierarchy', 300, 30);
+                
+                // Mobile frame
+                reqCtx.strokeStyle = '#333';
+                reqCtx.lineWidth = 3;
+                reqCtx.fillStyle = '#f8f9fa';
+                
+                // Draw rounded rectangle for phone
+                reqCtx.beginPath();
+                reqCtx.moveTo(220, 60);
+                reqCtx.lineTo(380, 60);
+                reqCtx.quadraticCurveTo(400, 60, 400, 80);
+                reqCtx.lineTo(400, 360);
+                reqCtx.quadraticCurveTo(400, 380, 380, 380);
+                reqCtx.lineTo(220, 380);
+                reqCtx.quadraticCurveTo(200, 380, 200, 360);
+                reqCtx.lineTo(200, 80);
+                reqCtx.quadraticCurveTo(200, 60, 220, 60);
+                reqCtx.closePath();
+                reqCtx.fill();
+                reqCtx.stroke();
+                
+                // Screen
+                reqCtx.fillStyle = '#fff';
+                reqCtx.fillRect(210, 90, 180, 260);
+                
+                // Components
+                const components = [
+                    {name: 'Emergency CTA', color: '#e74c3c', y: 100, height: 35},
+                    {name: 'Hero Section', color: '#3498db', y: 140, height: 50},
+                    {name: 'Services Grid', color: '#2ecc71', y: 195, height: 60},
+                    {name: 'Reviews Slider', color: '#f39c12', y: 260, height: 40},
+                    {name: 'Contact Form', color: '#9b59b6', y: 305, height: 40}
+                ];
+                
+                components.forEach(comp => {
+                    reqCtx.fillStyle = comp.color;
+                    reqCtx.globalAlpha = 0.8;
+                    reqCtx.fillRect(215, comp.y, 170, comp.height);
+                    reqCtx.globalAlpha = 1;
+                    
+                    reqCtx.fillStyle = 'white';
+                    reqCtx.font = '11px Arial';
+                    reqCtx.textAlign = 'center';
+                    reqCtx.fillText(comp.name, 300, comp.y + comp.height/2 + 4);
+                });
+                
+                // Labels
+                reqCtx.fillStyle = '#666';
+                reqCtx.font = '12px Arial';
+                reqCtx.textAlign = 'left';
+                reqCtx.fillText('Priority Components:', 50, 100);
+                reqCtx.fillText('1. Emergency button', 50, 120);
+                reqCtx.fillText('2. Click-to-call', 50, 140);
+                reqCtx.fillText('3. Service cards', 50, 160);
+                reqCtx.fillText('4. Trust signals', 50, 180);
+                reqCtx.fillText('5. Fast loading', 50, 200);
+                
+                reqCtx.textAlign = 'right';
+                reqCtx.fillText('Tailwind Classes:', 550, 100);
+                reqCtx.fillText('sticky top-0', 550, 120);
+                reqCtx.fillText('grid gap-4', 550, 140);
+                reqCtx.fillText('snap-x scroll', 550, 160);
+                reqCtx.fillText('animate-pulse', 550, 180);
+                reqCtx.fillText('lazy-load', 550, 200);
+            </script>
+
+            <h3>Technical Requirements Checklist</h3>
+            <div class="grid-container">
+                <div class="card" style="background: #ebf8ff;">
+                    <h4 style="color: #2c5282;">Frontend (React + Tailwind)</h4>
+                    <div class="checklist-item">☐ Mobile-first responsive design</div>
+                    <div class="checklist-item">☐ Sticky emergency call button</div>
+                    <div class="checklist-item">☐ Service cards with icons</div>
+                    <div class="checklist-item">☐ Review carousel/slider</div>
+                    <div class="checklist-item">☐ Contact form with validation</div>
+                    <div class="checklist-item">☐ Google Maps integration</div>
+                    <div class="checklist-item">☐ Dark mode toggle</div>
+                </div>
+                <div class="card" style="background: #f0fff4;">
+                    <h4 style="color: #276749;">Backend (WordPress)</h4>
+                    <div class="checklist-item" style="border-left-color: #48bb78;">☐ Custom post type: Services</div>
+                    <div class="checklist-item" style="border-left-color: #48bb78;">☐ Custom post type: Reviews</div>
+                    <div class="checklist-item" style="border-left-color: #48bb78;">☐ ACF for service details</div>
+                    <div class="checklist-item" style="border-left-color: #48bb78;">☐ REST API endpoints</div>
+                    <div class="checklist-item" style="border-left-color: #48bb78;">☐ Contact form handler</div>
+                    <div class="checklist-item" style="border-left-color: #48bb78;">☐ SEO optimization</div>
+                    <div class="checklist-item" style="border-left-color: #48bb78;">☐ Cache configuration</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Step 1: WordPress Setup</h2>
+            <p>First, let's set up the WordPress backend with custom post types and fields for our plumbing business.</p>
+
+            <div class="code-block">
+<pre><code><span class="code-comment">// functions.php - Register Custom Post Types</span>
+
+<span class="code-keyword">function</span> <span class="code-function">flowmaster_register_post_types</span>() {
+    <span class="code-comment">// Services Post Type</span>
+    <span class="code-function">register_post_type</span>(<span class="code-string">'services'</span>, [
+        <span class="code-string">'labels'</span> => [
+            <span class="code-string">'name'</span> => <span class="code-string">'Services'</span>,
+            <span class="code-string">'singular_name'</span> => <span class="code-string">'Service'</span>,
+        ],
+        <span class="code-string">'public'</span> => <span class="code-keyword">true</span>,
+        <span class="code-string">'show_in_rest'</span> => <span class="code-keyword">true</span>,
+        <span class="code-string">'menu_icon'</span> => <span class="code-string">'dashicons-hammer'</span>,
+        <span class="code-string">'supports'</span> => [<span class="code-string">'title'</span>, <span class="code-string">'editor'</span>, <span class="code-string">'thumbnail'</span>, <span class="code-string">'custom-fields'</span>],
+        <span class="code-string">'has_archive'</span> => <span class="code-keyword">true</span>,
+        <span class="code-string">'rewrite'</span> => [<span class="code-string">'slug'</span> => <span class="code-string">'services'</span>],
+    ]);
+
+    <span class="code-comment">// Reviews Post Type</span>
+    <span class="code-function">register_post_type</span>(<span class="code-string">'reviews'</span>, [
+        <span class="code-string">'labels'</span> => [
+            <span class="code-string">'name'</span> => <span class="code-string">'Reviews'</span>,
+            <span class="code-string">'singular_name'</span> => <span class="code-string">'Review'</span>,
+        ],
+        <span class="code-string">'public'</span> => <span class="code-keyword">true</span>,
+        <span class="code-string">'show_in_rest'</span> => <span class="code-keyword">true</span>,
+        <span class="code-string">'menu_icon'</span> => <span class="code-string">'dashicons-star-filled'</span>,
+        <span class="code-string">'supports'</span> => [<span class="code-string">'title'</span>, <span class="code-string">'editor'</span>, <span class="code-string">'custom-fields'</span>],
+    ]);
+}
+<span class="code-function">add_action</span>(<span class="code-string">'init'</span>, <span class="code-string">'flowmaster_register_post_types'</span>);</code></pre>
+            </div>
+
+            <h3>Adding REST API Fields</h3>
+            <div class="code-block">
+<pre><code><span class="code-comment">// Add REST API fields for custom data</span>
+<span class="code-keyword">function</span> <span class="code-function">flowmaster_add_rest_fields</span>() {
+    <span class="code-function">register_rest_field</span>(<span class="code-string">'services'</span>, <span class="code-string">'service_details'</span>, [
+        <span class="code-string">'get_callback'</span> => <span class="code-keyword">function</span>($post) {
+            <span class="code-keyword">return</span> [
+                <span class="code-string">'price_range'</span> => <span class="code-function">get_field</span>(<span class="code-string">'price_range'</span>, $post[<span class="code-string">'id'</span>]),
+                <span class="code-string">'duration'</span> => <span class="code-function">get_field</span>(<span class="code-string">'duration'</span>, $post[<span class="code-string">'id'</span>]),
+                <span class="code-string">'emergency'</span> => <span class="code-function">get_field</span>(<span class="code-string">'emergency_available'</span>, $post[<span class="code-string">'id'</span>]),
+            ];
+        },
+        <span class="code-string">'schema'</span> => <span class="code-keyword">null</span>,
+    ]);
+}
+<span class="code-function">add_action</span>(<span class="code-string">'rest_api_init'</span>, <span class="code-string">'flowmaster_add_rest_fields'</span>);</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Step 2: React Component Structure</h2>
+            <p>Build mobile-first React components using Tailwind CSS for styling.</p>
+
+            <h3>Main App Component</h3>
+            <div class="code-block">
+<pre><code><span class="code-comment">// App.js - Main Application Component</span>
+<span class="code-keyword">import</span> React, { useState, useEffect } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+<span class="code-keyword">import</span> { BrowserRouter <span class="code-keyword">as</span> Router, Routes, Route } <span class="code-keyword">from</span> <span class="code-string">'react-router-dom'</span>;
+
+<span class="code-keyword">function</span> <span class="code-function">App</span>() {
+    <span class="code-keyword">const</span> [services, setServices] = <span class="code-function">useState</span>([]);
+    <span class="code-keyword">const</span> [reviews, setReviews] = <span class="code-function">useState</span>([]);
+    <span class="code-keyword">const</span> [loading, setLoading] = <span class="code-function">useState</span>(<span class="code-keyword">true</span>);
+
+    <span class="code-function">useEffect</span>(() => {
+        <span class="code-function">fetchData</span>();
+    }, []);
+
+    <span class="code-keyword">const</span> <span class="code-function">fetchData</span> = <span class="code-keyword">async</span> () => {
+        <span class="code-keyword">try</span> {
+            <span class="code-keyword">const</span> [servicesData, reviewsData] = <span class="code-keyword">await</span> Promise.<span class="code-function">all</span>([
+                WordPressAPI.<span class="code-function">getServices</span>(),
+                WordPressAPI.<span class="code-function">getReviews</span>()
+            ]);
+            <span class="code-function">setServices</span>(servicesData);
+            <span class="code-function">setReviews</span>(reviewsData);
+        } <span class="code-keyword">catch</span> (error) {
+            console.<span class="code-function">error</span>(<span class="code-string">'Error fetching data:'</span>, error);
+        } <span class="code-keyword">finally</span> {
+            <span class="code-function">setLoading</span>(<span class="code-keyword">false</span>);
+        }
+    };
+
+    <span class="code-keyword">return</span> (
+        <span class="code-tag">&lt;div</span> <span class="code-string">className="min-h-screen bg-white"</span><span class="code-tag">&gt;</span>
+            <span class="code-tag">&lt;EmergencyBar /&gt;</span>
+            <span class="code-tag">&lt;MobileNav /&gt;</span>
+            <span class="code-tag">&lt;main&gt;</span>
+                <span class="code-tag">&lt;Hero /&gt;</span>
+                <span class="code-tag">&lt;Services</span> <span class="code-string">services={services}</span> <span class="code-string">loading={loading}</span> <span class="code-tag">/&gt;</span>
+                <span class="code-tag">&lt;Reviews</span> <span class="code-string">reviews={reviews}</span> <span class="code-tag">/&gt;</span>
+                <span class="code-tag">&lt;Contact /&gt;</span>
+            <span class="code-tag">&lt;/main&gt;</span>
+            <span class="code-tag">&lt;Footer /&gt;</span>
+        <span class="code-tag">&lt;/div&gt;</span>
+    );
+}
+
+<span class="code-keyword">export default</span> App;</code></pre>
+            </div>
+
+            <h3>Emergency Bar Component</h3>
+            <div class="code-block">
+<pre><code><span class="code-comment">// components/EmergencyBar.js - Sticky Emergency CTA</span>
+<span class="code-keyword">import</span> React <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+
+<span class="code-keyword">const</span> <span class="code-function">EmergencyBar</span> = () => {
+    <span class="code-keyword">return</span> (
+        <span class="code-tag">&lt;div</span> <span class="code-string">className="sticky top-0 z-50 bg-red-600 text-white"</span><span class="code-tag">&gt;</span>
+            <span class="code-tag">&lt;div</span> <span class="code-string">className="container mx-auto px-4"</span><span class="code-tag">&gt;</span>
+                <span class="code-tag">&lt;div</span> <span class="code-string">className="flex items-center justify-between py-2"</span><span class="code-tag">&gt;</span>
+                    <span class="code-tag">&lt;span</span> <span class="code-string">className="text-sm font-semibold"</span><span class="code-tag">&gt;</span>
+                        24/7 Emergency Service
+                    <span class="code-tag">&lt;/span&gt;</span>
+                    <span class="code-tag">&lt;a</span>
+                        <span class="code-string">href="tel:1-800-PLUMBER"</span>
+                        <span class="code-string">className="bg-white text-red-600 px-4 py-1 rounded-full"</span>
+                    <span class="code-tag">&gt;</span>
+                        Call Now
+                    <span class="code-tag">&lt;/a&gt;</span>
+                <span class="code-tag">&lt;/div&gt;</span>
+            <span class="code-tag">&lt;/div&gt;</span>
+        <span class="code-tag">&lt;/div&gt;</span>
+    );
+};
+
+<span class="code-keyword">export default</span> EmergencyBar;</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Step 3: Mobile-First Service Cards</h2>
+            
+            <div class="code-block">
+<pre><code><span class="code-comment">// components/Services.js - Responsive Service Grid</span>
+<span class="code-keyword">import</span> React <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+
+<span class="code-keyword">const</span> <span class="code-function">Services</span> = ({ services, loading }) => {
+    <span class="code-keyword">if</span> (loading) {
+        <span class="code-keyword">return</span> (
+            <span class="code-tag">&lt;div</span> <span class="code-string">className="py-12 px-4"</span><span class="code-tag">&gt;</span>
+                <span class="code-tag">&lt;div</span> <span class="code-string">className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"</span><span class="code-tag">&gt;</span>
+                    {[1, 2, 3].<span class="code-function">map</span>(i => (
+                        <span class="code-tag">&lt;div</span> <span class="code-string">key={i}</span> <span class="code-string">className="animate-pulse"</span><span class="code-tag">&gt;</span>
+                            <span class="code-tag">&lt;div</span> <span class="code-string">className="bg-gray-200 rounded-lg h-48"</span><span class="code-tag">&gt;&lt;/div&gt;</span>
+                        <span class="code-tag">&lt;/div&gt;</span>
+                    ))}
+                <span class="code-tag">&lt;/div&gt;</span>
+            <span class="code-tag">&lt;/div&gt;</span>
+        );
+    }
+
+    <span class="code-keyword">return</span> (
+        <span class="code-tag">&lt;section</span> <span class="code-string">className="py-12 px-4 bg-gray-50"</span><span class="code-tag">&gt;</span>
+            <span class="code-tag">&lt;div</span> <span class="code-string">className="container mx-auto"</span><span class="code-tag">&gt;</span>
+                <span class="code-tag">&lt;h2</span> <span class="code-string">className="text-3xl font-bold text-center mb-8"</span><span class="code-tag">&gt;</span>
+                    Book Your Service
+                <span class="code-tag">&lt;/h2&gt;</span>
+                
+                <span class="code-tag">&lt;form</span> <span class="code-string">onSubmit={handleSubmit}</span> <span class="code-string">className="max-w-2xl mx-auto"</span><span class="code-tag">&gt;</span>
+                    <span class="code-comment">{/* Urgency Selector */}</span>
+                    <span class="code-tag">&lt;div</span> <span class="code-string">className="grid grid-cols-2 gap-2 mb-4"</span><span class="code-tag">&gt;</span>
+                        <span class="code-tag">&lt;button</span>
+                            <span class="code-string">type="button"</span>
+                            <span class="code-string">className={`py-3 px-4 rounded-lg ${</span>
+                                formData.urgency === <span class="code-string">'emergency'</span>
+                                    ? <span class="code-string">'bg-red-600 text-white'</span>
+                                    : <span class="code-string">'bg-gray-100'</span>
+                            }`}
+                        <span class="code-tag">&gt;</span>
+                            🚨 Emergency
+                        <span class="code-tag">&lt;/button&gt;</span>
+                        <span class="code-tag">&lt;button</span>
+                            <span class="code-string">type="button"</span>
+                            <span class="code-string">className={`py-3 px-4 rounded-lg ${</span>
+                                formData.urgency === <span class="code-string">'regular'</span>
+                                    ? <span class="code-string">'bg-blue-600 text-white'</span>
+                                    : <span class="code-string">'bg-gray-100'</span>
+                            }`}
+                        <span class="code-tag">&gt;</span>
+                            📅 Schedule
+                        <span class="code-tag">&lt;/button&gt;</span>
+                    <span class="code-tag">&lt;/div&gt;</span>
+
+                    <span class="code-comment">{/* Form fields */}</span>
+                    <span class="code-tag">&lt;input</span>
+                        <span class="code-string">type="text"</span>
+                        <span class="code-string">placeholder="Your Name"</span>
+                        <span class="code-string">required</span>
+                        <span class="code-string">className="w-full px-4 py-3 rounded-lg border mb-4"</span>
+                    <span class="code-tag">/&gt;</span>
+                    
+                    <span class="code-tag">&lt;input</span>
+                        <span class="code-string">type="tel"</span>
+                        <span class="code-string">placeholder="Phone Number"</span>
+                        <span class="code-string">required</span>
+                        <span class="code-string">className="w-full px-4 py-3 rounded-lg border mb-4"</span>
+                    <span class="code-tag">/&gt;</span>
+
+                    <span class="code-tag">&lt;button</span>
+                        <span class="code-string">type="submit"</span>
+                        <span class="code-string">className="w-full bg-blue-600 text-white py-3 rounded-lg"</span>
+                    <span class="code-tag">&gt;</span>
+                        Book Appointment
+                    <span class="code-tag">&lt;/button&gt;</span>
+                <span class="code-tag">&lt;/form&gt;</span>
+            <span class="code-tag">&lt;/div&gt;</span>
+        <span class="code-tag">&lt;/section&gt;</span>
+    );
+};
+
+<span class="code-keyword">export default</span> Contact;</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Step 6: API Service Layer</h2>
+            
+            <div class="code-block">
+<pre><code><span class="code-comment">// services/api.js - WordPress API Integration</span>
+<span class="code-keyword">class</span> <span class="code-function">WordPressAPIService</span> {
+    <span class="code-function">constructor</span>() {
+        <span class="code-keyword">this</span>.baseURL = process.env.REACT_APP_WP_API_URL || 
+                       <span class="code-string">'https://your-site.com/wp-json'</span>;
+        <span class="code-keyword">this</span>.cache = <span class="code-keyword">new</span> <span class="code-function">Map</span>();
+    }
+
+    <span class="code-keyword">async</span> <span class="code-function">fetchWithCache</span>(endpoint, options = {}) {
+        <span class="code-keyword">const</span> cacheKey = `${endpoint}`;
+        <span class="code-keyword">const</span> cached = <span class="code-keyword">this</span>.cache.<span class="code-function">get</span>(cacheKey);
+
+        <span class="code-keyword">if</span> (cached) {
+            <span class="code-keyword">return</span> cached;
+        }
+
+        <span class="code-keyword">try</span> {
+            <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> <span class="code-function">fetch</span>(
+                `${<span class="code-keyword">this</span>.baseURL}${endpoint}`, 
+                options
+            );
+            <span class="code-keyword">const</span> data = <span class="code-keyword">await</span> response.<span class="code-function">json</span>();
+            
+            <span class="code-keyword">this</span>.cache.<span class="code-function">set</span>(cacheKey, data);
+            <span class="code-keyword">return</span> data;
+        } <span class="code-keyword">catch</span> (error) {
+            console.<span class="code-function">error</span>(<span class="code-string">'API Error:'</span>, error);
+            <span class="code-keyword">throw</span> error;
+        }
+    }
+
+    <span class="code-keyword">async</span> <span class="code-function">getServices</span>() {
+        <span class="code-keyword">return this</span>.<span class="code-function">fetchWithCache</span>(
+            <span class="code-string">'/wp/v2/services?per_page=20'</span>
+        );
+    }
+
+    <span class="code-keyword">async</span> <span class="code-function">getReviews</span>() {
+        <span class="code-keyword">return this</span>.<span class="code-function">fetchWithCache</span>(
+            <span class="code-string">'/wp/v2/reviews?per_page=10'</span>
+        );
+    }
+}
+
+<span class="code-keyword">export const</span> WordPressAPI = <span class="code-keyword">new</span> <span class="code-function">WordPressAPIService</span>();</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Step 7: Tailwind CSS Configuration</h2>
+            
+            <div class="code-block">
+<pre><code><span class="code-comment">// tailwind.config.js - Tailwind Configuration</span>
+module.exports = {
+    content: [
+        <span class="code-string">"./src/**/*.{js,jsx,ts,tsx}"</span>,
+    ],
+    theme: {
+        extend: {
+            colors: {
+                primary: {
+                    50: <span class="code-string">'#eff6ff'</span>,
+                    500: <span class="code-string">'#3b82f6'</span>,
+                    600: <span class="code-string">'#2563eb'</span>,
+                    700: <span class="code-string">'#1d4ed8'</span>,
+                },
+                emergency: {
+                    500: <span class="code-string">'#ef4444'</span>,
+                    600: <span class="code-string">'#dc2626'</span>,
+                }
+            },
+            animation: {
+                <span class="code-string">'pulse-slow'</span>: <span class="code-string">'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'</span>,
+            }
+        },
+    },
+    plugins: [],
+}</code></pre>
+            </div>
+
+            <h3>Package.json Dependencies</h3>
+            <div class="code-block">
+<pre><code>{
+    <span class="code-string">"dependencies"</span>: {
+        <span class="code-string">"react"</span>: <span class="code-string">"^18.2.0"</span>,
+        <span class="code-string">"react-dom"</span>: <span class="code-string">"^18.2.0"</span>,
+        <span class="code-string">"react-router-dom"</span>: <span class="code-string">"^6.8.0"</span>,
+        <span class="code-string">"axios"</span>: <span class="code-string">"^1.3.0"</span>,
+        <span class="code-string">"tailwindcss"</span>: <span class="code-string">"^3.2.0"</span>,
+        <span class="code-string">"@heroicons/react"</span>: <span class="code-string">"^2.0.0"</span>
+    },
+    <span class="code-string">"scripts"</span>: {
+        <span class="code-string">"start"</span>: <span class="code-string">"react-scripts start"</span>,
+        <span class="code-string">"build"</span>: <span class="code-string">"react-scripts build"</span>,
+        <span class="code-string">"test"</span>: <span class="code-string">"react-scripts test"</span>
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Step 8: Performance Optimization</h2>
+            
+            <div class="code-block">
+<pre><code><span class="code-comment">// utils/performance.js - Performance Optimizations</span>
+<span class="code-keyword">import</span> { useState, useEffect } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+
+<span class="code-comment">// Lazy Loading Images Component</span>
+<span class="code-keyword">export const</span> <span class="code-function">LazyImage</span> = ({ src, alt, className, ...props }) => {
+    <span class="code-keyword">const</span> [imageSrc, setImageSrc] = <span class="code-function">useState</span>(<span class="code-keyword">null</span>);
+    <span class="code-keyword">const</span> [imageRef, setImageRef] = <span class="code-function">useState</span>();
+
+    <span class="code-function">useEffect</span>(() => {
+        <span class="code-keyword">let</span> observer;
+        
+        <span class="code-keyword">if</span> (imageRef && imageSrc === <span class="code-keyword">null</span>) {
+            <span class="code-keyword">if</span> (IntersectionObserver) {
+                observer = <span class="code-keyword">new</span> <span class="code-function">IntersectionObserver</span>(
+                    entries => {
+                        entries.<span class="code-function">forEach</span>(entry => {
+                            <span class="code-keyword">if</span> (entry.isIntersecting) {
+                                <span class="code-function">setImageSrc</span>(src);
+                                observer.<span class="code-function">unobserve</span>(imageRef);
+                            }
+                        });
+                    },
+                    { threshold: 0.1, rootMargin: <span class="code-string">'50px'</span> }
+                );
+                observer.<span class="code-function">observe</span>(imageRef);
+            } <span class="code-keyword">else</span> {
+                <span class="code-comment">// Fallback for older browsers</span>
+                <span class="code-function">setImageSrc</span>(src);
+            }
+        }
+        
+        <span class="code-keyword">return</span> () => {
+            <span class="code-keyword">if</span> (observer && observer.unobserve) {
+                observer.<span class="code-function">unobserve</span>(imageRef);
+            }
+        };
+    }, [imageRef, imageSrc, src]);
+
+    <span class="code-keyword">return</span> (
+        <span class="code-tag">&lt;img</span>
+            <span class="code-string">ref={setImageRef}</span>
+            <span class="code-string">src={imageSrc || '/placeholder.webp'}</span>
+            <span class="code-string">alt={alt}</span>
+            <span class="code-string">className={className}</span>
+            <span class="code-string">loading="lazy"</span>
+            {...props}
+        <span class="code-tag">/&gt;</span>
+    );
+};
+
+<span class="code-comment">// Debounce Function for Search</span>
+<span class="code-keyword">export const</span> <span class="code-function">debounce</span> = (func, wait) => {
+    <span class="code-keyword">let</span> timeout;
+    <span class="code-keyword">return function</span> <span class="code-function">executedFunction</span>(...args) {
+        <span class="code-keyword">const</span> <span class="code-function">later</span> = () => {
+            <span class="code-function">clearTimeout</span>(timeout);
+            <span class="code-function">func</span>(...args);
+        };
+        <span class="code-function">clearTimeout</span>(timeout);
+        timeout = <span class="code-function">setTimeout</span>(later, wait);
+    };
+};</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Step 9: Service Worker for Offline Support</h2>
+            
+            <div class="code-block">
+<pre><code><span class="code-comment">// public/sw.js - Service Worker</span>
+<span class="code-keyword">const</span> CACHE_NAME = <span class="code-string">'flowmaster-v1'</span>;
+<span class="code-keyword">const</span> urlsToCache = [
+    <span class="code-string">'/'</span>,
+    <span class="code-string">'/static/css/main.css'</span>,
+    <span class="code-string">'/static/js/bundle.js'</span>,
+    <span class="code-string">'/offline.html'</span>
+];
+
+<span class="code-comment">// Install event - cache resources</span>
+self.<span class="code-function">addEventListener</span>(<span class="code-string">'install'</span>, (event) => {
+    event.<span class="code-function">waitUntil</span>(
+        caches.<span class="code-function">open</span>(CACHE_NAME)
+            .<span class="code-function">then</span>((cache) => {
+                console.<span class="code-function">log</span>(<span class="code-string">'Opened cache'</span>);
+                <span class="code-keyword">return</span> cache.<span class="code-function">addAll</span>(urlsToCache);
+            })
+    );
+});
+
+<span class="code-comment">// Fetch event - serve from cache when offline</span>
+self.<span class="code-function">addEventListener</span>(<span class="code-string">'fetch'</span>, (event) => {
+    event.<span class="code-function">respondWith</span>(
+        caches.<span class="code-function">match</span>(event.request)
+            .<span class="code-function">then</span>((response) => {
+                <span class="code-comment">// Cache hit - return response</span>
+                <span class="code-keyword">if</span> (response) {
+                    <span class="code-keyword">return</span> response;
+                }
+                <span class="code-keyword">return</span> <span class="code-function">fetch</span>(event.request);
+            })
+            .<span class="code-function">catch</span>(() => {
+                <span class="code-comment">// Offline - return offline page</span>
+                <span class="code-keyword">return</span> caches.<span class="code-function">match</span>(<span class="code-string">'/offline.html'</span>);
+            })
+    );
+});</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Complete Solution Architecture</h2>
+            
+            <canvas id="solutionCanvas" width="600" height="500"></canvas>
+            <script>
+                const solCanvas = document.getElementById('solutionCanvas');
+                const solCtx = solCanvas.getContext('2d');
+                
+                // Title
+                solCtx.font = 'bold 18px Arial';
+                solCtx.fillStyle = '#333';
+                solCtx.textAlign = 'center';
+                solCtx.fillText('FlowMaster Plumbing - Complete Architecture', 300, 30);
+                
+                // Draw layers
+                const layers = [
+                    {name: 'User Devices', items: ['Mobile 75%', 'Tablet 15%', 'Desktop 10%'], y: 60, color: '#3498db'},
+                    {name: 'Frontend (React)', items: ['Components', 'Tailwind CSS', 'Router'], y: 150, color: '#61dafb'},
+                    {name: 'State & Cache', items: ['React Query', 'Local Storage', 'Service Worker'], y: 240, color: '#9b59b6'},
+                    {name: 'API Layer', items: ['REST API', 'Authentication', 'Validation'], y: 330, color: '#f39c12'},
+                    {name: 'WordPress', items: ['Custom Posts', 'ACF Fields', 'Database'], y: 420, color: '#21759b'}
+                ];
+                
+                layers.forEach(layer => {
+                    // Layer box
+                    solCtx.fillStyle = layer.color;
+                    solCtx.globalAlpha = 0.2;
+                    solCtx.fillRect(100, layer.y, 400, 70);
+                    solCtx.globalAlpha = 1;
+                    
+                    solCtx.strokeStyle = layer.color;
+                    solCtx.lineWidth = 2;
+                    solCtx.strokeRect(100, layer.y, 400, 70);
+                    
+                    // Layer name
+                    solCtx.fillStyle = layer.color;
+                    solCtx.font = 'bold 14px Arial';
+                    solCtx.fillText(layer.name, 300, layer.y + 25);
+                    
+                    // Layer items
+                    solCtx.fillStyle = '#666';
+                    solCtx.font = '11px Arial';
+                    solCtx.fillText(layer.items.join(' • '), 300, layer.y + 45);
+                });
+                
+                // Connections
+                for(let i = 0; i < layers.length - 1; i++) {
+                    solCtx.strokeStyle = '#999';
+                    solCtx.lineWidth = 2;
+                    solCtx.setLineDash([5, 5]);
+                    solCtx.beginPath();
+                    solCtx.moveTo(300, layers[i].y + 70);
+                    solCtx.lineTo(300, layers[i + 1].y);
+                    solCtx.stroke();
+                }
+                solCtx.setLineDash([]);
+            </script>
+        </section>
+
+        <section>
+            <h2>Testing Your Solution</h2>
+            
+            <div class="card" style="background: #ebf8ff;">
+                <h3 style="color: #2c5282;">Mobile Performance Checklist</h3>
+                <div class="checklist-item">✅ First Paint: Under 1.5 seconds on 3G</div>
+                <div class="checklist-item">✅ Interactive: Under 3 seconds on mobile</div>
+                <div class="checklist-item">✅ Lighthouse Score: 95+ on mobile</div>
+                <div class="checklist-item">✅ Touch Targets: Minimum 44x44 pixels</div>
+                <div class="checklist-item">✅ Text Size: Minimum 16px base font</div>
+                <div class="checklist-item">✅ Viewport: No horizontal scrolling</div>
+                <div class="checklist-item">✅ Images: WebP format with fallbacks</div>
+                <div class="checklist-item">✅ Offline: Service worker caching</div>
+            </div>
+
+            <div class="card" style="background: #f0fff4; margin-top: 1rem;">
+                <h3 style="color: #276749;">SEO Checklist</h3>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Meta Tags: Dynamic per page</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Schema.org: LocalBusiness markup</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Sitemap: Auto-generated XML</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Mobile-First: Responsive design</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Page Speed: Core Web Vitals pass</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Local SEO: Google My Business integration</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Content: Service pages indexed</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Reviews: Structured data for ratings</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Bonus: Advanced Features</h2>
+            
+            <div class="grid-container">
+                <div class="card" style="background: #faf5ff;">
+                    <h3 style="color: #553c9a;">SMS Integration</h3>
+                    <p>Add Twilio for text notifications:</p>
+                    <div class="badge badge-yellow">Appointment reminders</div>
+                    <div class="badge badge-yellow">Service updates</div>
+                    <div class="badge badge-yellow">Emergency confirmations</div>
+                </div>
+                
+                <div class="card" style="background: #fffbeb;">
+                    <h3 style="color: #92400e;">Live Chat</h3>
+                    <p>Implement real-time support:</p>
+                    <div class="badge badge-blue">WebSocket connection</div>
+                    <div class="badge badge-blue">Operator dashboard</div>
+                    <div class="badge badge-blue">Chatbot for FAQs</div>
+                </div>
+                
+                <div class="card" style="background: #f0fdfa;">
+                    <h3 style="color: #134e4a;">Price Calculator</h3>
+                    <p>Interactive pricing tool:</p>
+                    <div class="badge badge-green">Service selection</div>
+                    <div class="badge badge-green">Instant quotes</div>
+                    <div class="badge badge-green">Email estimates</div>
+                </div>
+                
+                <div class="card" style="background: #fef2f2;">
+                    <h3 style="color: #991b1b;">Customer Portal</h3>
+                    <p>Account management:</p>
+                    <div class="badge badge-red">Service history</div>
+                    <div class="badge badge-red">Invoices & payments</div>
+                    <div class="badge badge-red">Maintenance schedules</div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 0.5rem; margin-top: 2rem;">
+                <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">🎯 Challenge Complete!</h2>
+                <p style="margin-bottom: 1rem;">You've built a production-ready plumbing & heating website that:</p>
+                <ul style="margin-bottom: 1.5rem;">
+                    <li style="margin: 0.5rem 0;">✨ Loads in under 2 seconds on mobile</li>
+                    <li style="margin: 0.5rem 0;">📱 Provides exceptional mobile UX</li>
+                    <li style="margin: 0.5rem 0;">🔍 Ranks well in local search</li>
+                    <li style="margin: 0.5rem 0;">💰 Converts visitors into customers</li>
+                    <li style="margin: 0.5rem 0;">🚀 Scales with the business</li>
+                </ul>
+                <p style="font-weight: bold;">Next Steps: Deploy to Vercel/Netlify for the frontend and configure your WordPress hosting for optimal performance!</p>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>Our Services
+                <span class="code-tag">&lt;/h2&gt;</span>
+                
+                <span class="code-comment">{/* Mobile-first grid */}</span>
+                <span class="code-tag">&lt;div</span> <span class="code-string">className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"</span><span class="code-tag">&gt;</span>
+                    {services.<span class="code-function">map</span>((service) => (
+                        <span class="code-tag">&lt;ServiceCard</span> <span class="code-string">key={service.id}</span> <span class="code-string">service={service}</span> <span class="code-tag">/&gt;</span>
+                    ))}
+                <span class="code-tag">&lt;/div&gt;</span>
+            <span class="code-tag">&lt;/div&gt;</span>
+        <span class="code-tag">&lt;/section&gt;</span>
+    );
+};
+
+<span class="code-keyword">const</span> <span class="code-function">ServiceCard</span> = ({ service }) => {
+    <span class="code-keyword">const</span> { title, excerpt, service_details } = service;
+    
+    <span class="code-keyword">return</span> (
+        <span class="code-tag">&lt;div</span> <span class="code-string">className="bg-white rounded-xl shadow-lg hover:shadow-xl"</span><span class="code-tag">&gt;</span>
+            <span class="code-tag">&lt;div</span> <span class="code-string">className="p-6 bg-gradient-to-r from-blue-500 to-blue-600"</span><span class="code-tag">&gt;</span>
+                <span class="code-comment">{/* Service icon would go here */}</span>
+            <span class="code-tag">&lt;/div&gt;</span>
+            
+            <span class="code-tag">&lt;div</span> <span class="code-string">className="p-6"</span><span class="code-tag">&gt;</span>
+                <span class="code-tag">&lt;h3</span> <span class="code-string">className="text-xl font-semibold mb-2"</span><span class="code-tag">&gt;</span>
+                    {title.rendered}
+                <span class="code-tag">&lt;/h3&gt;</span>
+                <span class="code-tag">&lt;p</span> <span class="code-string">className="text-gray-600 mb-4"</span><span class="code-tag">&gt;</span>
+                    {excerpt.rendered}
+                <span class="code-tag">&lt;/p&gt;</span>
+                
+                <span class="code-tag">&lt;button</span> <span class="code-string">className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg"</span><span class="code-tag">&gt;</span>
+                    Book Service
+                <span class="code-tag">&lt;/button&gt;</span>
+            <span class="code-tag">&lt;/div&gt;</span>
+        <span class="code-tag">&lt;/div&gt;</span>
+    );
+};
+
+<span class="code-keyword">export default</span> Services;</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Step 4: Customer Reviews Carousel</h2>
+            
+            <div class="code-block">
+<pre><code><span class="code-comment">// components/Reviews.js - Mobile-Optimized Review Slider</span>
+<span class="code-keyword">import</span> React, { useState, useRef } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+
+<span class="code-keyword">const</span> <span class="code-function">Reviews</span> = ({ reviews }) => {
+    <span class="code-keyword">const</span> [currentIndex, setCurrentIndex] = <span class="code-function">useState</span>(0);
+    <span class="code-keyword">const</span> scrollRef = <span class="code-function">useRef</span>(<span class="code-keyword">null</span>);
+
+    <span class="code-keyword">const</span> <span class="code-function">renderStars</span> = (rating) => {
+        <span class="code-keyword">return</span> Array.<span class="code-function">from</span>({ length: 5 }).<span class="code-function">map</span>((_, i) => (
+            <span class="code-tag">&lt;span</span> <span class="code-string">key={i}</span><span class="code-tag">&gt;</span>{i &lt; rating ? '⭐' : '☆'}<span class="code-tag">&lt;/span&gt;</span>
+        ));
+    };
+
+    <span class="code-keyword">return</span> (
+        <span class="code-tag">&lt;section</span> <span class="code-string">className="py-12 bg-white"</span><span class="code-tag">&gt;</span>
+            <span class="code-tag">&lt;div</span> <span class="code-string">className="container mx-auto px-4"</span><span class="code-tag">&gt;</span>
+                <span class="code-tag">&lt;h2</span> <span class="code-string">className="text-3xl font-bold text-center mb-8"</span><span class="code-tag">&gt;</span>
+                    What Our Customers Say
+                <span class="code-tag">&lt;/h2&gt;</span>
+                
+                <span class="code-tag">&lt;div</span> <span class="code-string">ref={scrollRef}</span> <span class="code-string">className="flex overflow-x-auto snap-x"</span><span class="code-tag">&gt;</span>
+                    {reviews.<span class="code-function">map</span>((review) => (
+                        <span class="code-tag">&lt;div</span> <span class="code-string">key={review.id}</span> <span class="code-string">className="flex-shrink-0 w-full md:w-96 snap-center p-4"</span><span class="code-tag">&gt;</span>
+                            <span class="code-tag">&lt;div</span> <span class="code-string">className="bg-gray-50 rounded-xl p-6"</span><span class="code-tag">&gt;</span>
+                                <span class="code-tag">&lt;div</span> <span class="code-string">className="flex mb-3"</span><span class="code-tag">&gt;</span>
+                                    {<span class="code-function">renderStars</span>(review.review_meta?.rating || 5)}
+                                <span class="code-tag">&lt;/div&gt;</span>
+                                <span class="code-tag">&lt;p</span> <span class="code-string">className="text-gray-700 mb-4"</span><span class="code-tag">&gt;</span>
+                                    {review.content.rendered}
+                                <span class="code-tag">&lt;/p&gt;</span>
+                                <span class="code-tag">&lt;p</span> <span class="code-string">className="font-semibold"</span><span class="code-tag">&gt;</span>
+                                    {review.review_meta?.customer_name}
+                                <span class="code-tag">&lt;/p&gt;</span>
+                            <span class="code-tag">&lt;/div&gt;</span>
+                        <span class="code-tag">&lt;/div&gt;</span>
+                    ))}
+                <span class="code-tag">&lt;/div&gt;</span>
+            <span class="code-tag">&lt;/div&gt;</span>
+        <span class="code-tag">&lt;/section&gt;</span>
+    );
+};
+
+<span class="code-keyword">export default</span> Reviews;</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Step 5: Contact Form & Booking System</h2>
+            
+            <div class="code-block">
+<pre><code><span class="code-comment">// components/Contact.js - Mobile-Optimized Contact Form</span>
+<span class="code-keyword">import</span> React, { useState } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+
+<span class="code-keyword">const</span> <span class="code-function">Contact</span> = () => {
+    <span class="code-keyword">const</span> [formData, setFormData] = <span class="code-function">useState</span>({
+        name: <span class="code-string">''</span>,
+        phone: <span class="code-string">''</span>,
+        email: <span class="code-string">''</span>,
+        service: <span class="code-string">''</span>,
+        urgency: <span class="code-string">'regular'</span>,
+        message: <span class="code-string">''</span>
+    });
+
+    <span class="code-keyword">const</span> <span class="code-function">handleSubmit</span> = <span class="code-keyword">async</span> (e) => {
+        e.<span class="code-function">preventDefault</span>();
+        <span class="code-comment">// Handle form submission</span>
+        console.<span class="code-function">log</span>(<span class="code-string">'Form submitted:'</span>, formData);
+    };
+
+    <span class="code-keyword">return</span> (
+        <span class="code-tag">&lt;section</span> <span class="code-string">className="py-12 bg-gray-50"</span><span class="code-tag">&gt;</span>
+            <span class="code-tag">&lt;div</span> <span class="code-string">className="container mx-auto px-4"</span><span class="code-tag">&gt;</span>
+                <span class="code-tag">&lt;h2</span> <span class="code-string">className="text-3xl font-bold text-center mb-8"</span><span class="code-tag">&gt;</span>
+<section>
+            <h2>Testing Your Solution</h2>
+            
+            <div class="card" style="background: #ebf8ff;">
+                <h3 style="color: #2c5282;">Mobile Performance Checklist</h3>
+                <div class="checklist-item">✅ First Paint: Under 1.5 seconds on 3G</div>
+                <div class="checklist-item">✅ Interactive: Under 3 seconds on mobile</div>
+                <div class="checklist-item">✅ Lighthouse Score: 95+ on mobile</div>
+                <div class="checklist-item">✅ Touch Targets: Minimum 44x44 pixels</div>
+                <div class="checklist-item">✅ Text Size: Minimum 16px base font</div>
+                <div class="checklist-item">✅ Viewport: No horizontal scrolling</div>
+                <div class="checklist-item">✅ Images: WebP format with fallbacks</div>
+                <div class="checklist-item">✅ Offline: Service worker caching</div>
+            </div>
+
+            <div class="card" style="background: #f0fff4; margin-top: 1rem;">
+                <h3 style="color: #276749;">SEO Checklist</h3>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Meta Tags: Dynamic per page</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Schema.org: LocalBusiness markup</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Sitemap: Auto-generated XML</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Mobile-First: Responsive design</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Page Speed: Core Web Vitals pass</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Local SEO: Google My Business integration</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Content: Service pages indexed</div>
+                <div class="checklist-item" style="border-left-color: #48bb78;">✅ Reviews: Structured data for ratings</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Bonus: Advanced Features</h2>
+            
+            <div class="grid-container">
+                <div class="card" style="background: #faf5ff;">
+                    <h3 style="color: #553c9a;">SMS Integration</h3>
+                    <p>Add Twilio for text notifications:</p>
+                    <div class="badge badge-yellow">Appointment reminders</div>
+                    <div class="badge badge-yellow">Service updates</div>
+                    <div class="badge badge-yellow">Emergency confirmations</div>
+                </div>
+                
+                <div class="card" style="background: #fffbeb;">
+                    <h3 style="color: #92400e;">Live Chat</h3>
+                    <p>Implement real-time support:</p>
+                    <div class="badge badge-blue">WebSocket connection</div>
+                    <div class="badge badge-blue">Operator dashboard</div>
+                    <div class="badge badge-blue">Chatbot for FAQs</div>
+                </div>
+                
+                <div class="card" style="background: #f0fdfa;">
+                    <h3 style="color: #134e4a;">Price Calculator</h3>
+                    <p>Interactive pricing tool:</p>
+                    <div class="badge badge-green">Service selection</div>
+                    <div class="badge badge-green">Instant quotes</div>
+                    <div class="badge badge-green">Email estimates</div>
+                </div>
+                
+                <div class="card" style="background: #fef2f2;">
+                    <h3 style="color: #991b1b;">Customer Portal</h3>
+                    <p>Account management:</p>
+                    <div class="badge badge-red">Service history</div>
+                    <div class="badge badge-red">Invoices & payments</div>
+                    <div class="badge badge-red">Maintenance schedules</div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 0.5rem; margin-top: 2rem;">
+                <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">🎯 Challenge Complete!</h2>
+                <p style="margin-bottom: 1rem;">You've built a production-ready plumbing & heating website that:</p>
+                <ul style="margin-bottom: 1.5rem;">
+                    <li style="margin: 0.5rem 0;">✨ Loads in under 2 seconds on mobile</li>
+                    <li style="margin: 0.5rem 0;">📱 Provides exceptional mobile UX</li>
+                    <li style="margin: 0.5rem 0;">🔍 Ranks well in local search</li>
+                    <li style="margin: 0.5rem 0;">💰 Converts visitors into customers</li>
+                    <li style="margin: 0.5rem 0;">🚀 Scales with the business</li>
+                </ul>
+                <p style="font-weight: bold;">Next Steps: Deploy to Vercel/Netlify for the frontend and configure your WordPress hosting for optimal performance!</p>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>

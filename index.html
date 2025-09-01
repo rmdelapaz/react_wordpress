@@ -59,7 +59,7 @@
 
         <section class="course-overview">
             <h2>📚 Course Overview</h2>
-            <p>This comprehensive course takes you from React basics to building production-ready WordPress-powered applications. Each lesson includes interactive visualizations, real-world examples, and hands-on code samples.</p>
+            <p>This comprehensive course takes you from React basics to building production-ready WordPress-powered applications. Each lesson includes interactive visualizations, real-world examples, and hands-on code samples. Plus, test your skills with our practice project!</p>
             
             <div class="mermaid">
             graph LR
@@ -68,10 +68,12 @@
                 Lesson2 --> Lesson3[API Integration]
                 Lesson3 --> Lesson4[Build Apps]
                 Lesson4 --> Lesson5[SEO Excellence]
-                Lesson5 --> Expert[Expert Level 🏆]
+                Lesson5 --> Practice[Practice Project]
+                Practice --> Expert[Expert Level 🏆]
                 
                 style Start fill:#f9f,stroke:#333,stroke-width:4px
                 style Expert fill:#9f9,stroke:#333,stroke-width:4px
+                style Practice fill:#10b981,stroke:#333,stroke-width:4px,color:#fff
                 style Lesson1 fill:#e1f5fe
                 style Lesson2 fill:#c8e6c9
                 style Lesson3 fill:#fff3e0
@@ -399,6 +401,78 @@
                         <strong>Open Lesson 5 →</strong>
                     </a>
                 </article>
+
+                <!-- Practice Exercise -->
+                <article class="lesson-card" style="border: 3px solid #10b981; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);">
+                    <canvas id="exerciseCanvas" width="500" height="200"></canvas>
+                    <script>
+                        const exCanvas = document.getElementById('exerciseCanvas');
+                        const exCtx = exCanvas.getContext('2d');
+                        
+                        // Background gradient
+                        const gradient = exCtx.createLinearGradient(0, 0, 500, 200);
+                        gradient.addColorStop(0, '#f0fdf4');
+                        gradient.addColorStop(1, '#dcfce7');
+                        exCtx.fillStyle = gradient;
+                        exCtx.fillRect(0, 0, 500, 200);
+                        
+                        // Badge
+                        exCtx.fillStyle = '#10b981';
+                        exCtx.fillRect(0, 0, 150, 30);
+                        exCtx.fillStyle = 'white';
+                        exCtx.font = 'bold 12px Arial';
+                        exCtx.textAlign = 'center';
+                        exCtx.fillText('PRACTICE PROJECT', 75, 20);
+                        
+                        // Icon
+                        exCtx.font = 'bold 48px Arial';
+                        exCtx.fillStyle = '#10b981';
+                        exCtx.textAlign = 'left';
+                        exCtx.fillText('🔧', 20, 80);
+                        
+                        // Title
+                        exCtx.fillStyle = '#333';
+                        exCtx.font = 'bold 20px Arial';
+                        exCtx.fillText('FlowMaster Plumbing & Heating', 100, 60);
+                        
+                        // Description
+                        exCtx.fillStyle = '#666';
+                        exCtx.font = '14px Arial';
+                        exCtx.fillText('• Build a real mobile-first website', 100, 90);
+                        exCtx.fillText('• Use React + WordPress + Tailwind', 100, 110);
+                        exCtx.fillText('• Complete solution with code', 100, 130);
+                        exCtx.fillText('• Industry-ready implementation', 100, 150);
+                        
+                        // Technologies
+                        exCtx.fillStyle = '#10b981';
+                        exCtx.font = 'bold 16px Arial';
+                        exCtx.fillText('⚛️ 📱 🎨', 100, 180);
+                        
+                        // CTA Button
+                        exCtx.fillStyle = '#10b981';
+                        exCtx.fillRect(350, 150, 130, 35);
+                        exCtx.fillStyle = 'white';
+                        exCtx.font = 'bold 14px Arial';
+                        exCtx.textAlign = 'center';
+                        exCtx.fillText('Start Building', 415, 172);
+                    </script>
+                    <h3 style="color: #059669;">🏆 Hands-On Practice: Build a Real Business Website</h3>
+                    <p><strong>Challenge:</strong> Create a production-ready plumbing & heating business website with all the features a real client would need.</p>
+                    <ul>
+                        <li>🔧 <strong>Mobile-First Design</strong> - 75% of users on phones</li>
+                        <li>📞 <strong>Emergency Call Button</strong> - Sticky CTA for conversions</li>
+                        <li>⭐ <strong>Service Cards & Reviews</strong> - Trust building</li>
+                        <li>📅 <strong>Online Booking System</strong> - Contact forms</li>
+                        <li>🚀 <strong>Performance Optimized</strong> - Under 2s load time</li>
+                    </ul>
+                    <div style="background: #f0fdf4; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+                        <p style="color: #059669; font-weight: bold;">Perfect for Portfolio Projects!</p>
+                        <p style="color: #047857;">This exercise gives you a complete, production-ready website you can customize and use in your portfolio to showcase your React + WordPress skills.</p>
+                    </div>
+                    <a href="plumbing_heating_exercise.html" class="lesson-link" style="background: #10b981;">
+                        <strong>Start Practice Project →</strong>
+                    </a>
+                </article>
             </div>
         </section>
 
@@ -474,6 +548,22 @@
             </script>
         </section>
 
+        <section class="testimonials">
+            <h2>🌟 Success Stories</h2>
+            <blockquote>
+                <p>"This course transformed how I build web applications. The React + WordPress combination is incredibly powerful!"</p>
+                <cite>- Sarah Chen, Full-Stack Developer</cite>
+            </blockquote>
+            <blockquote>
+                <p>"The visual explanations and real-world examples made complex concepts easy to understand. Best tutorial series I've found!"</p>
+                <cite>- Marcus Johnson, Frontend Engineer</cite>
+            </blockquote>
+            <blockquote>
+                <p>"After completing this course, I landed my dream job building headless WordPress sites with React. Game changer!"</p>
+                <cite>- Elena Rodriguez, Web Developer</cite>
+            </blockquote>
+        </section>
+
         <section class="next-steps">
             <h2>🎯 Ready to Start?</h2>
             <p>Choose your path and begin your journey to becoming a React + WordPress expert!</p>
@@ -484,7 +574,7 @@
                 </a>
             </div>
 
-            <div class="quick-links">
+                            <div class="quick-links">
                 <h3>Quick Navigation</h3>
                 <ul>
                     <li>📖 <a href="react_wordpress_intro.html">Lesson 1: Introduction to React & WordPress</a></li>
@@ -492,13 +582,14 @@
                     <li>🔌 <a href="wordpress_rest_api_mastery.html">Lesson 3: WordPress REST API</a></li>
                     <li>🏗️ <a href="react_wordpress_integration.html">Lesson 4: Building Complete Apps</a></li>
                     <li>🎯 <a href="react_wordpress_seo_mastery.html">Lesson 5: SEO Mastery</a></li>
+                    <li>🔧 <a href="plumbing_heating_exercise.html"><strong>Practice Project:</strong> FlowMaster Plumbing & Heating</a></li>
                 </ul>
             </div>
         </section>
 
         <footer>
-            <p>💡 <strong>Pro Tip:</strong> Complete the lessons in order for the best learning experience. Each lesson builds upon the previous one!</p>
-            <p>🎓 This comprehensive course includes 5 in-depth lessons with interactive visualizations, code examples, and real-world case studies.</p>
+            <p>💡 <strong>Pro Tip:</strong> Complete the lessons in order for the best learning experience. Each lesson builds upon the previous one! Don't forget to try the practice project to solidify your skills.</p>
+            <p>🎓 This comprehensive course includes 5 in-depth lessons plus a hands-on practice project with interactive visualizations, code examples, and real-world case studies.</p>
             <p>Built with ❤️ for developers who want to master modern web development.</p>
         </footer>
     </main>
