@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debugging & Troubleshooting Guide: React + WordPress Master Class</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="icon" href="/favicon.png">
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        .error-box {
+            background: #fee;
+            border-left: 4px solid #c00;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        .solution-box {
+            background: #efe;
+            border-left: 4px solid #0a0;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        .warning-box {
+            background: #ffeaa7;
+            border-left: 4px solid #fdcb6e;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        .code-error {
+            background: #2d2d2d;
+            color: #f48771;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        .code-fix {
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        .debug-tool {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            margin: 0.25rem;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .tool-chrome { background: #4285f4; color: white; }
+        .tool-react { background: #61dafb; color: #282c34; }
+        .tool-wordpress { background: #21759b; color: white; }
+        .tool-vscode { background: #007acc; color: white; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔍 Debugging & Troubleshooting Master Guide</h1>
+        <p>Transform from a bug hunter to a bug terminator with this comprehensive debugging guide!</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>The Detective's Mindset: Debugging Philosophy</h2>
+            <p>Debugging is like being Sherlock Holmes in the digital world. Every error is a clue, every console log is evidence, and every stack trace tells a story. The key is not to panic but to investigate systematically.</p>
+
+            <div class="mermaid">
+            graph TD
+                A[Bug Discovered] --> B{Can you reproduce it?}
+                B -->|Yes| C[Isolate the Problem]
+                B -->|No| D[Gather More Info]
+                C --> E[Check Error Messages]
+                D --> F[Add Logging]
+                E --> G[Search for Solution]
+                F --> B
+                G --> H{Solution Found?}
+                H -->|Yes| I[Implement Fix]
+                H -->|No| J[Break Down Problem]
+                J --> C
+                I --> K[Test Thoroughly]
+                K --> L{Fixed?}
+                L -->|Yes| M[Document Solution]
+                L -->|No| C
+                
+                style A fill:#e74c3c
+                style M fill:#2ecc71
+                style B fill:#3498db
+                style H fill:#f39c12
+            </div>
+        </section>
+
+        <section>
+            <h2>Essential Debugging Tools Arsenal</h2>
+            <p>Just as a carpenter needs the right tools, a developer needs the right debugging arsenal. Here's your complete toolkit:</p>
+
+            <canvas id="toolsCanvas" width="600" height="400"></canvas>
+            <script>
+                const toolsCanvas = document.getElementById('toolsCanvas');
+                const toolsCtx = toolsCanvas.getContext('2d');
+                
+                // Title
+                toolsCtx.font = 'bold 18px Arial';
+                toolsCtx.fillStyle = '#333';
+                toolsCtx.textAlign = 'center';
+                toolsCtx.fillText('Developer Debugging Toolkit', 300, 30);
+                
+                // Tool categories
+                const categories = [
+                    {name: 'Browser Tools', x: 150, y: 100, color: '#4285f4'},
+                    {name: 'React Tools', x: 450, y: 100, color: '#61dafb'},
+                    {name: 'WordPress Tools', x: 150, y: 250, color: '#21759b'},
+                    {name: 'VS Code Tools', x: 450, y: 250, color: '#007acc'}
+                ];
+                
+                categories.forEach(cat => {
+                    // Draw circle
+                    toolsCtx.fillStyle = cat.color;
+                    toolsCtx.beginPath();
+                    toolsCtx.arc(cat.x, cat.y, 60, 0, Math.PI * 2);
+                    toolsCtx.fill();
+                    
+                    // Draw text
+                    toolsCtx.fillStyle = 'white';
+                    toolsCtx.font = 'bold 12px Arial';
+                    toolsCtx.fillText(cat.name, cat.x, cat.y);
+                    
+                    // Draw tools
+                    toolsCtx.fillStyle = '#666';
+                    toolsCtx.font = '10px Arial';
+                    if (cat.name === 'Browser Tools') {
+                        toolsCtx.fillText('• DevTools Console', cat.x, cat.y + 80);
+                        toolsCtx.fillText('• Network Tab', cat.x, cat.y + 95);
+                        toolsCtx.fillText('• Elements Inspector', cat.x, cat.y + 110);
+                    } else if (cat.name === 'React Tools') {
+                        toolsCtx.fillText('• React DevTools', cat.x, cat.y + 80);
+                        toolsCtx.fillText('• Profiler', cat.x, cat.y + 95);
+                        toolsCtx.fillText('• Components Tree', cat.x, cat.y + 110);
+                    } else if (cat.name === 'WordPress Tools') {
+                        toolsCtx.fillText('• Query Monitor', cat.x, cat.y + 80);
+                        toolsCtx.fillText('• Debug Bar', cat.x, cat.y + 95);
+                        toolsCtx.fillText('• REST API Log', cat.x, cat.y + 110);
+                    } else if (cat.name === 'VS Code Tools') {
+                        toolsCtx.fillText('• Debugger', cat.x, cat.y + 80);
+                        toolsCtx.fillText('• Breakpoints', cat.x, cat.y + 95);
+                        toolsCtx.fillText('• Extensions', cat.x, cat.y + 110);
+                    }
+                });
+                
+                // Connection lines
+                toolsCtx.strokeStyle = '#ddd';
+                toolsCtx.lineWidth = 2;
+                toolsCtx.beginPath();
+                toolsCtx.moveTo(150, 100);
+                toolsCtx.lineTo(450, 100);
+                toolsCtx.lineTo(450, 250);
+                toolsCtx.lineTo(150, 250);
+                toolsCtx.closePath();
+                toolsCtx.stroke();
+            </script>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin: 2rem 0;">
+                <span class="debug-tool tool-chrome">Chrome DevTools</span>
+                <span class="debug-tool tool-react">React Developer Tools</span>
+                <span class="debug-tool tool-wordpress">Query Monitor</span>
+                <span class="debug-tool tool-vscode">VS Code Debugger</span>
+                <span class="debug-tool">Postman</span>
+                <span class="debug-tool">Redux DevTools</span>
+                <span class="debug-tool">Lighthouse</span>
+                <span class="debug-tool">Network Tab</span>
+            </div>
+        </section>
+
+        <section>
+            <h2>Common Error #1: CORS - The Gatekeeper Problem</h2>
+            <p>CORS errors are like a bouncer at a club who won't let you in because you're not on the list. Your React app (from localhost:3000) is trying to talk to WordPress (from localhost:8000), but the browser's security bouncer says "Not on my watch!"</p>
+
+            <div class="error-box">
+                <h4>🔴 The Error:</h4>
+                <div class="code-error">
+Access to fetch at 'http://localhost:8000/wp-json/wp/v2/posts' from origin 
+'http://localhost:3000' has been blocked by CORS policy: 
+No 'Access-Control-Allow-Origin' header is present on the requested resource.
+                </div>
+            </div>
+
+            <div class="solution-box">
+                <h4>✅ The Solutions:</h4>
+                <div class="code-fix">
+// Solution 1: WordPress functions.php
+function add_cors_headers() {
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+    
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+        status_header(200);
+        exit();
+    }
+}
+add_action('init', 'add_cors_headers');
+
+// Solution 2: Use a proxy in package.json (development only)
+{
+  "proxy": "http://localhost:8000"
+}
+
+// Solution 3: Use a CORS plugin for WordPress
+// Install: "WP CORS" or "WP REST API Controller"
+                </div>
+            </div>
+
+            <div class="mermaid">
+            sequenceDiagram
+                participant React as React App (3000)
+                participant Browser
+                participant WP as WordPress (8000)
+                
+                React->>Browser: Fetch posts
+                Browser->>WP: OPTIONS request (preflight)
+                WP-->>Browser: ❌ No CORS headers
+                Browser-->>React: CORS Error!
+                
+                Note over WP: Add CORS headers
+                
+                React->>Browser: Fetch posts
+                Browser->>WP: OPTIONS request (preflight)
+                WP-->>Browser: ✅ CORS headers present
+                Browser->>WP: GET request
+                WP-->>Browser: JSON data
+                Browser-->>React: Success!
+            </div>
+        </section>
+
+        <section>
+            <h2>Common Error #2: The Undefined Monster</h2>
+            <p>The "Cannot read property of undefined" error is like trying to open a door that doesn't exist. You're reaching for something that isn't there yet!</p>
+
+            <div class="error-box">
+                <h4>🔴 The Error:</h4>
+                <div class="code-error">
+TypeError: Cannot read property 'title' of undefined
+    at PostCard (PostCard.js:15)
+    at renderWithHooks (react-dom.development.js:14985)
+                </div>
+            </div>
+
+            <canvas id="undefinedCanvas" width="600" height="300"></canvas>
+            <script>
+                const undefCanvas = document.getElementById('undefinedCanvas');
+                const undefCtx = undefCanvas.getContext('2d');
+                
+                // Timeline visualization
+                undefCtx.font = 'bold 16px Arial';
+                undefCtx.fillStyle = '#333';
+                undefCtx.textAlign = 'center';
+                undefCtx.fillText('The Race Condition Timeline', 300, 30);
+                
+                // Timeline line
+                undefCtx.strokeStyle = '#333';
+                undefCtx.lineWidth = 2;
+                undefCtx.beginPath();
+                undefCtx.moveTo(50, 150);
+                undefCtx.lineTo(550, 150);
+                undefCtx.stroke();
+                
+                // Time points
+                const points = [
+                    {x: 100, label: 'Component Renders', status: 'danger'},
+                    {x: 250, label: 'Tries to Access Data', status: 'danger'},
+                    {x: 400, label: 'API Returns Data', status: 'warning'},
+                    {x: 500, label: 'Data Available', status: 'success'}
+                ];
+                
+                points.forEach(point => {
+                    // Draw point
+                    undefCtx.fillStyle = point.status === 'danger' ? '#e74c3c' : 
+                                        point.status === 'warning' ? '#f39c12' : '#2ecc71';
+                    undefCtx.beginPath();
+                    undefCtx.arc(point.x, 150, 8, 0, Math.PI * 2);
+                    undefCtx.fill();
+                    
+                    // Draw label
+                    undefCtx.fillStyle = '#333';
+                    undefCtx.font = '12px Arial';
+                    undefCtx.save();
+                    undefCtx.translate(point.x, 130);
+                    undefCtx.rotate(-Math.PI/4);
+                    undefCtx.fillText(point.label, 0, 0);
+                    undefCtx.restore();
+                });
+                
+                // Error zone
+                undefCtx.fillStyle = 'rgba(231, 76, 60, 0.2)';
+                undefCtx.fillRect(80, 100, 190, 100);
+                undefCtx.fillStyle = '#e74c3c';
+                undefCtx.font = 'bold 14px Arial';
+                undefCtx.fillText('ERROR ZONE', 175, 220);
+            </script>
+
+            <div class="solution-box">
+                <h4>✅ The Solutions:</h4>
+                <div class="code-fix">
+// Solution 1: Optional Chaining (ES2020)
+const title = post?.title?.rendered;
+
+// Solution 2: Conditional Rendering
+{post && post.title && (
+    <h2>{post.title.rendered}</h2>
+)}
+
+// Solution 3: Default Props
+const PostCard = ({ post = {} }) => {
+    const { title = { rendered: 'Loading...' } } = post;
+    return <h2>{title.rendered}</h2>;
+};
+
+// Solution 4: Loading State
+if (loading) return <Spinner />;
+if (!post) return <div>No post found</div>;
+return <h2>{post.title.rendered}</h2>;
+
+// Solution 5: Guard Clauses
+const getTitle = (post) => {
+    if (!post) return 'No post';
+    if (!post.title) return 'Untitled';
+    return post.title.rendered || 'Untitled';
+};
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Common Error #3: The Infinite Loop Trap</h2>
+            <p>useEffect infinite loops are like a hamster wheel - your code keeps running and running but never gets anywhere, eventually exhausting your browser!</p>
+
+            <div class="error-box">
+                <h4>🔴 The Error:</h4>
+                <div class="code-error">
+Warning: Maximum update depth exceeded. This can happen when a component 
+repeatedly calls setState inside componentWillUpdate or componentDidUpdate.
+                </div>
+            </div>
+
+            <div class="mermaid">
+            graph LR
+                A[useEffect runs] --> B[Updates state]
+                B --> C[Component re-renders]
+                C --> D[useEffect runs again]
+                D --> A
+                
+                style A fill:#e74c3c
+                style B fill:#e74c3c
+                style C fill:#e74c3c
+                style D fill:#e74c3c
+            </div>
+
+            <div class="solution-box">
+                <h4>✅ The Fix:</h4>
+                <div class="code-fix">
+// ❌ BAD - Infinite Loop
+useEffect(() => {
+    setCount(count + 1); // This causes re-render, which triggers useEffect again!
+});
+
+// ✅ GOOD - With Dependency Array
+useEffect(() => {
+    setCount(count + 1);
+}, []); // Empty array = runs once on mount
+
+// ✅ GOOD - Conditional Update
+useEffect(() => {
+    if (shouldUpdate) {
+        setCount(count + 1);
+        setShouldUpdate(false);
+    }
+}, [shouldUpdate, count]);
+
+// ✅ GOOD - Using Callback
+useEffect(() => {
+    setCount(prevCount => prevCount + 1);
+}, [someDependency]); // Not dependent on count
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Common Error #4: WordPress REST API 404</h2>
+            <p>Getting a 404 from WordPress REST API is like showing up at the wrong address - you're looking for something that WordPress doesn't know exists!</p>
+
+            <div class="error-box">
+                <h4>🔴 The Error:</h4>
+                <div class="code-error">
+GET http://localhost:8000/wp-json/wp/v2/posts 404 (Not Found)
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h4>🔍 Diagnostic Checklist:</h4>
+                <ol>
+                    <li>Are permalinks enabled? (Settings → Permalinks → Post name)</li>
+                    <li>Is REST API enabled? (Check with: yoursite.com/wp-json)</li>
+                    <li>Is .htaccess writable and configured?</li>
+                    <li>Are you using the correct endpoint?</li>
+                    <li>Is your custom post type registered with 'show_in_rest' => true?</li>
+                </ol>
+            </div>
+
+            <div class="solution-box">
+                <h4>✅ The Solutions:</h4>
+                <div class="code-fix">
+// Solution 1: Fix Permalinks
+// Go to: WordPress Admin → Settings → Permalinks
+// Select "Post name" and Save (this regenerates .htaccess)
+
+// Solution 2: Enable REST for Custom Post Types
+register_post_type('products', [
+    'public' => true,
+    'show_in_rest' => true, // ← This is crucial!
+    'rest_base' => 'products', // Optional: custom endpoint
+    'supports' => ['title', 'editor', 'custom-fields']
+]);
+
+// Solution 3: Debug REST API
+// Test these URLs in order:
+// 1. yoursite.com/wp-json → Should show API index
+// 2. yoursite.com/wp-json/wp/v2 → Should show endpoints
+// 3. yoursite.com/wp-json/wp/v2/posts → Should show posts
+
+// Solution 4: Check .htaccess
+# BEGIN WordPress
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+# END WordPress
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Common Error #5: State Not Updating</h2>
+            <p>When state doesn't update, it's like pressing an elevator button but the elevator never comes - you're doing something, but React doesn't know it needs to respond!</p>
+
+            <div class="error-box">
+                <h4>🔴 The Problem:</h4>
+                <div class="code-error">
+// You update state but UI doesn't change
+handleClick = () => {
+    user.name = 'John'; // ❌ Mutating state directly
+    setUser(user); // React doesn't see this as a change!
+}
+                </div>
+            </div>
+
+            <canvas id="stateCanvas" width="600" height="350"></canvas>
+            <script>
+                const stateCanvas = document.getElementById('stateCanvas');
+                const stateCtx = stateCanvas.getContext('2d');
+                
+                // Title
+                stateCtx.font = 'bold 16px Arial';
+                stateCtx.fillStyle = '#333';
+                stateCtx.textAlign = 'center';
+                stateCtx.fillText('React State Update Detection', 300, 30);
+                
+                // Wrong way
+                stateCtx.fillStyle = '#ffebee';
+                stateCtx.fillRect(50, 60, 230, 120);
+                stateCtx.strokeStyle = '#e74c3c';
+                stateCtx.lineWidth = 2;
+                stateCtx.strokeRect(50, 60, 230, 120);
+                
+                stateCtx.fillStyle = '#e74c3c';
+                stateCtx.font = 'bold 14px Arial';
+                stateCtx.fillText('❌ Wrong Way', 165, 85);
+                
+                stateCtx.fillStyle = '#333';
+                stateCtx.font = '12px Arial';
+                stateCtx.fillText('Same Reference', 165, 110);
+                stateCtx.fillText('obj.name = "John"', 165, 130);
+                stateCtx.fillText('setState(obj)', 165, 150);
+                stateCtx.fillText('No Re-render!', 165, 170);
+                
+                // Right way
+                stateCtx.fillStyle = '#e8f5e9';
+                stateCtx.fillRect(320, 60, 230, 120);
+                stateCtx.strokeStyle = '#2ecc71';
+                stateCtx.strokeRect(320, 60, 230, 120);
+                
+                stateCtx.fillStyle = '#2ecc71';
+                stateCtx.font = 'bold 14px Arial';
+                stateCtx.fillText('✅ Right Way', 435, 85);
+                
+                stateCtx.fillStyle = '#333';
+                stateCtx.font = '12px Arial';
+                stateCtx.fillText('New Reference', 435, 110);
+                stateCtx.fillText('setState({...obj,', 435, 130);
+                stateCtx.fillText('name: "John"})', 435, 150);
+                stateCtx.fillText('Re-renders!', 435, 170);
+                
+                // Comparison
+                stateCtx.strokeStyle = '#666';
+                stateCtx.lineWidth = 1;
+                stateCtx.setLineDash([5, 5]);
+                stateCtx.beginPath();
+                stateCtx.moveTo(165, 200);
+                stateCtx.lineTo(165, 250);
+                stateCtx.lineTo(435, 250);
+                stateCtx.lineTo(435, 200);
+                stateCtx.stroke();
+                stateCtx.setLineDash([]);
+                
+                stateCtx.fillStyle = '#666';
+                stateCtx.font = '12px Arial';
+                stateCtx.fillText('React compares references', 300, 270);
+                stateCtx.fillText('Same reference = No update', 300, 290);
+                stateCtx.fillText('New reference = Update!', 300, 310);
+            </script>
+
+            <div class="solution-box">
+                <h4>✅ The Solutions:</h4>
+                <div class="code-fix">
+// For Objects - Create New Reference
+// ❌ Wrong
+const updateUser = () => {
+    user.name = 'John';
+    setUser(user); // Same reference!
+};
+
+// ✅ Correct - Spread Operator
+const updateUser = () => {
+    setUser({
+        ...user,
+        name: 'John'
+    });
+};
+
+// ✅ Correct - Object.assign
+const updateUser = () => {
+    setUser(Object.assign({}, user, { name: 'John' }));
+};
+
+// For Arrays - Create New Array
+// ❌ Wrong
+const addItem = (item) => {
+    items.push(item);
+    setItems(items); // Same reference!
+};
+
+// ✅ Correct - Spread
+const addItem = (item) => {
+    setItems([...items, item]);
+};
+
+// ✅ Correct - Filter/Map (creates new array)
+const removeItem = (id) => {
+    setItems(items.filter(item => item.id !== id));
+};
+
+// For Nested Objects
+// ✅ Deep Clone for Nested Updates
+const updateNested = () => {
+    setUser({
+        ...user,
+        address: {
+            ...user.address,
+            city: 'New York'
+        }
+    });
+};
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Common Error #6: Mixed Content (HTTPS/HTTP)</h2>
+            <p>Mixed content errors are like trying to use a secure vault but leaving the door wide open - your HTTPS site is loading HTTP resources, breaking the security chain!</p>
+
+            <div class="error-box">
+                <h4>🔴 The Error:</h4>
+                <div class="code-error">
+Mixed Content: The page at 'https://mysite.com' was loaded over HTTPS, 
+but requested an insecure resource 'http://mysite.com/wp-json/wp/v2/posts'. 
+This request has been blocked; the content must be served over HTTPS.
+                </div>
+            </div>
+
+            <div class="solution-box">
+                <h4>✅ The Solutions:</h4>
+                <div class="code-fix">
+// Solution 1: Use Protocol-Relative URLs
+const API_URL = '//mysite.com/wp-json/wp/v2';
+
+// Solution 2: Force HTTPS in WordPress
+// wp-config.php
+define('FORCE_SSL_ADMIN', true);
+if (strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false) {
+    $_SERVER['HTTPS'] = 'on';
+}
+
+// Solution 3: Update WordPress URLs
+// Settings → General → WordPress Address (URL): https://...
+// Settings → General → Site Address (URL): https://...
+
+// Solution 4: Environment-Based URLs
+const API_URL = process.env.NODE_ENV === 'production'
+    ? 'https://mysite.com/wp-json/wp/v2'
+    : 'http://localhost:8000/wp-json/wp/v2';
+
+// Solution 5: .htaccess Redirect
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Debugging Tools Deep Dive</h2>
+            <h3>Chrome DevTools Network Tab Mastery</h3>
+            <p>The Network tab is like an X-ray machine for your API calls - you can see everything that's happening under the hood!</p>
+
+            <canvas id="networkCanvas" width="600" height="400"></canvas>
+            <script>
+                const netCanvas = document.getElementById('networkCanvas');
+                const netCtx = netCanvas.getContext('2d');
+                
+                // Draw Network Tab Interface
+                netCtx.fillStyle = '#f5f5f5';
+                netCtx.fillRect(20, 20, 560, 360);
+                
+                // Header
+                netCtx.fillStyle = '#333';
+                netCtx.fillRect(20, 20, 560, 30);
+                netCtx.fillStyle = 'white';
+                netCtx.font = 'bold 12px Arial';
+                netCtx.fillText('Network', 30, 38);
+                
+                // Filters
+                netCtx.fillStyle = '#666';
+                netCtx.font = '11px Arial';
+                ['All', 'XHR', 'JS', 'CSS', 'Img', 'Media', 'Font', 'Doc', 'WS'].forEach((filter, i) => {
+                    netCtx.fillRect(30 + i * 60, 60, 50, 25);
+                    netCtx.fillStyle = 'white';
+                    netCtx.fillText(filter, 35 + i * 60, 76);
+                    netCtx.fillStyle = '#666';
+                });
+                
+                // Request list
+                const requests = [
+                    {name: 'posts', status: 200, time: '45ms', size: '2.3 KB', color: '#2ecc71'},
+                    {name: 'users', status: 200, time: '23ms', size: '1.1 KB', color: '#2ecc71'},
+                    {name: 'comments', status: 404, time: '12ms', size: '0 KB', color: '#e74c3c'},
+                    {name: 'media', status: 500, time: '502ms', size: '0 KB', color: '#c0392b'},
+                    {name: 'categories', status: 200, time: '34ms', size: '0.8 KB', color: '#2ecc71'}
+                ];
+                
+                // Headers
+                netCtx.fillStyle = '#e0e0e0';
+                netCtx.fillRect(30, 100, 540, 25);
+                netCtx.fillStyle = '#333';
+                netCtx.font = 'bold 10px Arial';
+                netCtx.fillText('Name', 40, 115);
+                netCtx.fillText('Status', 200, 115);
+                netCtx.fillText('Time', 300, 115);
+                netCtx.fillText('Size', 400, 115);
+                
+                // Requests
+                requests.forEach((req, i) => {
+                    const y = 130 + i * 30;
+                    
+                    // Row
+                    if (i % 2 === 0) {
+                        netCtx.fillStyle = '#fafafa';
+                        netCtx.fillRect(30, y, 540, 30);
+                    }
+                    
+                    // Status indicator
+                    netCtx.fillStyle = req.color;
+                    netCtx.beginPath();
+                    netCtx.arc(35, y + 15, 3, 0, Math.PI * 2);
+                    netCtx.fill();
+                    
+                    // Text
+                    netCtx.fillStyle = '#333';
+                    netCtx.font = '11px Arial';
+                    netCtx.fillText(req.name, 50, y + 18);
+                    netCtx.fillStyle = req.status === 200 ? '#2ecc71' : '#e74c3c';
+                    netCtx.fillText(req.status.toString(), 200, y + 18);
+                    netCtx.fillStyle = '#333';
+                    netCtx.fillText(req.time, 300, y + 18);
+                    netCtx.fillText(req.size, 400, y + 18);
+                });
+                
+                // Selected request details
+                netCtx.fillStyle = '#e3f2fd';
+                netCtx.fillRect(30, 300, 540, 70);
+                netCtx.fillStyle = '#1976d2';
+                netCtx.font = 'bold 11px Arial';
+                netCtx.fillText('Request Headers:', 40, 320);
+                netCtx.fillStyle = '#666';
+                netCtx.font = '10px Arial';
+                netCtx.fillText('Accept: application/json', 40, 335);
+                netCtx.fillText('Origin: http://localhost:3000', 40, 350);
+                netCtx.fillText('Referer: http://localhost:3000/', 40, 365);
+            </script>
+
+            <div class="solution-box">
+                <h4>🎯 Network Tab Pro Tips:</h4>
+                <ol>
+                    <li><strong>Filter by XHR/Fetch:</strong> See only API calls</li>
+                    <li><strong>Preserve Log:</strong> Keep requests when navigating</li>
+                    <li><strong>Throttling:</strong> Simulate slow connections</li>
+                    <li><strong>Copy as cURL:</strong> Right-click → Copy → Copy as cURL</li>
+                    <li><strong>Response Preview:</strong> See formatted JSON</li>
+                    <li><strong>Timing Tab:</strong> Analyze request performance</li>
+                    <li><strong>Initiator:</strong> See what triggered the request</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>React Developer Tools Mastery</h2>
+            <p>React DevTools is like having X-ray vision for your components - you can see props, state, hooks, and the component tree in real-time!</p>
+
+            <div class="mermaid">
+            graph TD
+                A[React DevTools] --> B[Components Tab]
+                A --> C[Profiler Tab]
+                
+                B --> D[Component Tree]
+                B --> E[Props Inspector]
+                B --> F[State Inspector]
+                B --> G[Hooks Inspector]
+                
+                C --> H[Performance Flamegraph]
+                C --> I[Render Timeline]
+                C --> J[Commit Information]
+                
+                D --> K[Search Components]
+                E --> L[Edit Props Live]
+                F --> M[Modify State Live]
+                
+                style A fill:#61dafb
+                style B fill:#3498db
+                style C fill:#e74c3c
+            </div>
+
+            <div class="solution-box">
+                <h4>🔍 React DevTools Techniques:</h4>
+                <div class="code-fix">
+// 1. Finding Performance Issues
+// Look for components highlighted in yellow/red during renders
+
+// 2. Debugging Props
+// Click component → View props → Edit values live
+
+// 3. Hook Dependencies
+// See which values trigger useEffect re-runs
+
+// 4. Component Search
+// Use the search bar with component names or prop values
+
+// 5. Console Integration
+// Select component → Type $r in console to access it
+console.log($r.props); // Selected component's props
+console.log($r.state); // Selected component's state
+
+// 6. Debugging Re-renders
+// Enable "Highlight updates when components render"
+// Watch for unexpected flashing
+
+// 7. Performance Profiling
+// Start profiling → Interact with app → Stop → Analyze flamegraph
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>WordPress Debug Mode</h2>
+            <p>WordPress Debug Mode is like turning on all the lights in a dark room - suddenly you can see all the warnings and errors that were hiding!</p>
+
+            <div class="solution-box">
+                <h4>⚙️ Enable WordPress Debugging:</h4>
+                <div class="code-fix">
+// wp-config.php - Development Settings
+define('WP_DEBUG', true);
+define('WP_DEBUG_LOG', true);
+define('WP_DEBUG_DISPLAY', true);
+define('SCRIPT_DEBUG', true);
+define('SAVEQUERIES', true);
+
+// Advanced Debugging
+define('WP_DEBUG_LOG', '/path/to/custom/debug.log');
+
+// REST API Debugging
+add_filter('rest_pre_echo_response', function($result, $server, $request) {
+    error_log('REST Request: ' . $request->get_route());
+    error_log('REST Response: ' . json_encode($result));
+    return $result;
+}, 10, 3);
+
+// Query Monitor Plugin Configuration
+// Install Query Monitor plugin for visual debugging
+// Shows: Database queries, PHP errors, HTTP requests, 
+// Hooks & Actions, Block editor blocks, and more!
+
+// Custom Debug Function
+function debug_log($message) {
+    if (WP_DEBUG === true) {
+        if (is_array($message) || is_object($message)) {
+            error_log(print_r($message, true));
+        } else {
+            error_log($message);
+        }
+    }
+}
+
+// Usage
+debug_log('User ID: ' . get_current_user_id());
+debug_log($_POST); // Log entire POST array
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Console Debugging Strategies</h2>
+            <p>Console methods are like different types of highlighters - each one helps you mark and find information in different ways!</p>
+
+            <div class="solution-box">
+                <h4>🎯 Advanced Console Techniques:</h4>
+                <div class="code-fix">
+// 1. Styled Console Logs
+console.log('%c Important Message! ', 
+    'background: #222; color: #bada55; font-size: 16px; padding: 5px;');
+
+// 2. Console Groups
+console.group('API Call Details');
+console.log('Endpoint:', endpoint);
+console.log('Method:', method);
+console.log('Headers:', headers);
+console.groupEnd();
+
+// 3. Console Table for Arrays/Objects
+const users = [
+    { name: 'John', age: 30, role: 'Admin' },
+    { name: 'Jane', age: 25, role: 'User' }
+];
+console.table(users);
+
+// 4. Performance Timing
+console.time('API Call');
+fetch('/api/posts').then(() => {
+    console.timeEnd('API Call'); // API Call: 245.23ms
+});
+
+// 5. Stack Trace
+console.trace('Where did this come from?');
+
+// 6. Conditional Logging
+console.assert(user.age >= 18, 'User is not an adult!', user);
+
+// 7. Object Deep Inspection
+console.dir(document.body, { depth: 2 });
+
+// 8. Count Occurrences
+function trackEvent(event) {
+    console.count(event); // Button Click: 1, Button Click: 2, etc.
+}
+
+// 9. Memory Debugging
+console.memory; // Check memory usage
+
+// 10. Clear with Style
+console.clear();
+console.log('%c Console Cleared! ', 
+    'background: red; color: white; font-size: 20px;');
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>VS Code Debugging Setup</h2>
+            <p>VS Code debugging is like having a time machine for your code - you can pause execution, step through line by line, and inspect everything!</p>
+
+            <div class="solution-box">
+                <h4>🔧 VS Code Configuration:</h4>
+                <div class="code-fix">
+// .vscode/launch.json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome for React",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/src",
+            "sourceMapPathOverrides": {
+                "webpack:///src/*": "${webRoot}/*"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Node.js",
+            "program": "${workspaceFolder}/server.js",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Full Stack",
+            "configurations": ["Launch Chrome for React", "Debug Node.js"]
+        }
+    ]
+}
+
+// Debugging Shortcuts
+// F5: Start Debugging
+// F9: Toggle Breakpoint
+// F10: Step Over
+// F11: Step Into
+// Shift+F11: Step Out
+// Shift+F5: Stop Debugging
+
+// Conditional Breakpoints (Right-click on line number)
+// Expression: user.role === 'admin'
+// Hit Count: Break after 5 hits
+// Log Message: Log without stopping
+
+// Debug Console Commands
+// Watch expressions in real-time
+// Evaluate expressions while paused
+// Modify variables during execution
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Error Boundary Implementation</h2>
+            <p>Error Boundaries are like safety nets for your React app - they catch errors and prevent the entire app from crashing!</p>
+
+            <div class="solution-box">
+                <h4>🛡️ Error Boundary Component:</h4>
+                <div class="code-fix">
+// ErrorBoundary.js
+import React from 'react';
+
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            hasError: false,
+            error: null,
+            errorInfo: null,
+            errorCount: 0
+        };
+    }
+
+    static getDerivedStateFromError(error) {
+        // Update state so next render shows fallback UI
+        return { hasError: true };
+    }
+
+    componentDidCatch(error, errorInfo) {
+        // Log error to error reporting service
+        console.error('Error Boundary Caught:', error, errorInfo);
+        
+        // Send to error tracking service
+        if (window.Sentry) {
+            window.Sentry.captureException(error, {
+                contexts: { react: { componentStack: errorInfo.componentStack } }
+            });
+        }
+        
+        // Store error details
+        this.setState({
+            error,
+            errorInfo,
+            errorCount: this.state.errorCount + 1
+        });
+    }
+
+    handleReset = () => {
+        this.setState({
+            hasError: false,
+            error: null,
+            errorInfo: null
+        });
+    };
+
+    render() {
+        if (this.state.hasError) {
+            // Fallback UI
+            return (
+                <div style={{
+                    padding: '20px',
+                    background: '#fee',
+                    border: '1px solid #fcc',
+                    borderRadius: '5px',
+                    margin: '20px'
+                }}>
+                    <h2>Oops! Something went wrong 😢</h2>
+                    <details style={{ whiteSpace: 'pre-wrap', marginTop: '10px' }}>
+                        <summary>Click for error details</summary>
+                        <p>{this.state.error && this.state.error.toString()}</p>
+                        <p>{this.state.errorInfo && this.state.errorInfo.componentStack}</p>
+                    </details>
+                    <button onClick={this.handleReset} style={{
+                        marginTop: '10px',
+                        padding: '10px 20px',
+                        background: '#007bff',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '5px',
+                        cursor: 'pointer'
+                    }}>
+                        Try Again
+                    </button>
+                </div>
+            );
+        }
+
+        return this.props.children;
+    }
+}
+
+// Usage
+function App() {
+    return (
+        <ErrorBoundary>
+            <Header />
+            <ErrorBoundary>
+                <MainContent />
+            </ErrorBoundary>
+            <Footer />
+        </ErrorBoundary>
+    );
+}
+
+// Custom Hook for Error Handling
+function useErrorHandler() {
+    const [error, setError] = React.useState(null);
+    
+    const resetError = () => setError(null);
+    
+    const captureError = React.useCallback((error) => {
+        setError(error);
+        console.error('Error captured:', error);
+    }, []);
+    
+    React.useEffect(() => {
+        if (error) throw error;
+    }, [error]);
+    
+    return { captureError, resetError };
+}
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Performance Debugging</h2>
+            <p>Performance issues are like traffic jams in your app - everything slows down and users get frustrated. Let's find and fix the bottlenecks!</p>
+
+            <canvas id="perfDebugCanvas" width="600" height="350"></canvas>
+            <script>
+                const perfCanvas = document.getElementById('perfDebugCanvas');
+                const perfCtx = perfCanvas.getContext('2d');
+                
+                // Title
+                perfCtx.font = 'bold 16px Arial';
+                perfCtx.fillStyle = '#333';
+                perfCtx.textAlign = 'center';
+                perfCtx.fillText('React Performance Profiling', 300, 30);
+                
+                // Render timeline
+                perfCtx.strokeStyle = '#ddd';
+                perfCtx.lineWidth = 2;
+                perfCtx.beginPath();
+                perfCtx.moveTo(50, 100);
+                perfCtx.lineTo(550, 100);
+                perfCtx.stroke();
+                
+                // Render blocks
+                const renders = [
+                    {component: 'App', time: 45, x: 60, color: '#e74c3c'},
+                    {component: 'Header', time: 5, x: 120, color: '#2ecc71'},
+                    {component: 'PostList', time: 120, x: 180, color: '#e74c3c'},
+                    {component: 'PostCard', time: 8, x: 320, color: '#f39c12'},
+                    {component: 'Footer', time: 3, x: 420, color: '#2ecc71'}
+                ];
+                
+                renders.forEach(render => {
+                    // Draw bar
+                    perfCtx.fillStyle = render.color;
+                    perfCtx.fillRect(render.x, 100 - render.time/2, 40, render.time);
+                    
+                    // Label
+                    perfCtx.fillStyle = '#333';
+                    perfCtx.font = '10px Arial';
+                    perfCtx.save();
+                    perfCtx.translate(render.x + 20, 120);
+                    perfCtx.rotate(Math.PI/4);
+                    perfCtx.fillText(render.component, 0, 0);
+                    perfCtx.restore();
+                    
+                    // Time
+                    perfCtx.fillStyle = render.color;
+                    perfCtx.font = 'bold 11px Arial';
+                    perfCtx.textAlign = 'center';
+                    perfCtx.fillText(render.time + 'ms', render.x + 20, 90 - render.time/2);
+                });
+                
+                // Legend
+                const legend = [
+                    {color: '#2ecc71', label: 'Fast (<10ms)'},
+                    {color: '#f39c12', label: 'Moderate (10-50ms)'},
+                    {color: '#e74c3c', label: 'Slow (>50ms)'}
+                ];
+                
+                legend.forEach((item, i) => {
+                    perfCtx.fillStyle = item.color;
+                    perfCtx.fillRect(150 + i * 120, 250, 15, 15);
+                    perfCtx.fillStyle = '#333';
+                    perfCtx.font = '12px Arial';
+                    perfCtx.fillText(item.label, 170 + i * 120, 262);
+                });
+                
+                // Optimization tips
+                perfCtx.fillStyle = '#666';
+                perfCtx.font = '11px Arial';
+                perfCtx.textAlign = 'left';
+                perfCtx.fillText('⚡ Use React.memo() for expensive components', 50, 300);
+                perfCtx.fillText('⚡ Implement virtualization for long lists', 50, 320);
+                perfCtx.fillText('⚡ Optimize images and lazy load', 350, 300);
+                perfCtx.fillText('⚡ Use production builds for testing', 350, 320);
+            </script>
+
+            <div class="solution-box">
+                <h4>⚡ Performance Debugging Tools:</h4>
+                <div class="code-fix">
+// 1. React Profiler API
+import { Profiler } from 'react';
+
+function onRenderCallback(id, phase, actualDuration) {
+    console.log(`${id} (${phase}) took ${actualDuration}ms`);
+}
+
+<Profiler id="PostList" onRender={onRenderCallback}>
+    <PostList posts={posts} />
+</Profiler>
+
+// 2. Performance Observer
+const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+        console.log('LCP:', entry.startTime);
+    }
+});
+observer.observe({ entryTypes: ['largest-contentful-paint'] });
+
+// 3. Why Did You Render
+// npm install @welldone-software/why-did-you-render
+import whyDidYouRender from '@welldone-software/why-did-you-render';
+
+if (process.env.NODE_ENV === 'development') {
+    whyDidYouRender(React, {
+        trackAllPureComponents: true,
+        logOwnerReasons: true
+    });
+}
+
+// 4. Custom Performance Hook
+function usePerformanceTimer(label) {
+    React.useEffect(() => {
+        performance.mark(`${label}-start`);
+        
+        return () => {
+            performance.mark(`${label}-end`);
+            performance.measure(
+                label,
+                `${label}-start`,
+                `${label}-end`
+            );
+            const measure = performance.getEntriesByName(label)[0];
+            console.log(`${label}: ${measure.duration}ms`);
+        };
+    }, [label]);
+}
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Debugging Checklist</h2>
+            <p>When faced with a bug, follow this systematic approach - like a pilot's pre-flight checklist!</p>
+
+            <div class="mermaid">
+            graph TD
+                Start[Bug Found] --> Check1{Can you reproduce it?}
+                Check1 -->|No| Gather[Gather more information]
+                Check1 -->|Yes| Check2{Check console errors?}
+                Check2 --> Check3{Check Network tab?}
+                Check3 --> Check4{Check React DevTools?}
+                Check4 --> Check5{Isolate component?}
+                Check5 --> Check6{Add breakpoints?}
+                Check6 --> Check7{Check state updates?}
+                Check7 --> Check8{Review recent changes?}
+                Check8 --> Solve[Problem Identified]
+                Solve --> Fix[Implement Fix]
+                Fix --> Test[Test Thoroughly]
+                Test --> Document[Document Solution]
+                
+                style Start fill:#e74c3c
+                style Solve fill:#f39c12
+                style Document fill:#2ecc71
+            </div>
+
+            <div style="background: #f0f8ff; padding: 2rem; border-radius: 10px; margin: 2rem 0;">
+                <h3>🔍 The Ultimate Debugging Checklist</h3>
+                <ol style="line-height: 2;">
+                    <li>☐ <strong>Reproduce the bug consistently</strong></li>
+                    <li>☐ <strong>Check browser console for errors</strong></li>
+                    <li>☐ <strong>Inspect Network tab for failed requests</strong></li>
+                    <li>☐ <strong>Verify API endpoints are correct</strong></li>
+                    <li>☐ <strong>Check CORS headers</strong></li>
+                    <li>☐ <strong>Examine React DevTools for state/props</strong></li>
+                    <li>☐ <strong>Add strategic console.logs</strong></li>
+                    <li>☐ <strong>Use debugger statements</strong></li>
+                    <li>☐ <strong>Test in different browsers</strong></li>
+                    <li>☐ <strong>Check for race conditions</strong></li>
+                    <li>☐ <strong>Review recent Git commits</strong></li>
+                    <li>☐ <strong>Validate data types</strong></li>
+                    <li>☐ <strong>Check for memory leaks</strong></li>
+                    <li>☐ <strong>Test with production build</strong></li>
+                    <li>☐ <strong>Clear cache and hard reload</strong></li>
+                </ol>
+            </div>
+        </section>
+
+        <footer>
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 0.5rem; margin-top: 2rem;">
+                <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">🎯 Debugging Mastery Achieved!</h2>
+                <p style="margin-bottom: 1rem;">You now have the complete toolkit to debug any React + WordPress issue:</p>
+                <ul style="margin-bottom: 1.5rem;">
+                    <li style="margin: 0.5rem 0;">🔍 Systematic debugging approach</li>
+                    <li style="margin: 0.5rem 0;">🛠️ Mastery of debugging tools</li>
+                    <li style="margin: 0.5rem 0;">💡 Solutions to common errors</li>
+                    <li style="margin: 0.5rem 0;">⚡ Performance optimization techniques</li>
+                    <li style="margin: 0.5rem 0;">🛡️ Error boundary implementation</li>
+                </ul>
+                <p style="font-weight: bold;">Remember: Every bug is a learning opportunity. The more you debug, the better developer you become!</p>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>
